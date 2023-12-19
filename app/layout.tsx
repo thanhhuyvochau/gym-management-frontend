@@ -1,17 +1,20 @@
+"use client";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
 
-const inter = Inter({ subsets: ["latin"] });
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
-export const metadata: Metadata = {
-  title: "Gym Management System",
-  description: "Platform to Simplify you Life",
-};
+const theme = createTheme({
+  typography: {
+    fontFamily: "Poppins, sans-serif",
+    fontSize: 16,
+  },
+});
+
+// export const metadata: Metadata = {
+//   title: "Gym Management System",
+//   description: "Platform to Simplify you Life",
+// };
 
 export default function RootLayout({
   children,
@@ -20,7 +23,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        />
+      </head>
+      <body>
+        <ThemeProvider theme={theme}>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }

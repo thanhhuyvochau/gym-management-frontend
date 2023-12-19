@@ -12,11 +12,11 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import classes from "./Login.module.css";
+import classes from "./Register.module.css";
 import Link from "next/link";
 import Input from "@mui/material/Input";
 
-const Login = () => {
+const Register = () => {
   return (
     <>
       <Grid className={classes.fullHeightContainer} container>
@@ -30,20 +30,27 @@ const Login = () => {
           xs={6}
         >
           <Box minWidth={"50%"} component="form" autoComplete="true">
-            <Stack justifyContent="center" alignItems="center" spacing={4}>
+            <Stack
+              maxWidth="100%"
+              justifyContent="center"
+              alignItems="center"
+              spacing={4}
+            >
               <Typography
                 style={{ color: " var( --main-font-color)" }}
                 variant="h3"
               >
-                Sign In
+                Sign Up
               </Typography>
 
-              <Grid container direction="row">
+              <Grid container direction="column">
                 <InputLabel
                   style={{ color: "var(--main-font-color)" }}
                   htmlFor="emailInput"
                 >
-                  <Typography variant="h5">Email</Typography>
+                  <Typography fontWeight="600" variant="h5">
+                    Email*
+                  </Typography>
                 </InputLabel>
                 <TextField
                   className={classes.inputField}
@@ -52,12 +59,30 @@ const Login = () => {
                   required
                 />
               </Grid>
-              <Grid container direction="row">
+              <Grid container direction="column">
                 <InputLabel
                   style={{ color: "var(--main-font-color)" }}
                   htmlFor="passwordInput"
                 >
-                  <Typography variant="h5">Password</Typography>
+                  <Typography fontWeight="600" variant="h5">
+                    Create Password*
+                  </Typography>
+                </InputLabel>
+                <TextField
+                  className={classes.inputField}
+                  style={{ border: "solid 4px #332F64", borderRadius: "10px" }}
+                  required
+                  id="passwordInput"
+                />
+              </Grid>
+              <Grid container direction="column">
+                <InputLabel
+                  style={{ color: "var(--main-font-color)" }}
+                  htmlFor="passwordInput"
+                >
+                  <Typography fontWeight="600" variant="h5">
+                    Re-type Password*
+                  </Typography>
                 </InputLabel>
                 <TextField
                   className={classes.inputField}
@@ -93,7 +118,7 @@ const Login = () => {
                 variant="extended"
                 sx={{ width: "100%" }}
               >
-                <Typography variant="h5">Login</Typography>
+                <Typography variant="h5">Register</Typography>
               </Fab>
             </Stack>
           </Box>
@@ -121,4 +146,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

@@ -4,6 +4,9 @@
 .inputField {
   width: 100%;
 }
+.inputLabel {
+  font-weight: 600;
+}
 .fullHeightContainer {
   height: 100vh;
 }

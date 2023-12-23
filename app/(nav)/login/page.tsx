@@ -29,7 +29,15 @@ const Login = () => {
           item
           xs={6}
         >
-          <Box minWidth={"50%"} component="form" autoComplete="true">
+          <Box
+            width="65%"
+            maxWidth="25rem"
+            height="100%"
+            className="mt-16"
+            minWidth={{ xs: "100%", sm: "25rem" }}
+            component="form"
+            autoComplete="true"
+          >
             <Stack justifyContent="center" alignItems="center" spacing={4}>
               <Typography
                 style={{ color: " var( --main-font-color)" }}
@@ -71,6 +79,7 @@ const Login = () => {
                   id="passwordInput"
                 />
               </Grid>
+
               <Grid
                 justifyContent="space-between"
                 direction="row"
@@ -116,7 +125,7 @@ const Login = () => {
             src="./images/main-logo.png"
             style={{
               maxWidth: "100%",
-              maxHeight: "100%",
+              maxHeight: "80%",
               objectFit: "scale-down",
             }}
           />

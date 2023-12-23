@@ -43,30 +43,32 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar color="default" position="static">
+    <AppBar color="default" position="sticky">
       <Container maxWidth="lg">
         <Toolbar disableGutters>
-          <Avatar
-            sx={{
-              display: { xs: "none", md: "flex" },
-              width: "80px",
-              height: "80px",
-              objectFit: "contain",
-            }}
-            alt="Remy Sharp"
-            src="./images/nav-logo.svg"
-          />
+          <Link href={"/home"}>
+            <Avatar
+              sx={{
+                display: { xs: "none", md: "flex" },
+                width: "80px",
+                height: "80px",
+                objectFit: "contain",
+              }}
+              alt="Remy Sharp"
+              src="./images/nav-logo.svg"
+            />
+          </Link>
+
           <Grid width="fit-content" container direction="column">
             <Typography
               variant="h6"
               noWrap
               component="a"
-              href="/home"
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
                 fontFamily: "monospace",
-                fontWeight: "normal",
+                fontWeight: "600",
                 letterSpacing: ".3rem",
                 color: "var(--main-font-color)",
                 textDecoration: "none",
@@ -78,12 +80,11 @@ function ResponsiveAppBar() {
               variant="h6"
               noWrap
               component="a"
-              href="/home"
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
                 fontFamily: "monospace",
-                fontWeight: "normal",
+                fontWeight: "600",
                 letterSpacing: ".3rem",
                 color: "var(--main-font-color)",
                 textDecoration: "none",
@@ -92,6 +93,7 @@ function ResponsiveAppBar() {
               FITNESS
             </Typography>
           </Grid>
+
           <Box
             component="div"
             sx={{
@@ -183,8 +185,12 @@ export default function MainLayout({
 }) {
   return (
     <>
-      <ResponsiveAppBar></ResponsiveAppBar>
-      {children}
+      <Box component={"div"}>
+        <ResponsiveAppBar></ResponsiveAppBar>
+        <Box style={{}} component={"div"}>
+          {children}
+        </Box>
+      </Box>
     </>
   );
 }

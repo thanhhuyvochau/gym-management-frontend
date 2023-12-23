@@ -7,9 +7,6 @@
 .inputLabel {
   font-weight: 600;
 }
-.fullHeightContainer {
-  height: 100vh;
-}
 .fullHeightGridItem {
-  height: 100%;
+  height: 80%;
 }

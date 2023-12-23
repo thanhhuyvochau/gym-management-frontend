@@ -27,15 +27,19 @@ const Register = () => {
           className={classes.fullHeightGridItem}
           container
           item
-          xs={6}
+          xs={12}
+          sm={6}
         >
-          <Box minWidth={"50%"} component="form" autoComplete="true">
-            <Stack
-              maxWidth="100%"
-              justifyContent="center"
-              alignItems="center"
-              spacing={4}
-            >
+          <Box
+            width="65%"
+            maxWidth="25rem"
+            height="100%"
+            className="mt-16"
+            minWidth={{ xs: "100%", sm: "25rem" }}
+            component="form"
+            autoComplete="true"
+          >
+            <Stack justifyContent="center" alignItems="center" spacing={4}>
               <Typography
                 style={{ color: " var( --main-font-color)" }}
                 variant="h3"
@@ -49,7 +53,7 @@ const Register = () => {
                   htmlFor="emailInput"
                 >
                   <Typography fontWeight="600" variant="h5">
-                    Email*
+                    Email
                   </Typography>
                 </InputLabel>
                 <TextField
@@ -65,7 +69,7 @@ const Register = () => {
                   htmlFor="passwordInput"
                 >
                   <Typography fontWeight="600" variant="h5">
-                    Create Password*
+                    Create Password
                   </Typography>
                 </InputLabel>
                 <TextField
@@ -81,7 +85,7 @@ const Register = () => {
                   htmlFor="passwordInput"
                 >
                   <Typography fontWeight="600" variant="h5">
-                    Re-type Password*
+                    Re-type Password
                   </Typography>
                 </InputLabel>
                 <TextField
@@ -91,25 +95,7 @@ const Register = () => {
                   id="passwordInput"
                 />
               </Grid>
-              <Grid
-                justifyContent="space-between"
-                direction="row"
-                container
-                item
-                xs={12}
-              >
-                <FormControlLabel
-                  style={{ color: "var(--main-font-color)" }}
-                  control={<Checkbox />}
-                  label="Remember me"
-                />
-                <Link
-                  style={{ color: "var(--main-font-color)", margin: "auto 0" }}
-                  href=""
-                >
-                  Forgot Password?
-                </Link>
-              </Grid>
+
               <Fab
                 style={{
                   background: "var( --main-font-color)",
@@ -120,6 +106,19 @@ const Register = () => {
               >
                 <Typography variant="h5">Register</Typography>
               </Fab>
+              <Grid
+                justifyContent="space-between"
+                direction="row"
+                container
+                item
+                xs={12}
+              >
+                <FormControlLabel
+                  style={{ color: "var(--main-font-color)" }}
+                  control={<Checkbox />}
+                  label="Accept all the Terms and Conditions"
+                />
+              </Grid>
             </Stack>
           </Box>
         </Grid>
@@ -136,7 +135,7 @@ const Register = () => {
             src="./images/main-logo.png"
             style={{
               maxWidth: "100%",
-              maxHeight: "100%",
+              maxHeight: "80%",
               objectFit: "scale-down",
             }}
           />

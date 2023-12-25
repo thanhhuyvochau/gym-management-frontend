@@ -346,6 +346,67 @@ const Main = () => {
           </Stack>
         </Stack>
       </Box>
+      <Stack
+        style={{
+          background: "#ECE9E9",
+          color: "#151515",
+          height: "300px",
+        }}
+        component={"div"}
+        direction={"column"}
+      >
+        <Box
+          component={"div"}
+          style={{
+            height: "70px",
+            backgroundImage:
+              "linear-gradient(180deg, #2B2B2B 0%, rgba(43, 43, 43, 0.00) 100%)",
+          }}
+        ></Box>
+        <Stack
+          direction={"row"}
+          justifyContent={"space-around"}
+          alignItems={"center"}
+          flexGrow={"1"}
+        >
+          <Stack direction={"column"}>
+            <Typography className="mb-5" variant="h5">
+              COMPANY
+            </Typography>
+            <Typography fontSize={"1rem"} variant="h6">
+              Privacy Policy
+            </Typography>
+            <Typography fontSize={"1rem"} variant="h6">
+              Terms and Conditions
+            </Typography>
+            <Typography fontSize={"1rem"} variant="h6">
+              Careers
+            </Typography>
+          </Stack>
+          <Stack direction={"column"}>
+            <Typography className="mb-5" variant="h5">
+              GYM
+            </Typography>
+            <Typography fontSize={"1rem"} variant="h6">
+              Why Join Us
+            </Typography>
+            <Typography fontSize={"1rem"} variant="h6">
+              Plan
+            </Typography>
+          </Stack>
+          <Stack direction={"column"}>
+            <Typography className="mb-5" variant="h5">
+              CUSTOMER
+            </Typography>
+            <Typography fontSize={"1rem"} variant="h6">
+              FAQs
+            </Typography>
+            <Typography fontSize={"1rem"} variant="h6">
+              Contact Us
+            </Typography>
+          </Stack>
+        </Stack>
+      </Stack>
     </Stack>
   );
 };

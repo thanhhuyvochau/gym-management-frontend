@@ -7,6 +7,15 @@
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
   --main-font-color: #1a1363;
+  --primary: #1a1363;
+  --yellow-bold: #fdee21;
+  --yellow-light: #ffff7d;
+  --purple-bold: #332f64;
+  --purple-light: #77749b;
+  --grey-bold: #4b4b4b;
+  --grey-light: #e4ffdf;
+  --while: #ffffff;
+  --while-brow: #ece9e9;
 }
 
 @media (prefers-color-scheme: dark) {

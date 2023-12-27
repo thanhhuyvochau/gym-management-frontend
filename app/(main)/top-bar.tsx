@@ -5,46 +5,43 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Grid } from "@mui/material";
 import Link from "next/link";
 
-const pages = ["About", "Why Join Us?", "Plan", "Register"];
+const pages = ["Feedback", "Log Out"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
-
-function HomeReponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
-
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+interface Props {
+  /**
+   * Injected by the documentation to work in an iframe.
+   * Remove this when copying and pasting into your project.
+   */
+  window?: () => Window;
+  onClickMobileIcon: () => void;
+  mobileOpen?: boolean;
+  drawerWidth: number;
+}
+function DashBoardTopBar(props: Props) {
+  const handleOnclickMobileIcon = () => {
+    props.onClickMobileIcon();
   };
 
   return (
-    <AppBar color="default" position="sticky">
-      <Container maxWidth="lg">
+    <AppBar
+      style={{
+        backgroundColor: "var(--while-brow)",
+      }}
+      color="default"
+      position="fixed"
+      sx={{
+        width: { sm: `calc(100% - ${props.drawerWidth}px)` },
+        ml: { sm: `${props.drawerWidth}px` },
+      }}
+    >
+      <Box component={"div"}>
         <Toolbar disableGutters>
           <Link href={"/home"}>
             <Avatar
@@ -106,37 +103,25 @@ function HomeReponsiveAppBar() {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              onClick={handleOpenNavMenu}
+              onClick={handleOnclickMobileIcon}
               color="inherit"
             >
               <MenuIcon />
             </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <Link href={"/home"}>
+            <Avatar
+              sx={{
+                display: { xs: "flex", md: "none" },
+                width: "80px",
+                height: "80px",
+                objectFit: "contain",
+                mr: 1,
+              }}
+              alt="Remy Sharp"
+              src="./images/nav-logo.svg"
+            />
+          </Link>
           <Typography
             variant="h5"
             noWrap
@@ -146,14 +131,12 @@ function HomeReponsiveAppBar() {
               mr: 2,
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
+              fontWeight: 400,
+              color: "var(--main-font-color)",
               textDecoration: "none",
             }}
           >
-            LOGO
+            STAMINA FITNESS
           </Typography>
           <Box
             sx={{
@@ -165,32 +148,18 @@ function HomeReponsiveAppBar() {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
                 style={{ color: "var(--main-font-color)", display: "block" }}
               >
-                <Link href="/register">{page}</Link>
+                <Link style={{ textTransform: "capitalize" }} href="/register">
+                  {page}
+                </Link>
               </Button>
             ))}
           </Box>
         </Toolbar>
-      </Container>
+      </Box>
     </AppBar>
   );
 }
 
-export default function MainLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <>
-      <Box component={"div"}>
-        <HomeReponsiveAppBar></HomeReponsiveAppBar>
-        <Box style={{}} component={"div"}>
-          {children}
-        </Box>
-      </Box>
-    </>
-  );
-}
+export default DashBoardTopBar;

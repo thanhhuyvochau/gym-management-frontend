@@ -12,7 +12,7 @@ interface PlanCardProps {
   amount?: number;
   name: string;
   icon: string;
-  backgroudColor: string;
+  backgroundColor: string;
   border?: string;
   fontColor: string;
 }
@@ -83,7 +83,7 @@ const PlanCard = (props: PlanCardProps) => {
       <Stack
         direction={"row"}
         style={{
-          backgroundColor: props.backgroudColor,
+          backgroundColor: props.backgroundColor,
           borderRadius: "27px",
           color: props.fontColor,
           width: "211px",
@@ -307,14 +307,14 @@ const Main = () => {
             <PlanCard
               name="Annual Membership"
               icon="./images/mdi_chess-pawn.png"
-              backgroudColor="white"
+              backgroundColor="white"
               fontColor="--var(main-font-color)"
               border="4px solid #1A1363"
             />
             <PlanCard
               name="Weekly Rate"
               icon="./images/mdi_chess-knight.png"
-              backgroudColor="#3E3E3E"
+              backgroundColor="#3E3E3E"
               amount={7}
               timeUnit="Days"
               fontColor="white"
@@ -322,7 +322,7 @@ const Main = () => {
             <PlanCard
               name="Monthly Rate"
               icon="./images/mdi_chess-bishop.png"
-              backgroudColor="#77749B"
+              backgroundColor="#77749B"
               timeUnit="Month"
               amount={1}
               fontColor="white"
@@ -330,7 +330,7 @@ const Main = () => {
             <PlanCard
               name="Biannual Rate"
               icon="./images/mdi_chess-king.png"
-              backgroudColor="#332F64"
+              backgroundColor="#332F64"
               timeUnit="Months"
               amount={6}
               fontColor="white"
@@ -338,7 +338,7 @@ const Main = () => {
             <PlanCard
               name="Annual Rate"
               icon="./images/mdi_crown.png"
-              backgroudColor="#1A1363"
+              backgroundColor="#1A1363"
               timeUnit="Year"
               amount={1}
               fontColor="white"
@@ -412,3 +412,5 @@ const Main = () => {
 };
 
 export default Main;
+
+

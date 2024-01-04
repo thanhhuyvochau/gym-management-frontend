@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="25562f44-61dc-49c5-863e-170bc1f7c2ab" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(main)/daskboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(main)/daskboard/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(main)/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(main)/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(main)/side-bar.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(main)/top-bar.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(nav)/home/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(nav)/home/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(nav)/login/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(nav)/login/page.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,11 +38,13 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
+    "last_opened_file_path": "F:/gym-management-project/gym-management-frontend",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "F:\\gym-management-project\\gym-management-frontend\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -52,6 +59,7 @@
       <workItem from="1702913588363" duration="25000" />
       <workItem from="1702914225133" duration="3000" />
       <workItem from="1702918694296" duration="1086000" />
+      <workItem from="1704299048856" duration="56000" />
     </task>
     <servers />
   </component>

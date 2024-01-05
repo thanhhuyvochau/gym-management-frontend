@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Provider from "./Provider";
 
 const theme = createTheme({
   typography: {
@@ -22,16 +23,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        />
-      </head>
-      <body style={{ overflow: "hidden" }}>
-        <ThemeProvider theme={theme}>{children}</ThemeProvider>
-      </body>
-    </html>
+    <Provider>
+      <html lang="en">
+        <head>
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          />
+        </head>
+        <body style={{ overflow: "hidden" }}>
+          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        </body>
+      </html>
+    </Provider>
   );
 }

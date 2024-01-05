@@ -16,9 +16,20 @@ import Link from "next/link";
 import api from "@/app/_ultils/api";
 import { API } from "@/app/_constants/api-endpoint";
 import { JwtResponse } from "../../_models/jwt-response";
+import { signIn } from "next-auth/react";
+import { on } from "stream";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const onSubmit = async () => {
+    const result = await signIn("credential", {
+      username: email,
+      password: password,
+      redirect: true,
+      callbackUrl: "/",
+    });
+  };
 
   const handleLogin = () => {
     api
@@ -124,7 +135,7 @@ const Login = () => {
                 }}
                 variant="extended"
                 sx={{ width: "100%" }}
-                onClick={handleLogin}
+                onClick={() => onSubmit()}
               >
                 <Typography variant="h5">Login</Typography>
               </Fab>

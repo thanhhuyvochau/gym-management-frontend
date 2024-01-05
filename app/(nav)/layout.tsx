@@ -15,8 +15,9 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Grid } from "@mui/material";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 
-const pages = ["About", "Why Join Us?", "Plan", "Register"];
+const pages = ["About", "Why Join Us?", "Plan", "Login"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function HomeReponsiveAppBar() {
@@ -35,7 +36,8 @@ function HomeReponsiveAppBar() {
   };
 
   const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
+    // setAnchorElNav(null);
+    signIn("credential");
   };
 
   const handleCloseUserMenu = () => {
@@ -168,7 +170,7 @@ function HomeReponsiveAppBar() {
                 onClick={handleCloseNavMenu}
                 style={{ color: "var(--main-font-color)", display: "block" }}
               >
-                <Link href="/register">{page}</Link>
+                {page} 2
               </Button>
             ))}
           </Box>

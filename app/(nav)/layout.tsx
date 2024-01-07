@@ -10,17 +10,40 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import { Grid } from "@mui/material";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
+import Grid from "@mui/material/Grid/Grid";
+import { log } from "console";
 
-const pages = ["About", "Why Join Us?", "Plan", "Login"];
+interface NavItem {
+  name: string;
+  navLink: () => any;
+}
+
+// const pages = ["About", "Why Join Us?", "Plan", "Login", "Logout"];
+
+const pages: NavItem[] = [
+  { name: "About", navLink: () => "/about" },
+  { name: "Why Join Us?", navLink: () => "/why-join-us" },
+  { name: "Plan", navLink: () => "/plan" },
+  { name: "Login", navLink: () => signIn() },
+  {
+    name: "Dashboard",
+    navLink: () => "/daskboard",
+  },
+  {
+    name: "Logout",
+    navLink: () => signOut({ redirect: true, callbackUrl: "/login" }),
+  },
+];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
-function HomeReponsiveAppBar() {
+export function HomeReponsiveAppBar() {
+  const { data: session } = useSession();
+  // console.log("DATA SESSION:---\n" + JSON.stringify(session));
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -36,14 +59,13 @@ function HomeReponsiveAppBar() {
   };
 
   const handleCloseNavMenu = () => {
-    // setAnchorElNav(null);
-    signIn("credential");
+    setAnchorElNav(null);
+    // signIn("credential");
   };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
   return (
     <AppBar color="default" position="sticky">
       <Container maxWidth="lg">
@@ -132,8 +154,8 @@ function HomeReponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -164,15 +186,83 @@ function HomeReponsiveAppBar() {
               justifyContent: "flex-end",
             }}
           >
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                style={{ color: "var(--main-font-color)", display: "block" }}
-              >
-                {page} 2
-              </Button>
-            ))}
+            {pages.map((page) => {
+              if (page.name == "Logout") {
+                let logoutButton;
+                if (session != undefined) {
+                  logoutButton = (
+                    <Button
+                      key={page.name}
+                      onClick={page.navLink}
+                      style={{
+                        color: "var(--main-font-color)",
+                        display: "block",
+                      }}
+                    >
+                      {page.name}
+                    </Button>
+                  );
+                  return logoutButton;
+                } else {
+                  return;
+                }
+              } else if (page.name == "Login") {
+                let logInButton;
+                if (session == undefined) {
+                  return (logInButton = (
+                    <Button
+                      key={page.name}
+                      onClick={page.navLink}
+                      style={{
+                        color: "var(--main-font-color)",
+                        display: "block",
+                      }}
+                    >
+                      {page.name}
+                    </Button>
+                  ));
+                } else {
+                  return;
+                }
+              } else if (page.name == "Dashboard") {
+                if (session != undefined) {
+                  return (
+                    <Button key={page.name}>
+                      <Link
+                        href={
+                         page.navLink()
+                        }
+                        key={page.name}
+                        style={{
+                          color: "var(--main-font-color)",
+                          display: "block",
+                        }}
+                      >
+                        {page.name}
+                      </Link>
+                    </Button>
+                  );
+                }
+              } else {
+                console.log("PAGE LINK:" + page.navLink);
+                return (
+                  <Button key={page.name}>
+                    <Link
+                      href={
+                        page.navLink()
+                      }
+                      key={page.name}
+                      style={{
+                        color: "var(--main-font-color)",
+                        display: "block",
+                      }}
+                    >
+                      {page.name}
+                    </Link>
+                  </Button>
+                );
+              }
+            })}
           </Box>
         </Toolbar>
       </Container>

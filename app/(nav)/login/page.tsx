@@ -18,29 +18,30 @@ import { API } from "@/app/_constants/api-endpoint";
 import { JwtResponse } from "../../_models/jwt-response";
 import { signIn } from "next-auth/react";
 import { on } from "stream";
+import { tree } from "next/dist/build/templates/app-page";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const onSubmit = async () => {
-    const result = await signIn("credential", {
-      username: email,
-      password: password,
+    const result = await signIn("credentials", {
+      username: "thanhhuyvochau@gmail.com",
+      password: "08122000@Huy",
       redirect: true,
-      callbackUrl: "/",
+      callbackUrl: "/daskboard",
     });
   };
 
-  const handleLogin = () => {
-    api
-      .post(API.LOGIN, {
-        email: email,
-        password: password,
-      })
-      .then((response: JwtResponse) => {
-        localStorage.setItem("user_data", JSON.stringify(response));
-      });
-  };
+  // const handleLogin = () => {
+  //   api
+  //     .post(API.LOGIN, {
+  //       email: email,
+  //       password: password,
+  //     })
+  //     .then((response: JwtResponse) => {
+  //       localStorage.setItem("user_data", JSON.stringify(response));
+  //     });
+  // };
 
   return (
     <>

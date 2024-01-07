@@ -1,7 +1,6 @@
-import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
+import { Box, Button, Grid, Stack, Typography } from "@mui/material";
 import React from "react";
 import classes from "./Main.module.css";
-import { title } from "process";
 
 interface OfferCardProps {
   title: string;
@@ -412,5 +411,3 @@ const Main = () => {
 };
 
 export default Main;
-
-

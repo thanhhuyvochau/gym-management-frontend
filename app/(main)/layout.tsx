@@ -73,7 +73,7 @@ export default function MainLayout({
   // Remove this const when copying and pasting into your project.
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box  height={"100%"} sx={{ display: "flex" }}>
       <DashBoardTopBar
         drawerWidth={drawerWidth}
         onClickMobileIcon={handleDrawerToggle}

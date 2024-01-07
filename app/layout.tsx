@@ -4,6 +4,8 @@ import "./globals.css";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Provider from "./Provider";
+import { ReactNode } from "react";
+import { SessionProvider } from "next-auth/react";
 
 const theme = createTheme({
   typography: {
@@ -12,29 +14,24 @@ const theme = createTheme({
   },
 });
 
-// export const metadata: Metadata = {
-//   title: "Gym Management System",
-//   description: "Platform to Simplify you Life",
-// };
+interface Props {
+  children: ReactNode;
+}
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout(prop: Props) {
   return (
-    <Provider>
-      <html lang="en">
-        <head>
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-          />
-        </head>
-        <body style={{ overflow: "hidden" }}>
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
-        </body>
-      </html>
-    </Provider>
+    <html lang="en">
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        />
+      </head>
+      <body style={{ overflow: "hidden" }}>
+        <SessionProvider refetchOnWindowFocus={false}>
+          <ThemeProvider theme={theme}>{prop.children}</ThemeProvider>
+        </SessionProvider>
+      </body>
+    </html>
   );
 }

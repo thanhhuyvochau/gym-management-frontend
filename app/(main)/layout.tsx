@@ -20,19 +20,9 @@ import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
 import PaymentOutlinedIcon from "@mui/icons-material/PaymentOutlined";
 import DashBoardTopBar from "../../components/TopBarComponent/top-bar";
+import SideBarComponent from "@/components/SideBarComponent/side-bar";
 const drawerWidth = 240;
 
-
-const desktopIcons = [
-  <SpaceDashboardOutlinedIcon style={{ color: "white" }} />,
-  <OtherHousesOutlinedIcon style={{ color: "white" }} />,
-  <AppRegistrationOutlinedIcon style={{ color: "white" }} />,
-  <AssignmentSharpIcon style={{ color: "white" }} />,
-  <PaymentOutlinedIcon style={{ color: "white" }} />,
-  <Inventory2OutlinedIcon style={{ color: "white" }} />,
-  <PeopleOutlinedIcon style={{ color: "white" }} />,
-  <AssessmentOutlinedIcon style={{ color: "white" }} />,
-];
 export default function MainLayout({
   children,
 }: {
@@ -48,32 +38,14 @@ export default function MainLayout({
     <div>
       <Toolbar />
       <Divider />
-      <List>
-        {[
-          "Dashboard",
-          "Profile",
-          "Registration",
-          "Plan",
-          "Payment",
-          "Inventory",
-          "Member",
-          "Report",
-        ].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>{desktopIcons[index]}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+      <SideBarComponent></SideBarComponent>
     </div>
   );
 
   // Remove this const when copying and pasting into your project.
 
   return (
-    <Box  height={"100%"} sx={{ display: "flex" }}>
+    <Box height={"100%"} sx={{ display: "flex" }}>
       <DashBoardTopBar
         drawerWidth={drawerWidth}
         onClickMobileIcon={handleDrawerToggle}

@@ -1,6 +1,9 @@
+import { AccountResponse } from "@/app/_models/account-response";
+import { ApiResponse } from "@/types/api-response";
 import { log } from "console";
-import NextAuth from "next-auth"
+import NextAuth, { User } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials";
+import { useSession } from "next-auth/react";
 
 const handler = NextAuth({
     providers: [
@@ -31,8 +34,10 @@ const handler = NextAuth({
                 const user = await res.json();
 
                 if (user) {
-                    // Any object returned will be saved in `user` property of the JW
-                    return user;
+                    // Any object returned will be saved in `user` property of the JWT
+                    console.log("USER LOGIN:" + JSON.stringify(user));
+
+                    return user.data;
                 } else {
                     // If you return null then an error will be displayed advising the user to check their details.
                     return null;
@@ -44,12 +49,21 @@ const handler = NextAuth({
     ],
     callbacks: {
         async jwt({ token, user }) {
-            console.log("TOKEN:" + JSON.stringify(token));
-            let data = token.data as Object;
-            return { ...data, ...user };
+            //TODO 
+            // Mapping response data to user session
+            // Currently problem is that is lose data after refresh because user only return 
+            // after login and session is set to user , so when request session get empty
+            if (user) {
+                token.user = user;
+            }
+            // console.log("jwt.token:" + JSON.stringify(token));
+            return token;
         },
         async session({ session, token, user }) {
-            session.user = token as any;
+            if (token && token.user) {
+                session.user = { ...token.user };
+            }
+            console.log("SESSION CONVERTER:" + JSON.stringify(session));
             return session;
         },
     },

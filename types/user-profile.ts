@@ -8,7 +8,7 @@ export interface UserProfileResponse {
     address: string;
     phone: string;
     status: boolean;
-    gender: "MALE" | "FEMALE" | "OTHER";
+    gender: "MALE" | "FEMALE";
     roleDto: {
         id: number;
         name: string;

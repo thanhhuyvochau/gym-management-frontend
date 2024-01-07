@@ -4,6 +4,7 @@ import React, { ReactNode } from "react";
 
 interface Props {
   children: ReactNode;
+  session: any
 }
 const Provider = ({ children: children }: Props) => {
   return <SessionProvider>{children}</SessionProvider>;

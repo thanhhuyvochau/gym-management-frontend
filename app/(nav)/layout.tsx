@@ -42,6 +42,7 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 export function HomeReponsiveAppBar() {
   const { data: session } = useSession();
+
   // console.log("DATA SESSION:---\n" + JSON.stringify(session));
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -229,9 +230,7 @@ export function HomeReponsiveAppBar() {
                   return (
                     <Button key={page.name}>
                       <Link
-                        href={
-                         page.navLink()
-                        }
+                        href={page.navLink()}
                         key={page.name}
                         style={{
                           color: "var(--main-font-color)",
@@ -248,9 +247,7 @@ export function HomeReponsiveAppBar() {
                 return (
                   <Button key={page.name}>
                     <Link
-                      href={
-                        page.navLink()
-                      }
+                      href={page.navLink()}
                       key={page.name}
                       style={{
                         color: "var(--main-font-color)",

@@ -86,7 +86,6 @@ const allSideBarItem: SideBarItem[] = [
 
 const SideBarComponent = () => {
   const { data: session } = useSession();
-  console.log("SESSION FOR RENDER:" + JSON.stringify(session));
   const generateSideBarByRole = () => {
     let sideBarBasedOnRole: SideBarItem[] = [];
     let userRoles = session?.user.roles;
@@ -98,7 +97,6 @@ const SideBarComponent = () => {
         return navItem;
       }
     });
-    console.log(JSON.stringify(sideBarBasedOnRole));
 
     return sideBarBasedOnRole;
   };
@@ -107,8 +105,6 @@ const SideBarComponent = () => {
   };
 
   let sideBarBasedOnRole = generateSideBarByRole();
-  console.log("SIDE BAR: " + sideBarBasedOnRole);
-
   return (
     <List>
       {generateSideBarByRole().map((item, index) => (

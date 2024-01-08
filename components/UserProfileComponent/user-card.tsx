@@ -42,7 +42,7 @@ const UserCardComponent = (userProfile: UserProfileResponse) => {
           </Grid>
           <Grid alignSelf={"flex-end"} item xs={8}>
             <Typography textAlign={"right"} variant="subtitle2">
-              JuanDelaCruz
+            {userProfile.fullName}
             </Typography>
           </Grid>
         </Grid>
@@ -58,7 +58,7 @@ const UserCardComponent = (userProfile: UserProfileResponse) => {
           </Grid>
           <Grid alignSelf={"flex-end"} item xs={8}>
             <Typography textAlign={"right"} variant="subtitle2">
-              09123456789
+              {userProfile.phone}
             </Typography>
           </Grid>
         </Grid>
@@ -74,7 +74,7 @@ const UserCardComponent = (userProfile: UserProfileResponse) => {
           </Grid>
           <Grid item>
             <Typography textAlign={"right"} variant="subtitle2">
-              juan.delacruz@gmail.com
+            {userProfile.email}
             </Typography>
           </Grid>
         </Grid>

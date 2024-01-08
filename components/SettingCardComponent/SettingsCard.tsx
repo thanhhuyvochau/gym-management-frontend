@@ -89,7 +89,6 @@ export default function SettingsCard(props: any) {
     edit.disabled = !edit.disabled;
     edit.isEdit = !edit.isEdit;
     update({ ...edit });
-    console.log("user: ", user);
   };
 
   // TOGGLE PASSWORD VISIBILITY
@@ -98,8 +97,6 @@ export default function SettingsCard(props: any) {
     setUser({ ...user });
   };
   const a11yProps = (index: number) => {
-    console.log("index:" + index);
-
     return {
       id: `simple-tab-${index}`,
       "aria-controls": `simple-tabpanel-${index}`,

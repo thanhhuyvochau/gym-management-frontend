@@ -35,8 +35,6 @@ const handler = NextAuth({
 
                 if (user) {
                     // Any object returned will be saved in `user` property of the JWT
-                    console.log("USER LOGIN:" + JSON.stringify(user));
-
                     return user.data;
                 } else {
                     // If you return null then an error will be displayed advising the user to check their details.
@@ -61,9 +59,8 @@ const handler = NextAuth({
         },
         async session({ session, token, user }) {
             if (token && token.user) {
-                session.user = { ...token.user };
+                session.user = { ...token.user } as any;
             }
-            console.log("SESSION CONVERTER:" + JSON.stringify(session));
             return session;
         },
     },

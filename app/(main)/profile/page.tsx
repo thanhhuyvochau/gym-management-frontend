@@ -55,7 +55,6 @@ const Profile = () => {
         const profileData = await fetchUserProfile(sessionData.user.token);
         if (profileData) {
           setUserProfile(profileData);
-          console.log("USER PROFILE:", profileData);
         }
       }
     };

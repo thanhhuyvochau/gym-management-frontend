@@ -16,7 +16,7 @@ import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
 import PaymentOutlinedIcon from "@mui/icons-material/PaymentOutlined";
 import DashBoardTopBar from "../../components/TopBarComponent/top-bar";
-import { SideBarItem } from "@/types/side-bar-item";
+import { SideBarItem } from "@/app/_models/side-bar-item";
 import { GYM_ADMIN, GYM_OWNER } from "@/app/_constants/role";
 import { useSession } from "next-auth/react";
 import { log } from "console";

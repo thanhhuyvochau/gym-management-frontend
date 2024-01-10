@@ -1,4 +1,3 @@
-import { ApiResponse } from "./api-response";
 
 export interface UserProfileResponse {
     id: number;

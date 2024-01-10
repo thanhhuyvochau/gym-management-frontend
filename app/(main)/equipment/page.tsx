@@ -2,7 +2,7 @@
 import { EquimentResponse } from "@/app/_models/equipment";
 import { Add } from "@mui/icons-material";
 import { Box, Button, Stack, Typography } from "@mui/material";
-import MUIDataTable, {
+import  {
   MUIDataTableColumn,
   MUIDataTableOptions,
 } from "mui-datatables";
@@ -14,6 +14,10 @@ import CustomizedButtons, {
 } from "@/components/CustomButton/ViewButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EquipmentAddForm from "@/components/DialogForm/EquipmentAddForm";
+import dynamic from 'next/dynamic';
+const MUIDataTable = dynamic(() => import('mui-datatables'), {
+    ssr: false
+});
 const columns: MUIDataTableColumn[] = [
   { label: "Code", name: "code" },
   { label: "Name", name: "name" },

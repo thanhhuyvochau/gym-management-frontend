@@ -17,7 +17,7 @@ import {
 import React, { useState } from "react";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import CustomInput from "../CustomInputComponent/CustomInput";
-import axios from "axios";
+
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
   clipPath: "inset(50%)",

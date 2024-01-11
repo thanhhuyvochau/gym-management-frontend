@@ -15,7 +15,7 @@ import classes from "./Login.module.css";
 import Link from "next/link";
 import api from "@/app/_ultils/api";
 import { API } from "@/app/_constants/api-endpoint";
-import { JwtResponse } from "../../_models/jwt-response";
+import { JwtResponse } from "../../_models/JwtResponse";
 import { signIn } from "next-auth/react";
 import { on } from "stream";
 import { tree } from "next/dist/build/templates/app-page";

@@ -1,5 +1,5 @@
-import { AccountResponse } from "@/app/_models/account-response";
-import { ApiResponse } from "@/app/_models/api-response";
+import { AccountResponse } from "@/app/_models/AccountResponse";
+import { ApiResponse } from "@/app/_models/ApiResponse";
 import { log } from "console";
 import NextAuth, { User } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials";

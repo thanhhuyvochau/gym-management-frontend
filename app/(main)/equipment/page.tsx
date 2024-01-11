@@ -1,5 +1,5 @@
 "use client";
-import { EquimentResponse } from "@/app/_models/equipment";
+import { EquimentResponse } from "@/app/_models/EquimentResponse";
 import { Add } from "@mui/icons-material";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import  {

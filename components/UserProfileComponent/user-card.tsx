@@ -1,4 +1,4 @@
-import { UserProfileResponse } from "@/app/_models/user-profile";
+import { UserProfileResponse } from "@/app/_models/UserProfileResponse";
 import React from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Image from "next/image";

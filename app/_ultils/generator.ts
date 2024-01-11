@@ -1,4 +1,4 @@
-import { SideBarItem } from "@/app/_models/side-bar-item";
+import { SideBarItem } from "@/app/_models/SideBarItem";
 import { GYM_ADMIN, GYM_OWNER } from "../_constants/role";
 
 const allSideBarItem: SideBarItem[] = [

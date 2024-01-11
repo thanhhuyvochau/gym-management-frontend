@@ -1,4 +1,4 @@
-import { UserProfileResponse } from '@/app/_models/user-profile';
+import { UserProfileResponse } from '@/app/_models/UserProfileResponse';
 import React from 'react';
 
 const PasswordInputCard = (userProfile: UserProfileResponse) => {

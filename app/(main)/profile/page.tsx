@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Grid, Paper } from "@mui/material";
-import { UserProfileResponse } from "@/app/_models/user-profile";
+import { UserProfileResponse } from "@/app/_models/UserProfileResponse";
 import SettingsCard from "@/components/SettingCardComponent/SettingsCard";
 import UserCardComponent from "@/components/UserProfileComponent/user-card";
 import { Session } from "next-auth/core/types";

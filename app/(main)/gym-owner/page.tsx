@@ -2,7 +2,7 @@
 import React from "react";
 import { MUIDataTableColumn, MUIDataTableOptions } from "mui-datatables";
 import { Box, Button, Typography } from "@mui/material";
-import { AccountResponse } from "@/app/_models/account-response";
+import { AccountResponse } from "@/app/_models/AccountResponse";
 import { Add, PlusOneRounded } from "@mui/icons-material";
 import dynamic from "next/dynamic";
 const MUIDataTable = dynamic(() => import("mui-datatables"), {

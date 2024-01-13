@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { Grid, Paper } from "@mui/material";
 import { UserProfileResponse } from "@/app/_models/UserProfileResponse";
 import SettingsCard from "@/components/SettingCardComponent/SettingsCard";
@@ -44,6 +44,7 @@ const fetchUserProfile = async (token: string) => {
 
 const Profile = () => {
   const session = useSession();
+  const [isLoading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(
     null
   );
@@ -55,33 +56,35 @@ const Profile = () => {
         const profileData = await fetchUserProfile(sessionData.user.token);
         if (profileData) {
           setUserProfile(profileData);
+          setLoading(false);
         }
       }
     };
-
     fetchData();
   }, [session]);
 
   return (
-    <Grid minHeight={"500px"} className="pt-10" gap={"2rem"} container>
-      <Grid alignSelf={""} item xs={4}>
-        <Paper
-          style={{
-            height: "100%",
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-          }}
-          elevation={3}
-          className="p-8"
-        >
-          <UserCardComponent {...(userProfile as UserProfileResponse)} />
-        </Paper>
+    !isLoading && (
+      <Grid minHeight={"500px"} className="pt-10" gap={"2rem"} container>
+        <Grid alignSelf={""} item xs={4}>
+          <Paper
+            style={{
+              height: "100%",
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+            }}
+            elevation={3}
+            className="p-8"
+          >
+            <UserCardComponent {...(userProfile as UserProfileResponse)} />
+          </Paper>
+        </Grid>
+        <Grid item xs={7}>
+          <SettingsCard info={userProfile} />
+        </Grid>
       </Grid>
-      <Grid item xs={7}>
-        <SettingsCard />
-      </Grid>
-    </Grid>
+    )
   );
 };
 

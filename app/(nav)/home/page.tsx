@@ -161,7 +161,7 @@ const OfferCard = (props: OfferCardProps) => {
   );
 };
 
-const Main = () => {
+const Home = () => {
   return (
     <Stack>
       <Box
@@ -410,4 +410,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default Home;

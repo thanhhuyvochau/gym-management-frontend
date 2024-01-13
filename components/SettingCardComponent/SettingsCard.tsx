@@ -1,5 +1,5 @@
 // IMPORTS
-import React, { Component, useState } from "react";
+import React, { Component, use, useState } from "react";
 import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -15,7 +15,6 @@ import Button from "@mui/material/Button";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import CustomInput from "../CustomInputComponent/CustomInput";
-import { log } from "console";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -43,6 +42,11 @@ function TabPanel(props: TabPanelProps) {
 export default function SettingsCard(props: any) {
   //TAB STATES
   const [value, setValue] = React.useState(0);
+  // FORM STATES
+  const [user, setUser] = useState({
+    ...props.info,
+    showPassword: false,
+  });
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -59,18 +63,6 @@ export default function SettingsCard(props: any) {
       label: "Female",
     },
   ];
-
-  // FORM STATES
-  const [user, setUser] = useState({
-    // DEFAULT VALUES
-    fullName: props.fullName,
-    gender: props.gender,
-    phone: props.phone,
-    email: props.email,
-    pass: props.pass,
-    showPassword: false,
-  });
-
   const changeField = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, [event.target.name]: event.target.value });
   };
@@ -150,13 +142,16 @@ export default function SettingsCard(props: any) {
                   ></CustomInput>
                 </Grid>
 
-                {/* ROW 2: GENDER */}
                 <Grid item xs={6}>
                   <CustomInput
                     select
                     id="gender"
                     name="gender"
-                    value={user.gender}
+                    value={
+                      user.gender == undefined
+                        ? genderSelect[0].value
+                        : user.gender
+                    }
                     onChange={changeField}
                     title="Gender"
                     dis={edit.disabled}
@@ -169,7 +164,6 @@ export default function SettingsCard(props: any) {
                     ))}
                   ></CustomInput>
                 </Grid>
-
                 {/* ROW 3: PHONE */}
                 <Grid item xs={6}>
                   <CustomInput
@@ -188,7 +182,6 @@ export default function SettingsCard(props: any) {
                     }}
                   ></CustomInput>
                 </Grid>
-
                 {/* ROW 3: EMAIL */}
                 <Grid item xs={6}>
                   <CustomInput
@@ -198,7 +191,7 @@ export default function SettingsCard(props: any) {
                     value={user.email}
                     onChange={changeField}
                     title="Email Address"
-                    dis={true}
+                    dis={edit.disabled}
                     req={edit.required}
                   ></CustomInput>
                 </Grid>
@@ -334,4 +327,7 @@ export default function SettingsCard(props: any) {
       </Box>
     </Card>
   );
+}
+function updateUser() {
+  throw new Error("Function not implemented.");
 }

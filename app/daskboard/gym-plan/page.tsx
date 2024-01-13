@@ -53,7 +53,7 @@ const GymPlanManagement = () => {
       id: 1,
       name: "Basic Plan",
       description: "Access to basic gym facilities",
-      timeUnit: "month",
+      timeUnit: "MONTH",
       timeAmount: 1,
       price: 29.99,
       activate: true,
@@ -64,7 +64,7 @@ const GymPlanManagement = () => {
       id: 2,
       name: "Premium Plan",
       description: "Access to premium gym facilities and classes",
-      timeUnit: "month",
+      timeUnit: "MONTH",
       timeAmount: 3,
       price: 79.99,
       activate: true,
@@ -75,7 +75,7 @@ const GymPlanManagement = () => {
       id: 3,
       name: "Annual Plan",
       description: "Access to all gym facilities for a year",
-      timeUnit: "year",
+      timeUnit: "YEAR",
       timeAmount: 1,
       price: 349.99,
       activate: true,
@@ -86,7 +86,7 @@ const GymPlanManagement = () => {
       id: 4,
       name: "Student Plan",
       description: "Special plan for students",
-      timeUnit: "month",
+      timeUnit: "MONTH",
       timeAmount: 6,
       price: 49.99,
       activate: false,
@@ -185,7 +185,7 @@ const GymPlanManagement = () => {
         columns={columns}
         options={options}
       />
-      <EditGymPlanForm gymPlan={mockGymPlanData[0]} ></EditGymPlanForm>
+      <EditGymPlanForm  gymPlan={mockGymPlanData[0]} ></EditGymPlanForm>
     </Box>
   );
 };

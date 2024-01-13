@@ -1,9 +1,12 @@
 import { AccountResponse } from "@/app/_models/AccountResponse";
 import { ApiResponse } from "@/app/_models/ApiResponse";
+import { isTokenExpired, parseJwtToken } from "@/app/_ultils/jwt";
 import { log } from "console";
 import NextAuth, { User } from "next-auth"
+import { decode } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 const handler = NextAuth({
     providers: [
@@ -45,6 +48,10 @@ const handler = NextAuth({
             },
         }),
     ],
+    session: {
+        strategy: "jwt",
+        maxAge: 86400000 // 24 hours
+    },
     callbacks: {
         async jwt({ token, user }) {
             //TODO 
@@ -53,14 +60,21 @@ const handler = NextAuth({
             // after login and session is set to user , so when request session get empty
             if (user) {
                 token.user = user;
+
+
             }
-            // console.log("jwt.token:" + JSON.stringify(token));
             return token;
         },
-        async session({ session, token, user }) {
-            if (token && token.user) {
+        async session({ session, token }) {
+            if (isTokenExpired(parseJwtToken(token.user.token))) {
+                console.log("SESSION:" + JSON.stringify(session));
+
+                return undefined;
+            } else if (token && token.user) {
                 session.user = { ...token.user } as any;
             }
+            // console.log("SESSION:" + JSON.stringify(session));
+
             return session;
         },
     },

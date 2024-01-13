@@ -28,20 +28,11 @@ const Login = () => {
       username: "thanhhuyvochau@gmail.com",
       password: "08122000@Huy",
       redirect: true,
-      callbackUrl: "/daskboard",
+      callbackUrl: "/daskboard/profile",
     });
   };
 
-  // const handleLogin = () => {
-  //   api
-  //     .post(API.LOGIN, {
-  //       email: email,
-  //       password: password,
-  //     })
-  //     .then((response: JwtResponse) => {
-  //       localStorage.setItem("user_data", JSON.stringify(response));
-  //     });
-  // };
+
 
   return (
     <>

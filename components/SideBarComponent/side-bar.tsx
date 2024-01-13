@@ -4,8 +4,9 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  makeStyles,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 /*ICON FOR DASHBOARD */
 import SpaceDashboardOutlinedIcon from "@mui/icons-material/SpaceDashboardOutlined";
 import OtherHousesOutlinedIcon from "@mui/icons-material/OtherHousesOutlined";
@@ -21,6 +22,7 @@ import { GYM_ADMIN, GYM_OWNER } from "@/app/_constants/role";
 import { useSession } from "next-auth/react";
 import { log } from "console";
 import { getServerSession } from "next-auth";
+import Link from "next/link";
 
 const desktopIcons = [
   <SpaceDashboardOutlinedIcon style={{ color: "white" }} />,
@@ -32,55 +34,69 @@ const desktopIcons = [
   <PeopleOutlinedIcon style={{ color: "white" }} />,
   <AssessmentOutlinedIcon style={{ color: "white" }} />,
 ];
-
+const styles = {
+  "&.Mui-selected": {
+    backgroundColor: "#ffffffd9",
+    color: "var(--primary)",
+    borderRadius: "10px 0px 0px 10px",
+  },
+  "&.Mui-selected svg": {
+    backgroundColor: "transparent",
+    color: "#1a1363 !important",
+    fontWeight: "500 !important",
+  },
+  "&.Mui-selected .MuiTypography-root": {
+    fontWeight: "500 !important",
+  },
+};
 const allSideBarItem: SideBarItem[] = [
   {
     label: "Dashboard",
     icon: desktopIcons[0],
     forRole: [GYM_ADMIN, GYM_OWNER], // Adjust roles as needed
-    link: "/daskboard",
+    link: "/daskboard/statistic",
   },
   {
     label: "Profile",
     icon: desktopIcons[1],
     forRole: [GYM_ADMIN, GYM_OWNER], // Adjust roles as needed
-    link: "/profile",
+    link: "/daskboard/profile",
   },
   {
     label: "Registration",
     icon: desktopIcons[2],
     forRole: [GYM_OWNER], // Adjust roles as needed
-    link: "/registe-member",
+    link: "/daskboard/member",
   },
   {
     label: "Plan",
     icon: desktopIcons[3],
-    forRole: [GYM_ADMIN, GYM_OWNER], // Adjust roles as needed
-    link: "/plan",
+    forRole: [GYM_OWNER], // Adjust roles as needed
+    link: "/daskboard/gym-plan",
   },
   {
     label: "Payment",
     icon: desktopIcons[4],
     forRole: [GYM_OWNER], // Adjust roles as needed
-    link: "/payment",
+    link: "/daskboard/payment",
   },
   {
     label: "Inventory",
     icon: desktopIcons[5],
     forRole: [GYM_OWNER], // Adjust roles as needed
-    link: "/inventory",
+    link: "/daskboard/inventory",
   },
   {
     label: "Member",
     icon: desktopIcons[6],
     forRole: [GYM_OWNER], // Adjust roles as needed
-    link: "/member",
+    link: "/daskboard/member",
   },
   {
     label: "Report",
     icon: desktopIcons[7],
     forRole: [GYM_OWNER], // Adjust roles as needed
-    link: "/report",
+    link: "/daskboard/report",
   },
 ];
 
@@ -104,15 +120,25 @@ const SideBarComponent = () => {
     return arr1.some((item) => arr2.includes(item));
   };
 
-  let sideBarBasedOnRole = generateSideBarByRole();
+  const [selectIndex, setSelectedNavItem] = useState(0);
+
   return (
     <List>
       {generateSideBarByRole().map((item, index) => (
-        <ListItem key={index} disablePadding>
-          <ListItemButton>
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.label} />
-          </ListItemButton>
+        <ListItem
+          style={{ width: "100%", display: "block" }}
+          key={index}
+          disablePadding
+          selected={index === selectIndex}
+          onClick={() => setSelectedNavItem(index)}
+          sx={styles}
+        >
+          <Link style={{ background: "#ffffff" }} href={item.link}>
+            <ListItemButton>
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.label} />
+            </ListItemButton>
+          </Link>
         </ListItem>
       ))}
     </List>

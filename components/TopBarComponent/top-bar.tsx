@@ -11,8 +11,9 @@ import Button from "@mui/material/Button";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Grid } from "@mui/material";
 import Link from "next/link";
+import { signIn, signOut } from "next-auth/react";
 
-const pages = ["Feedback", "Log Out"];
+const pages = ["Log Out"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 interface Props {
   /**
@@ -52,7 +53,7 @@ function DashBoardTopBar(props: Props) {
                 objectFit: "contain",
               }}
               alt="Remy Sharp"
-              src="./images/nav-logo.svg"
+              src="/images/nav-logo.svg"
             />
           </Link>
 
@@ -119,7 +120,7 @@ function DashBoardTopBar(props: Props) {
                 mr: 1,
               }}
               alt="Remy Sharp"
-              src="./images/nav-logo.svg"
+              src="/images/nav-logo.svg"
             />
           </Link>
           <Typography
@@ -148,11 +149,16 @@ function DashBoardTopBar(props: Props) {
             {pages.map((page) => (
               <Button
                 key={page}
-                style={{ color: "var(--main-font-color)", display: "block" }}
+                style={{
+                  color: "var(--main-font-color)",
+                  display: "block",
+                  textTransform: "capitalize",
+                }}
+                onClick={() =>
+                  signOut({ redirect: true, callbackUrl: "/home" })
+                }
               >
-                <Link style={{ textTransform: "capitalize" }} href="/register">
-                  {page}
-                </Link>
+                {page}
               </Button>
             ))}
           </Box>

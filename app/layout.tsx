@@ -4,8 +4,9 @@ import "./globals.css";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Provider from "./Provider";
-import { ReactNode } from "react";
-import { SessionProvider } from "next-auth/react";
+import { ReactNode, useEffect } from "react";
+import { SessionProvider, signOut, useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 const theme = createTheme({
   typography: {
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export default function RootLayout(prop: Props) {
+
   return (
     <html lang="en">
       <head>
@@ -28,7 +30,7 @@ export default function RootLayout(prop: Props) {
         />
       </head>
       <body style={{ overflow: "hidden" }}>
-        <SessionProvider refetchOnWindowFocus={false}>
+        <SessionProvider refetchOnWindowFocus={true}>
           <ThemeProvider theme={theme}>{prop.children}</ThemeProvider>
         </SessionProvider>
       </body>

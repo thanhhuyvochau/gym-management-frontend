@@ -13,7 +13,7 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { getSession, signIn, signOut, useSession } from "next-auth/react";
 import Grid from "@mui/material/Grid/Grid";
 import { log } from "console";
 
@@ -35,15 +35,13 @@ const pages: NavItem[] = [
   },
   {
     name: "Logout",
-    navLink: () => signOut({ redirect: true, callbackUrl: "/login" }),
+    navLink: () => signOut({ redirect: true, callbackUrl: "/home" }),
   },
 ];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 export function HomeReponsiveAppBar() {
   const { data: session } = useSession();
-
-  // console.log("DATA SESSION:---\n" + JSON.stringify(session));
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
@@ -80,7 +78,7 @@ export function HomeReponsiveAppBar() {
                 objectFit: "contain",
               }}
               alt="Remy Sharp"
-              src="./images/nav-logo.svg"
+              src="/images/nav-logo.svg"
             />
           </Link>
 
@@ -243,7 +241,6 @@ export function HomeReponsiveAppBar() {
                   );
                 }
               } else {
-                console.log("PAGE LINK:" + page.navLink);
                 return (
                   <Button key={page.name}>
                     <Link

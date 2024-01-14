@@ -3,6 +3,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Provider from "./Provider";
+import { ReactNode, useEffect } from "react";
+import { SessionProvider, signOut, useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 const theme = createTheme({
   typography: {
@@ -11,16 +15,12 @@ const theme = createTheme({
   },
 });
 
-// export const metadata: Metadata = {
-//   title: "Gym Management System",
-//   description: "Platform to Simplify you Life",
-// };
+interface Props {
+  children: ReactNode;
+}
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout(prop: Props) {
+
   return (
     <html lang="en">
       <head>
@@ -30,7 +30,9 @@ export default function RootLayout({
         />
       </head>
       <body style={{ overflow: "hidden" }}>
-        <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        <SessionProvider refetchOnWindowFocus={true}>
+          <ThemeProvider theme={theme}>{prop.children}</ThemeProvider>
+        </SessionProvider>
       </body>
     </html>
   );

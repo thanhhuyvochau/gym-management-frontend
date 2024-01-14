@@ -1,3 +1,4 @@
+"use client";
 import {
   Box,
   Button,
@@ -11,12 +12,79 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import classes from "./Register.module.css";
-import Link from "next/link";
-import Input from "@mui/material/Input";
+import axios from "axios";
+import { API } from "@/app/_constants/api-endpoint";
+import { redirect } from "next/navigation";
 
 const Register = () => {
+  const [formState, setFormState] = useState({
+    email: "",
+    password: "",
+    rePassword: "",
+  });
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+    rePassword: "",
+  });
+  const changeField = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value);
+
+    setFormState({ ...formState, [event.target.name]: event.target.value });
+  };
+  const validateForm = () => {
+    let valid = true;
+
+    if (!formState.email) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        email: "Email is required",
+      }));
+      valid = false;
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, email: "" }));
+    }
+
+    if (!formState.password) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        password: "Password is required",
+      }));
+      valid = false;
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, password: "" }));
+    }
+
+    if (formState.password !== formState.rePassword) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        rePassword: "Passwords do not match",
+      }));
+      valid = false;
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, rePassword: "" }));
+    }
+
+    return valid;
+  };
+  const handleSubmitRegister = async () => {
+    if (validateForm()) {
+      try {
+        const response = await axios.post(API.REGISTER, {
+          email: formState.email,
+          password: formState.password,
+        });
+        // Handle the response as needed
+        console.log("Registration successful:", response.data);
+        redirect("/login");
+      } catch (error) {
+        // Handle errors
+        console.error("Registration failed:", error);
+      }
+    }
+  };
   return (
     <>
       <Grid className={classes.fullHeightContainer} container>
@@ -61,7 +129,13 @@ const Register = () => {
                   id="emailInput"
                   style={{ border: "solid 4px #332F64", borderRadius: "10px" }}
                   required
+                  value={formState.email}
+                  onChange={changeField}
+                  name="email"
                 />
+                <Typography variant="subtitle2" color={"red"}>
+                  {errors.email}
+                </Typography>
               </Grid>
               <Grid container direction="column">
                 <InputLabel
@@ -77,8 +151,15 @@ const Register = () => {
                   style={{ border: "solid 4px #332F64", borderRadius: "10px" }}
                   required
                   id="passwordInput"
+                  value={formState.password}
+                  onChange={changeField}
+                  name="password"
                 />
+                <Typography variant="subtitle2" color={"red"}>
+                  {errors.email}
+                </Typography>
               </Grid>
+
               <Grid container direction="column">
                 <InputLabel
                   style={{ color: "var(--main-font-color)" }}
@@ -93,7 +174,13 @@ const Register = () => {
                   style={{ border: "solid 4px #332F64", borderRadius: "10px" }}
                   required
                   id="passwordInput"
+                  value={formState.rePassword}
+                  onChange={changeField}
+                  name="rePassword"
                 />
+                <Typography variant="subtitle2" color={"red"}>
+                  {errors.rePassword}
+                </Typography>
               </Grid>
 
               <Fab
@@ -103,6 +190,7 @@ const Register = () => {
                 }}
                 variant="extended"
                 sx={{ width: "100%" }}
+                onClick={handleSubmitRegister}
               >
                 <Typography variant="h5">Register</Typography>
               </Fab>

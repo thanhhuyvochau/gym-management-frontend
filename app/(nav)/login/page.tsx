@@ -1,9 +1,8 @@
+"use client";
 import {
   Box,
-  Button,
   Checkbox,
   Fab,
-  FormControl,
   FormControlLabel,
   Grid,
   InputLabel,
@@ -11,12 +10,30 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import classes from "./Login.module.css";
 import Link from "next/link";
-import Input from "@mui/material/Input";
-
+import api from "@/app/_ultils/api";
+import { API } from "@/app/_constants/api-endpoint";
+import { JwtResponse } from "../../_models/JwtResponse";
+import { signIn } from "next-auth/react";
+import { on } from "stream";
+import { tree } from "next/dist/build/templates/app-page";
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const onSubmit = async () => {
+    const result = await signIn("credentials", {
+      username: "thanhhuyvochau@gmail.com",
+      password: "08122000@Huy",
+      redirect: true,
+      callbackUrl: "/daskboard/profile",
+    });
+  };
+
+
+
   return (
     <>
       <Grid className={classes.fullHeightContainer} container>
@@ -60,6 +77,8 @@ const Login = () => {
                   id="emailInput"
                   style={{ border: "solid 4px #332F64", borderRadius: "10px" }}
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
               <Grid container direction="column">
@@ -77,6 +96,8 @@ const Login = () => {
                   style={{ border: "solid 4px #332F64", borderRadius: "10px" }}
                   required
                   id="passwordInput"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
 
@@ -106,6 +127,7 @@ const Login = () => {
                 }}
                 variant="extended"
                 sx={{ width: "100%" }}
+                onClick={() => onSubmit()}
               >
                 <Typography variant="h5">Login</Typography>
               </Fab>

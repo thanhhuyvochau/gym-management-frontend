@@ -1,4 +1,5 @@
+const BASE: string = "http://localhost:8080/api";
 export const API = {
-    LOGIN: "/auth/login",
-    REGISTER: ""
+    LOGIN: BASE + "/auth/login",
+    REGISTER: BASE + "/accounts/register"
 }

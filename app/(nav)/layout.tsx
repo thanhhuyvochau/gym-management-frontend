@@ -42,6 +42,7 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 export function HomeReponsiveAppBar() {
   const { data: session } = useSession();
+  // const session = getCustomSession();
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null

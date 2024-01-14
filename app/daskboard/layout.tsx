@@ -10,7 +10,7 @@ import DashBoardTopBar from "../../components/TopBarComponent/top-bar";
 import SideBarComponent from "@/components/SideBarComponent/side-bar";
 import { Avatar, Stack, Typography } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useState } from "react";
 import { UserProfileResponse } from "../_models/UserProfileResponse";
 import { Session } from "next-auth";
@@ -23,6 +23,9 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   const session = useSession();
+  // if (session == undefined) {
+  //   signOut({ redirect: true, callbackUrl: "/login" });
+  // }
   const [isLoading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(
     null
@@ -134,7 +137,7 @@ export default function MainLayout({
               width: drawerWidth,
               backgroundColor: "var(--primary)",
               color: "var(--white)",
-              paddingLeft: "26px"
+              paddingLeft: "26px",
             },
           }}
           style={{ backgroundColor: "--var(--primary)" }}

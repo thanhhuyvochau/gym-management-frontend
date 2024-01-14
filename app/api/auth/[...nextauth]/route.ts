@@ -66,10 +66,10 @@ const handler = NextAuth({
             return token;
         },
         async session({ session, token }) {
-            if (isTokenExpired(parseJwtToken(token.user.token))) {
+            if (isTokenExpired(parseJwtToken((token.user as any).token))) {
                 console.log("SESSION:" + JSON.stringify(session));
-
-                return undefined;
+                // session.expires = token.exp;
+                return session;
             } else if (token && token.user) {
                 session.user = { ...token.user } as any;
             }

@@ -50,9 +50,12 @@ const Profile = () => {
   );
   useEffect(() => {
     const fetchData = async () => {
-      const sessionData = session.data as Session;
       if (session.status === "authenticated" && userProfile == null) {
+        const sessionData = session.data;
         console.log("SESSION BEFORE CALL:" + sessionData.user.token);
+        if (sessionData.user.token == undefined) {
+          signOut({ redirect: true, callbackUrl: "/login" });
+        }
         const profileData = await fetchUserProfile(sessionData.user.token);
         if (profileData) {
           setUserProfile(profileData);

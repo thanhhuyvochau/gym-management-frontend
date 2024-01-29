@@ -143,7 +143,7 @@ const MemberCard: React.FC<MemberCardProps> = ({
           {expanded ? <ExpandLess /> : <ExpandMore />}
         </IconButton>
       </DialogContent>
-      <Divider sx={{ my: 2, backgroundColor: "#1a1363" }} />
+      <Divider sx={{ my: 0, backgroundColor: "#1a1363" }} />
       <div style={{ marginTop: "0", textAlign: "right", padding: "1rem" }}>
         <Button onClick={onClickClose} variant="contained" style={buttonStyles}>
           Close

@@ -17,7 +17,7 @@ const handler = NextAuth({
             // You can specify which fields should be submitted, by adding keys to the `credentials` object.
             // You can pass any HTML attribute to the <input> tag through the object.
             credentials: {
-                username: { label: "Username", type: "text", placeholder: "jsmith" },
+                username: { label: "Username", type: "text", },
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials, req) {
@@ -59,21 +59,17 @@ const handler = NextAuth({
             // after login and session is set to user , so when request session get empty
             if (user) {
                 token.user = user;
-
-
             }
             return token;
         },
         async session({ session, token }) {
             if (isTokenExpired(parseJwtToken((token.user as any).token))) {
-                console.log("SESSION:" + JSON.stringify(session));
-                // session.expires = token.exp;
+                console.log("EXPIRED SESSION TOKEN JWT:" + JSON.stringify(session));
                 return session;
             } else if (token && token.user) {
                 session.user = { ...token.user } as any;
             }
             // console.log("SESSION:" + JSON.stringify(session));
-
             return session;
         },
     },

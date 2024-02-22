@@ -91,40 +91,70 @@ const MemberCard: React.FC<MemberCardProps> = ({
         </Typography>
         <Grid container spacing={4} rowGap={4}>
           <Grid item xs={12} sm={6}>
-            <Typography variant="body2" sx={{ color: "#1a1363", marginBottom: "0.5rem" }}>
+            <Typography
+              variant="body2"
+              sx={{ color: "#1a1363", marginBottom: "0.5rem" }}
+            >
               <strong>ID:</strong> {id}
             </Typography>
-            <Typography variant="body2" sx={{ color: "#1a1363", marginBottom: "0.5rem" }}>
+            <Typography
+              variant="body2"
+              sx={{ color: "#1a1363", marginBottom: "0.5rem" }}
+            >
               <strong>Gender:</strong> {gender}
             </Typography>
-            <Typography variant="body2" sx={{ color: "#1a1363", marginBottom: "0.5rem" }}>
+            <Typography
+              variant="body2"
+              sx={{ color: "#1a1363", marginBottom: "0.5rem" }}
+            >
               <strong>Date of Birth:</strong> {dateOfBirth}
             </Typography>
             <Divider sx={{ my: 2, backgroundColor: "#1a1363" }} />
-            <Typography variant="body2" sx={{ color: "#1a1363", marginBottom: "0.5rem" }}>
+            <Typography
+              variant="body2"
+              sx={{ color: "#1a1363", marginBottom: "0.5rem" }}
+            >
               <strong>Email:</strong> {email}
             </Typography>
-            <Typography variant="body2" sx={{ color: "#1a1363", marginBottom: "0.5rem" }}>
+            <Typography
+              variant="body2"
+              sx={{ color: "#1a1363", marginBottom: "0.5rem" }}
+            >
               <strong>Phone Number:</strong> {phoneNumber}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="body2" sx={{ color: "#1a1363", marginBottom: "0.5rem" }}>
+            <Typography
+              variant="body2"
+              sx={{ color: "#1a1363", marginBottom: "0.5rem" }}
+            >
               <strong>Address:</strong> {streetAddress}, {city}, {stateProvince}
             </Typography>
             <Divider sx={{ my: 2, backgroundColor: "#1a1363" }} />
-            <Typography variant="body2" sx={{ color: "#1a1363", marginBottom: "0.5rem" }}>
+            <Typography
+              variant="body2"
+              sx={{ color: "#1a1363", marginBottom: "0.5rem" }}
+            >
               <strong>Membership Type:</strong> {membershipType}
             </Typography>
-            <Typography variant="body2" sx={{ color: "#1a1363", marginBottom: "0.5rem" }}>
+            <Typography
+              variant="body2"
+              sx={{ color: "#1a1363", marginBottom: "0.5rem" }}
+            >
               <strong>Membership Start Date:</strong> {membershipStartDate}
             </Typography>
             {membershipEndDate && (
-              <Typography variant="body2" sx={{ color: "#1a1363", marginBottom: "0.5rem" }}>
+              <Typography
+                variant="body2"
+                sx={{ color: "#1a1363", marginBottom: "0.5rem" }}
+              >
                 <strong>Membership End Date:</strong> {membershipEndDate}
               </Typography>
             )}
-            <Typography variant="body2" sx={{ color: "#1a1363", marginBottom: "0.5rem" }}>
+            <Typography
+              variant="body2"
+              sx={{ color: "#1a1363", marginBottom: "0.5rem" }}
+            >
               <strong>Membership Status:</strong>{" "}
               {membershipStatus ? "Active" : "Inactive"}
             </Typography>

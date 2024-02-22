@@ -36,17 +36,22 @@ const options: MUIDataTableOptions = {
   },
 };
 const GymPlanManagement = () => {
-  const [open, setOpen] = React.useState(false);
+  const [openDetail, setOpenDetail] = React.useState(false);
   const [selectedPlan, setSelectedPlan] = useState<GymPlanResponse | null>(
     null
   );
+  const [openEdit, setOpenEdit] = React.useState(false);
   const handleClickOpen = () => {
-    console.log("OPEN");
-    setOpen(true);
+    setOpenDetail(true);
   };
   const handleClickClose = () => {
-    console.log("CLOSE");
-    setOpen(false);
+    setOpenEdit(false);
+  };
+  const handleClickOpenEditForm = () => {
+    setOpenEdit(true);
+  };
+  const handleClickCloseEditForm = () => {
+    setOpenEdit(false);
   };
   const mockGymPlanData: GymPlanResponse[] = [
     {
@@ -157,6 +162,14 @@ const GymPlanManagement = () => {
                 variant="outlined"
                 color="success"
                 startIcon={<EditIcon />}
+                onClick={() => {
+                  let rowIndex = tableMeta.rowIndex;
+                  let selectedPlan = mockGymPlanData[rowIndex];
+                  setSelectedPlan((previous) => {
+                    return (previous = selectedPlan);
+                  });
+                  handleClickOpenEditForm();
+                }}
               >
                 Edit
               </Button>
@@ -175,7 +188,7 @@ const GymPlanManagement = () => {
       {selectedPlan !== null && (
         <GymPlanDetails
           onClickClose={handleClickClose}
-          status={open}
+          status={openDetail}
           gymPlan={selectedPlan as any}
         ></GymPlanDetails>
       )}
@@ -185,7 +198,13 @@ const GymPlanManagement = () => {
         columns={columns}
         options={options}
       />
-      <EditGymPlanForm  gymPlan={mockGymPlanData[0]} ></EditGymPlanForm>
+      {selectedPlan !== null && (
+        <EditGymPlanForm
+          gymPlan={selectedPlan as any}
+          onOpen={openEdit}
+          onCancel={handleClickCloseEditForm}
+        ></EditGymPlanForm>
+      )}
     </Box>
   );
 };

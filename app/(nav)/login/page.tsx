@@ -25,14 +25,12 @@ const Login = () => {
 
   const onSubmit = async () => {
     const result = await signIn("credentials", {
-      username: "thanhhuyvochau@gmail.com",
-      password: "08122000@Huy",
+      username: email,
+      password: password,
       redirect: true,
       callbackUrl: "/daskboard/profile",
     });
   };
-
-
 
   return (
     <>

@@ -1,74 +1,36 @@
-const BASE_URL = 'http://localhost:8080/api';
+import axios from 'axios';
 
-const api = {
-    get: async (endpoint: any) => {
-        try {
-            const response = await fetch(`${BASE_URL}${endpoint}`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        } catch (error: any) {
-            throw new Error(`Error during GET request: ${error.message}`);
-        }
-    },
+// Create an Axios instance with a base URL
+const api = axios.create({
+  baseURL: 'http://localhost:8080/api', // Replace with your API base URL
+  headers: {
+    'Content-Type': 'application/json',
+    // You can add other headers as needed
+  },
+});
 
-    post: async (endpoint: any, data: any) => {
-        try {
-            const response = await fetch(`${BASE_URL}${endpoint}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
+// Define your service methods
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            return response.json();
-        } catch (error: any) {
-            throw new Error(`Error during POST request: ${error.message}`);
-        }
-    },
-    put: async (endpoint: any, data: any) => {
-        try {
-            const response = await fetch(`${BASE_URL}${endpoint}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            return response.json();
-        } catch (error: any) {
-            throw new Error(`Error during POST request: ${error.message}`);
-        }
-    },
-    delete: async (endpoint: any) => {
-        try {
-            const response = await fetch(`${BASE_URL}${endpoint}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            return response.json();
-        } catch (error: any) {
-            throw new Error(`Error during POST request: ${error.message}`);
-        }
-    },
+export const getPosts = async () => {
+  try {
+    const response = await api.get('/posts');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    throw error;
+  }
 };
+
+export const createPost = async (postData:any) => {
+  try {
+    const response = await api.post('/posts', postData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating post:', error);
+    throw error;
+  }
+};
+
+// Add more methods as needed
 
 export default api;

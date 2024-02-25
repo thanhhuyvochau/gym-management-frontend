@@ -19,17 +19,25 @@ import { JwtResponse } from "../../_models/JwtResponse";
 import { signIn } from "next-auth/react";
 import { on } from "stream";
 import { tree } from "next/dist/build/templates/app-page";
+import authService from "@/app/_services/authService";
+import { useRouter } from "next/navigation";
+
+
 const Login = () => {
+  // const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter()
 
   const onSubmit = async () => {
-    const result = await signIn("credentials", {
-      username: email,
-      password: password,
-      redirect: true,
-      callbackUrl: "/daskboard/profile",
-    });
+    authService
+      .login(email, password)
+      .then((loginResponse) => {
+        router.push("/")
+      })
+      .catch((error) => {
+        alert("Login Error:"+error);
+      });
   };
 
   return (

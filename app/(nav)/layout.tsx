@@ -13,7 +13,6 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import Link from "next/link";
-import { getSession, signIn, signOut, useSession } from "next-auth/react";
 import Grid from "@mui/material/Grid/Grid";
 import { log } from "console";
 
@@ -35,15 +34,12 @@ const pages: NavItem[] = [
   },
   {
     name: "Logout",
-    navLink: () => signOut({ redirect: true, callbackUrl: "/home" }),
+    navLink: () => console.log("Sign Out"),
   },
 ];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 export function HomeReponsiveAppBar() {
-  const { data: session } = useSession();
-  // const session = getCustomSession();
-
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -189,58 +185,50 @@ export function HomeReponsiveAppBar() {
             {pages.map((page) => {
               if (page.name == "Logout") {
                 let logoutButton;
-                if (session != undefined) {
-                  logoutButton = (
-                    <Button
-                      key={page.name}
-                      onClick={page.navLink}
-                      style={{
-                        color: "var(--main-font-color)",
-                        display: "block",
-                      }}
-                    >
-                      {page.name}
-                    </Button>
-                  );
-                  return logoutButton;
-                } else {
-                  return;
-                }
+
+                logoutButton = (
+                  <Button
+                    key={page.name}
+                    onClick={page.navLink}
+                    style={{
+                      color: "var(--main-font-color)",
+                      display: "block",
+                    }}
+                  >
+                    {page.name}
+                  </Button>
+                );
+                return logoutButton;
               } else if (page.name == "Login") {
                 let logInButton;
-                if (session == undefined) {
-                  return (logInButton = (
-                    <Button
+
+                return (logInButton = (
+                  <Button
+                    key={page.name}
+                    href={page.navLink()}
+                    style={{
+                      color: "var(--main-font-color)",
+                      display: "block",
+                    }}
+                  >
+                    {page.name}
+                  </Button>
+                ));
+              } else if (page.name == "Dashboard") {
+                return (
+                  <Button key={page.name}>
+                    <Link
+                      href={page.navLink()}
                       key={page.name}
-                      onClick={page.navLink}
                       style={{
                         color: "var(--main-font-color)",
                         display: "block",
                       }}
                     >
                       {page.name}
-                    </Button>
-                  ));
-                } else {
-                  return;
-                }
-              } else if (page.name == "Dashboard") {
-                if (session != undefined) {
-                  return (
-                    <Button key={page.name}>
-                      <Link
-                        href={page.navLink()}
-                        key={page.name}
-                        style={{
-                          color: "var(--main-font-color)",
-                          display: "block",
-                        }}
-                      >
-                        {page.name}
-                      </Link>
-                    </Button>
-                  );
-                }
+                    </Link>
+                  </Button>
+                );
               } else {
                 return (
                   <Button key={page.name}>

@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { signOut, useSession } from "next-auth/react";
 import { Grid, Paper } from "@mui/material";
 import { UserProfileResponse } from "@/app/_models/UserProfileResponse";
 import SettingsCard from "@/components/SettingCardComponent/SettingsCard";
@@ -43,28 +42,12 @@ const fetchUserProfile = async (token: string) => {
 };
 
 const Profile = () => {
-  const session = useSession();
+
   const [isLoading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(
     null
   );
-  useEffect(() => {
-    const fetchData = async () => {
-      if (session.status === "authenticated" && userProfile == null) {
-        const sessionData = session.data;
-        console.log("SESSION BEFORE CALL:" + sessionData.user.token);
-        if (sessionData.user.token == undefined) {
-          signOut({ redirect: true, callbackUrl: "/login" });
-        }
-        const profileData = await fetchUserProfile(sessionData.user.token);
-        if (profileData) {
-          setUserProfile(profileData);
-          setLoading(false);
-        }
-      }
-    };
-    fetchData();
-  }, [session]);
+  
 
   return (
     !isLoading && (

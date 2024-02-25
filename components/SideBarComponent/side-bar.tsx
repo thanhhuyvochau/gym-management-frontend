@@ -16,12 +16,8 @@ import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
 import PaymentOutlinedIcon from "@mui/icons-material/PaymentOutlined";
-import DashBoardTopBar from "../../components/TopBarComponent/top-bar";
 import { SideBarItem } from "@/app/_models/SideBarItem";
 import { GYM_ADMIN, GYM_OWNER } from "@/app/_constants/role";
-import { useSession } from "next-auth/react";
-import { log } from "console";
-import { getServerSession } from "next-auth";
 import Link from "next/link";
 
 const desktopIcons = [
@@ -101,10 +97,10 @@ const allSideBarItem: SideBarItem[] = [
 ];
 
 const SideBarComponent = () => {
-  const { data: session } = useSession();
+
   const generateSideBarByRole = () => {
     let sideBarBasedOnRole: SideBarItem[] = [];
-    let userRoles = session?.user.roles;
+    let userRoles = ["ROLE_GYM_OWNER"];
     if (userRoles == undefined) userRoles = [];
     sideBarBasedOnRole = allSideBarItem.filter((navItem) => {
       if (!hasExistInList(userRoles as string[], navItem.forRole)) {

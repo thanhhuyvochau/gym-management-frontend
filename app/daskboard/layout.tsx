@@ -10,7 +10,6 @@ import DashBoardTopBar from "../../components/TopBarComponent/top-bar";
 import SideBarComponent from "@/components/SideBarComponent/side-bar";
 import { Avatar, Stack, Typography } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { signOut, useSession } from "next-auth/react";
 import { useState } from "react";
 import { UserProfileResponse } from "../_models/UserProfileResponse";
 import { Session } from "next-auth";
@@ -22,7 +21,7 @@ export default function MainLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = useSession();
+
   // if (session == undefined) {
   //   signOut({ redirect: true, callbackUrl: "/login" });
   // }
@@ -30,20 +29,20 @@ export default function MainLayout({
   const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(
     null
   );
-  React.useEffect(() => {
-    const fetchData = async () => {
-      const sessionData = session.data as Session;
-      if (session.status === "authenticated" && userProfile == null) {
-        console.log("SESSION BEFORE CALL:" + sessionData.user.token);
-        const profileData = await fetchUserProfile(sessionData.user.token);
-        if (profileData) {
-          setUserProfile(profileData);
-          setLoading(false);
-        }
-      }
-    };
-    fetchData();
-  }, [session]);
+  // React.useEffect(() => {
+  //   const fetchData = async () => {
+  //     const sessionData = session.data as Session;
+  //     if (session.status === "authenticated" && userProfile == null) {
+  //       console.log("SESSION BEFORE CALL:" + sessionData.user.token);
+  //       const profileData = await fetchUserProfile(sessionData.user.token);
+  //       if (profileData) {
+  //         setUserProfile(profileData);
+  //         setLoading(false);
+  //       }
+  //     }
+  //   };
+  //   fetchData();
+  // }, [session]);
   const fetchUserProfile = async (token: string) => {
     try {
       const response = await fetch(

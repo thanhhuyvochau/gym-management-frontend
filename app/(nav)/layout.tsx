@@ -28,7 +28,7 @@ const pages: NavItem[] = [
   { name: "About", navLink: () => "/about" },
   { name: "Why Join Us?", navLink: () => "/why-join-us" },
   { name: "Plan", navLink: () => "/plan" },
-  { name: "Login", navLink: () => signIn() },
+  { name: "Login", navLink: () => "/login" },
   {
     name: "Dashboard",
     navLink: () => "/daskboard",

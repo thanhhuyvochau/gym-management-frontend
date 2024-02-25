@@ -38,9 +38,6 @@ const authService = {
     getToken: (): string | null => {
         // Retrieve the token from localStorage or secure storage
         return localStorage.getItem('access_token');
-    },
-    getProfile(): UserProfileResponse => {
-        const response: ApiResponse<JwtResponse> = await api.get("/accounts/profile");
     }
 };
 

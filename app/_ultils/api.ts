@@ -21,7 +21,7 @@ export const getPosts = async () => {
   }
 };
 
-export const createPost = async (postData:any) => {
+export const createPost = async (postData: any) => {
   try {
     const response = await api.post('/posts', postData);
     return response.data;
@@ -32,5 +32,17 @@ export const createPost = async (postData:any) => {
 };
 
 // Add more methods as needed
+
+api.interceptors.request.use((config) => {
+  config.headers = config.headers || {};
+
+  const accessToken = localStorage.getItem('access_token');
+
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+
+  return config;
+});
 
 export default api;

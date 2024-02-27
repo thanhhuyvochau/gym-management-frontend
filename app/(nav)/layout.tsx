@@ -1,22 +1,3 @@
-<<<<<<< Updated upstream
-"use client";
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
-import Link from "next/link";
-import Grid from "@mui/material/Grid/Grid";
-import { log } from "console";
-=======
 'use client';
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
@@ -32,10 +13,10 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import Link from 'next/link';
-import { getSession, signIn, signOut, useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import Grid from '@mui/material/Grid/Grid';
-import { log } from 'console';
->>>>>>> Stashed changes
+import { useAuth } from '../_hooks';
+import { Logo } from '@/components';
 
 interface NavItem {
   name: string;
@@ -44,49 +25,28 @@ interface NavItem {
 
 // const pages = ["About", "Why Join Us?", "Plan", "Login", "Logout"];
 
-const pages: NavItem[] = [
-<<<<<<< Updated upstream
-  { name: "About", navLink: () => "/about" },
-  { name: "Why Join Us?", navLink: () => "/why-join-us" },
-  { name: "Plan", navLink: () => "/plan" },
-  { name: "Login", navLink: () => "/login" },
-=======
-  { name: 'About', navLink: () => '/about' },
-  { name: 'Why Join Us?', navLink: () => '/why-join-us' },
-  { name: 'Plan', navLink: () => '/plan' },
-  { name: 'Login', navLink: () => '/login' },
->>>>>>> Stashed changes
-  {
-    name: 'Dashboard',
-    navLink: () => '/daskboard',
-  },
-  {
-<<<<<<< Updated upstream
-    name: "Logout",
-    navLink: () => console.log("Sign Out"),
-=======
-    name: 'Logout',
-    navLink: () => signOut({ redirect: true, callbackUrl: '/home' }),
->>>>>>> Stashed changes
-  },
-];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export function HomeReponsiveAppBar() {
-<<<<<<< Updated upstream
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
-=======
-  const { data: session } = useSession();
-  // const session = getCustomSession();
-
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
->>>>>>> Stashed changes
+
+  const { profile, logout } = useAuth();
+
+  const pages: NavItem[] = [
+    { name: 'About', navLink: () => '/about' },
+    { name: 'Why Join Us?', navLink: () => '/why-join-us' },
+    { name: 'Plan', navLink: () => '/plan' },
+    { name: 'Login', navLink: () => '/login' },
+    {
+      name: 'Dashboard',
+      navLink: () => '/dashboard',
+    },
+    {
+      name: 'Logout',
+      navLink: () => '/logout',
+    },
+  ];
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -107,54 +67,6 @@ export function HomeReponsiveAppBar() {
     <AppBar color='default' position='sticky'>
       <Container maxWidth='lg'>
         <Toolbar disableGutters>
-          <Link href={'/home'}>
-            <Avatar
-              sx={{
-                display: { xs: 'none', md: 'flex' },
-                width: '80px',
-                height: '80px',
-                objectFit: 'contain',
-              }}
-              alt='Remy Sharp'
-              src='/images/nav-logo.svg'
-            />
-          </Link>
-
-          <Grid width='fit-content' container direction='column'>
-            <Typography
-              variant='h6'
-              noWrap
-              component='a'
-              sx={{
-                mr: 2,
-                display: { xs: 'none', md: 'flex' },
-                fontFamily: 'monospace',
-                fontWeight: '600',
-                letterSpacing: '.3rem',
-                color: 'var(--main-font-color)',
-                textDecoration: 'none',
-              }}
-            >
-              STAMINA
-            </Typography>
-            <Typography
-              variant='h6'
-              noWrap
-              component='a'
-              sx={{
-                mr: 2,
-                display: { xs: 'none', md: 'flex' },
-                fontFamily: 'monospace',
-                fontWeight: '600',
-                letterSpacing: '.3rem',
-                color: 'var(--main-font-color)',
-                textDecoration: 'none',
-              }}
-            >
-              FITNESS
-            </Typography>
-          </Grid>
-
           <Box
             component='div'
             sx={{
@@ -199,25 +111,8 @@ export function HomeReponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant='h5'
-            noWrap
-            component='a'
-            href='#app-bar-with-responsive-menu'
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            LOGO
-          </Typography>
+          <Logo />
+
           <Box
             sx={{
               flexGrow: 1,
@@ -225,107 +120,82 @@ export function HomeReponsiveAppBar() {
               justifyContent: 'flex-end',
             }}
           >
-            {pages.map((page) => {
-              if (page.name == 'Logout') {
-                let logoutButton;
-<<<<<<< Updated upstream
-
-                logoutButton = (
-                  <Button
-                    key={page.name}
-                    onClick={page.navLink}
-                    style={{
-                      color: "var(--main-font-color)",
-                      display: "block",
-                    }}
-                  >
-                    {page.name}
-                  </Button>
-                );
-                return logoutButton;
-              } else if (page.name == "Login") {
-                let logInButton;
-
-                return (logInButton = (
-                  <Button
-                    key={page.name}
-                    href={page.navLink()}
-                    style={{
-                      color: "var(--main-font-color)",
-                      display: "block",
-                    }}
-                  >
-                    {page.name}
-                  </Button>
-                ));
-              } else if (page.name == "Dashboard") {
-                return (
-                  <Button key={page.name}>
-                    <Link
-                      href={page.navLink()}
-                      key={page.name}
-                      style={{
-                        color: "var(--main-font-color)",
-                        display: "block",
-                      }}
-                    >
-                      {page.name}
-                    </Link>
-                  </Button>
-                );
-=======
-                if (session != undefined) {
-                  logoutButton = (
-                    <Button
-                      key={page.name}
-                      onClick={page.navLink}
-                      style={{
-                        color: 'var(--main-font-color)',
-                        display: 'block',
-                      }}
-                    >
-                      {page.name}
-                    </Button>
-                  );
-                  return logoutButton;
-                } else {
-                  return;
-                }
-              } else if (page.name == 'Dashboard') {
-                if (session != undefined) {
-                  return (
-                    <Button key={page.name}>
-                      <Link
-                        href={page.navLink()}
-                        key={page.name}
-                        style={{
-                          color: 'var(--main-font-color)',
-                          display: 'block',
-                        }}
-                      >
-                        {page.name}
-                      </Link>
-                    </Button>
-                  );
-                }
->>>>>>> Stashed changes
-              } else {
-                return (
-                  <Button key={page.name}>
-                    <Link
-                      href={page.navLink()}
-                      key={page.name}
-                      style={{
-                        color: 'var(--main-font-color)',
-                        display: 'block',
-                      }}
-                    >
-                      {page.name}
-                    </Link>
-                  </Button>
-                );
-              }
-            })}
+            <Button>
+              <Link
+                href={'/about'}
+                style={{
+                  color: 'var(--main-font-color)',
+                  display: 'block',
+                  textDecoration: 'none',
+                }}
+              >
+                About
+              </Link>
+            </Button>
+            <Button>
+              <Link
+                href={'/why-join-us'}
+                style={{
+                  color: 'var(--main-font-color)',
+                  display: 'block',
+                  textDecoration: 'none',
+                }}
+              >
+                Why Join Us?
+              </Link>
+            </Button>
+            <Button>
+              <Link
+                href={'/plan'}
+                style={{
+                  color: 'var(--main-font-color)',
+                  display: 'block',
+                  textDecoration: 'none',
+                }}
+              >
+                Plan
+              </Link>
+            </Button>
+            {!profile && (
+              <Button>
+                <Link
+                  href={'/login'}
+                  style={{
+                    color: 'var(--main-font-color)',
+                    display: 'block',
+                    textDecoration: 'none',
+                  }}
+                >
+                  Login
+                </Link>
+              </Button>
+            )}
+            {Boolean(profile) && (
+              <Button>
+                <Link
+                  href={'/dashboard'}
+                  style={{
+                    color: 'var(--main-font-color)',
+                    display: 'block',
+                    textDecoration: 'none',
+                  }}
+                >
+                  Dashboard
+                </Link>
+              </Button>
+            )}
+            {Boolean(profile) && (
+              <Button
+                onClick={logout}
+                style={{
+                  color: 'var(--main-font-color)',
+                  display: 'block',
+                  textDecoration: 'none',
+                }}
+              >
+                Logout
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </Container>

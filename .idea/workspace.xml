@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="25562f44-61dc-49c5-863e-170bc1f7c2ab" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/app/(main)/daskboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(main)/daskboard/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(main)/dashboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(main)/dashboard/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/(main)/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(main)/layout.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/(main)/side-bar.tsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/(main)/top-bar.tsx" beforeDir="false" />

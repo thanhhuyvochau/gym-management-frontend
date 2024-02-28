@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 "use client";
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
@@ -15,6 +16,26 @@ import AdbIcon from "@mui/icons-material/Adb";
 import Link from "next/link";
 import Grid from "@mui/material/Grid/Grid";
 import { log } from "console";
+=======
+'use client';
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
+import AdbIcon from '@mui/icons-material/Adb';
+import Link from 'next/link';
+import { getSession, signIn, signOut, useSession } from 'next-auth/react';
+import Grid from '@mui/material/Grid/Grid';
+import { log } from 'console';
+>>>>>>> Stashed changes
 
 interface NavItem {
   name: string;
@@ -24,28 +45,48 @@ interface NavItem {
 // const pages = ["About", "Why Join Us?", "Plan", "Login", "Logout"];
 
 const pages: NavItem[] = [
+<<<<<<< Updated upstream
   { name: "About", navLink: () => "/about" },
   { name: "Why Join Us?", navLink: () => "/why-join-us" },
   { name: "Plan", navLink: () => "/plan" },
   { name: "Login", navLink: () => "/login" },
+=======
+  { name: 'About', navLink: () => '/about' },
+  { name: 'Why Join Us?', navLink: () => '/why-join-us' },
+  { name: 'Plan', navLink: () => '/plan' },
+  { name: 'Login', navLink: () => '/login' },
+>>>>>>> Stashed changes
   {
-    name: "Dashboard",
-    navLink: () => "/daskboard",
+    name: 'Dashboard',
+    navLink: () => '/daskboard',
   },
   {
+<<<<<<< Updated upstream
     name: "Logout",
     navLink: () => console.log("Sign Out"),
+=======
+    name: 'Logout',
+    navLink: () => signOut({ redirect: true, callbackUrl: '/home' }),
+>>>>>>> Stashed changes
   },
 ];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export function HomeReponsiveAppBar() {
+<<<<<<< Updated upstream
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+=======
+  const { data: session } = useSession();
+  // const session = getCustomSession();
+
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+>>>>>>> Stashed changes
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -63,51 +104,51 @@ export function HomeReponsiveAppBar() {
     setAnchorElUser(null);
   };
   return (
-    <AppBar color="default" position="sticky">
-      <Container maxWidth="lg">
+    <AppBar color='default' position='sticky'>
+      <Container maxWidth='lg'>
         <Toolbar disableGutters>
-          <Link href={"/home"}>
+          <Link href={'/home'}>
             <Avatar
               sx={{
-                display: { xs: "none", md: "flex" },
-                width: "80px",
-                height: "80px",
-                objectFit: "contain",
+                display: { xs: 'none', md: 'flex' },
+                width: '80px',
+                height: '80px',
+                objectFit: 'contain',
               }}
-              alt="Remy Sharp"
-              src="/images/nav-logo.svg"
+              alt='Remy Sharp'
+              src='/images/nav-logo.svg'
             />
           </Link>
 
-          <Grid width="fit-content" container direction="column">
+          <Grid width='fit-content' container direction='column'>
             <Typography
-              variant="h6"
+              variant='h6'
               noWrap
-              component="a"
+              component='a'
               sx={{
                 mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: "600",
-                letterSpacing: ".3rem",
-                color: "var(--main-font-color)",
-                textDecoration: "none",
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'monospace',
+                fontWeight: '600',
+                letterSpacing: '.3rem',
+                color: 'var(--main-font-color)',
+                textDecoration: 'none',
               }}
             >
               STAMINA
             </Typography>
             <Typography
-              variant="h6"
+              variant='h6'
               noWrap
-              component="a"
+              component='a'
               sx={{
                 mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: "600",
-                letterSpacing: ".3rem",
-                color: "var(--main-font-color)",
-                textDecoration: "none",
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'monospace',
+                fontWeight: '600',
+                letterSpacing: '.3rem',
+                color: 'var(--main-font-color)',
+                textDecoration: 'none',
               }}
             >
               FITNESS
@@ -115,62 +156,64 @@ export function HomeReponsiveAppBar() {
           </Grid>
 
           <Box
-            component="div"
+            component='div'
             sx={{
               flexGrow: 1,
-              display: { xs: "flex", md: "none" },
+              display: { xs: 'flex', md: 'none' },
             }}
           >
             <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
+              size='large'
+              aria-label='account of current user'
+              aria-controls='menu-appbar'
+              aria-haspopup='true'
               onClick={handleOpenNavMenu}
-              color="inherit"
+              color='inherit'
             >
               <MenuIcon />
             </IconButton>
             <Menu
-              id="menu-appbar"
+              id='menu-appbar'
               anchorEl={anchorElNav}
               anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
+                vertical: 'bottom',
+                horizontal: 'left',
               }}
               keepMounted
               transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
+                vertical: 'top',
+                horizontal: 'left',
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: { xs: "block", md: "none" },
+                display: { xs: 'block', md: 'none' },
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page.name}</Typography>
-                </MenuItem>
+                <Link key={page.name} href={page.navLink()}>
+                  <MenuItem onClick={handleCloseNavMenu}>
+                    <Typography textAlign='center'>{page.name}</Typography>
+                  </MenuItem>
+                </Link>
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
-            variant="h5"
+            variant='h5'
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component='a'
+            href='#app-bar-with-responsive-menu'
             sx={{
               mr: 2,
-              display: { xs: "flex", md: "none" },
+              display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
-              fontFamily: "monospace",
+              fontFamily: 'monospace',
               fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
             }}
           >
             LOGO
@@ -178,13 +221,14 @@ export function HomeReponsiveAppBar() {
           <Box
             sx={{
               flexGrow: 1,
-              display: { xs: "none", md: "flex" },
-              justifyContent: "flex-end",
+              display: { xs: 'none', md: 'flex' },
+              justifyContent: 'flex-end',
             }}
           >
             {pages.map((page) => {
-              if (page.name == "Logout") {
+              if (page.name == 'Logout') {
                 let logoutButton;
+<<<<<<< Updated upstream
 
                 logoutButton = (
                   <Button
@@ -229,6 +273,42 @@ export function HomeReponsiveAppBar() {
                     </Link>
                   </Button>
                 );
+=======
+                if (session != undefined) {
+                  logoutButton = (
+                    <Button
+                      key={page.name}
+                      onClick={page.navLink}
+                      style={{
+                        color: 'var(--main-font-color)',
+                        display: 'block',
+                      }}
+                    >
+                      {page.name}
+                    </Button>
+                  );
+                  return logoutButton;
+                } else {
+                  return;
+                }
+              } else if (page.name == 'Dashboard') {
+                if (session != undefined) {
+                  return (
+                    <Button key={page.name}>
+                      <Link
+                        href={page.navLink()}
+                        key={page.name}
+                        style={{
+                          color: 'var(--main-font-color)',
+                          display: 'block',
+                        }}
+                      >
+                        {page.name}
+                      </Link>
+                    </Button>
+                  );
+                }
+>>>>>>> Stashed changes
               } else {
                 return (
                   <Button key={page.name}>
@@ -236,8 +316,8 @@ export function HomeReponsiveAppBar() {
                       href={page.navLink()}
                       key={page.name}
                       style={{
-                        color: "var(--main-font-color)",
-                        display: "block",
+                        color: 'var(--main-font-color)',
+                        display: 'block',
                       }}
                     >
                       {page.name}
@@ -253,16 +333,12 @@ export function HomeReponsiveAppBar() {
   );
 }
 
-export default function MainLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Box component={"div"}>
+      <Box component={'div'}>
         <HomeReponsiveAppBar></HomeReponsiveAppBar>
-        <Box style={{}} component={"div"}>
+        <Box style={{}} component={'div'}>
           {children}
         </Box>
       </Box>

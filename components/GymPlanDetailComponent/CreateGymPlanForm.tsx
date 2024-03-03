@@ -31,40 +31,33 @@ const schema = yup.object().shape({
 });
 
 interface IEditGymPlanFormProps {
-  gymPlan: Plan;
   onCancel: () => void;
 }
 
-const EditGymPlanForm = ({ gymPlan, onCancel }: IEditGymPlanFormProps) => {
+const CreateGymPlanForm = ({ onCancel }: IEditGymPlanFormProps) => {
   const {
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {
-      name: gymPlan.name,
-      description: gymPlan.description,
-      timeAmount: gymPlan.timeAmount,
-      timeUnit: gymPlan.timeUnit,
-      price: gymPlan.price,
-      activate: gymPlan.activate,
-    },
   });
 
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
-    mutationFn: planService.updatePlans,
+    mutationFn: planService.create,
     onSuccess: () => {
-      toast.success('Update plan successfully!');
+      toast.success('Create plan successfully!');
       queryClient.invalidateQueries({ queryKey: ['plans'] });
       onCancel();
+      reset();
     },
   });
 
   const handleSave = (data: any) => {
-    mutate({ id: gymPlan.id, payload: data });
+    mutate(data);
   };
 
   return (
@@ -87,7 +80,6 @@ const EditGymPlanForm = ({ gymPlan, onCancel }: IEditGymPlanFormProps) => {
               <Controller
                 name='name'
                 control={control}
-                defaultValue={gymPlan.name}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -103,7 +95,6 @@ const EditGymPlanForm = ({ gymPlan, onCancel }: IEditGymPlanFormProps) => {
               <Controller
                 name='description'
                 control={control}
-                defaultValue={gymPlan.description}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -122,7 +113,6 @@ const EditGymPlanForm = ({ gymPlan, onCancel }: IEditGymPlanFormProps) => {
               <Controller
                 name='timeAmount'
                 control={control}
-                defaultValue={gymPlan.timeAmount}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -139,7 +129,6 @@ const EditGymPlanForm = ({ gymPlan, onCancel }: IEditGymPlanFormProps) => {
               <Controller
                 name='timeUnit'
                 control={control}
-                defaultValue={gymPlan.timeUnit}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -162,7 +151,6 @@ const EditGymPlanForm = ({ gymPlan, onCancel }: IEditGymPlanFormProps) => {
               <Controller
                 name='price'
                 control={control}
-                defaultValue={gymPlan.price}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -179,12 +167,8 @@ const EditGymPlanForm = ({ gymPlan, onCancel }: IEditGymPlanFormProps) => {
               <Controller
                 name='activate'
                 control={control}
-                defaultValue={gymPlan.activate}
                 render={({ field }) => (
-                  <FormControlLabel
-                    control={<Switch {...field} color='primary' defaultChecked={gymPlan.activate} />}
-                    label='Activation Status'
-                  />
+                  <FormControlLabel control={<Switch {...field} color='primary' />} label='Activation Status' />
                 )}
               />
             </Grid>
@@ -207,4 +191,4 @@ const EditGymPlanForm = ({ gymPlan, onCancel }: IEditGymPlanFormProps) => {
   );
 };
 
-export default EditGymPlanForm;
+export default CreateGymPlanForm;

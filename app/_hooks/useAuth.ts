@@ -8,14 +8,19 @@ export const useAuth = () => {
 
   const queryClient = useQueryClient();
 
-  const { data: profile, refetch } = useQuery({
+  const {
+    data: profile,
+    refetch,
+    isLoading,
+    isFetched,
+  } = useQuery({
     queryKey: ['profile'],
     queryFn: () => authService.getProfile(),
     staleTime: Infinity,
     enabled: Boolean(accessToken),
   });
 
-  const { mutate: login } = useMutation({
+  const { mutate: login, isError: isLoginError } = useMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) => {
       return authService.login(email, password);
     },
@@ -28,7 +33,8 @@ export const useAuth = () => {
   function logout() {
     authService.logout();
     queryClient.setQueriesData({ queryKey: ['profile'] }, null);
+    toast.success('Logout successfully!');
   }
 
-  return { profile, logout, refetch, login };
+  return { profile, isLoading, isFetched, logout, refetch, login, isLoginError };
 };

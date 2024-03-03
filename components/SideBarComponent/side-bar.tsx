@@ -12,6 +12,7 @@ import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
 import { SideBarItem } from '@/app/_models/SideBarItem';
 import { GYM_ADMIN, GYM_OWNER } from '@/app/_constants/role';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const desktopIcons = [
   <SpaceDashboardOutlinedIcon style={{ color: 'white' }} />,
@@ -43,7 +44,7 @@ const allSideBarItem: SideBarItem[] = [
     label: 'Dashboard',
     icon: desktopIcons[0],
     forRole: [GYM_ADMIN, GYM_OWNER], // Adjust roles as needed
-    link: '/dashboard/statistic',
+    link: '/dashboard',
   },
   {
     label: 'Profile',
@@ -55,7 +56,7 @@ const allSideBarItem: SideBarItem[] = [
     label: 'Registration',
     icon: desktopIcons[2],
     forRole: [GYM_OWNER], // Adjust roles as needed
-    link: '/dashboard/member',
+    link: '/dashboard/register-member',
   },
   {
     label: 'Plan',
@@ -110,6 +111,8 @@ const SideBarComponent = () => {
 
   const [selectIndex, setSelectedNavItem] = useState(0);
 
+  const pathname = usePathname();
+
   return (
     <List>
       {generateSideBarByRole().map((item, index) => (
@@ -117,11 +120,18 @@ const SideBarComponent = () => {
           style={{ width: '100%', display: 'block' }}
           key={index}
           disablePadding
-          selected={index === selectIndex}
+          selected={item.link === pathname}
           onClick={() => setSelectedNavItem(index)}
           sx={styles}
         >
-          <Link style={{ background: '#ffffff' }} href={item.link}>
+          <Link
+            style={{
+              background: '#ffffff',
+              textDecoration: 'none',
+              color: item.link === pathname ? 'var(--primary)' : 'white',
+            }}
+            href={item.link}
+          >
             <ListItemButton>
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.label} />

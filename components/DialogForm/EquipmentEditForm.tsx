@@ -21,8 +21,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { inventoryService } from '@/app/_services';
 import { toast } from 'react-toastify';
+import { Inventory } from '@/app/_services/inventory/types';
 import { DatePicker } from '@mui/x-date-pickers';
-import { parse } from 'date-fns';
 
 const schema = yup.object().shape({
   name: yup.string().required('Equipment Name is required'),
@@ -47,26 +47,34 @@ const schema = yup.object().shape({
 
 interface IEquipmentAddFormProps {
   onClose: () => void;
-  status: boolean;
+  inventory: Inventory;
 }
 
-const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
-  const [selectedImage, setSelectedImage] = useState(null);
+const EquipmentEditForm = ({ onClose, inventory }: IEquipmentAddFormProps) => {
   const {
     handleSubmit,
     register,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      name: inventory.name,
+      code: inventory.code,
+      quantity: inventory.quantity,
+      expectedDateFrom: new Date(inventory.expectedDateFrom),
+      expectedDateTo: new Date(inventory.expectedDateTo),
+      costPer: inventory.costPer,
+    },
   });
 
   const queryClient = useQueryClient();
 
-  const { mutate: mutateAdd } = useMutation({
-    mutationFn: inventoryService.create,
+  const { mutate: mutateEdit } = useMutation({
+    mutationFn: inventoryService.update,
     onSuccess: () => {
-      toast.success('Create inventory successfully!');
+      toast.success('Update inventory successfully!');
       queryClient.invalidateQueries({ queryKey: ['inventories'] });
       onClose();
     },
@@ -84,14 +92,14 @@ const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
   };
 
   const onSubmit = (data: any) => {
-    mutateAdd(data);
+    mutateEdit({ id: inventory.id, payload: data });
   };
 
   return (
-    <Dialog onClose={onClose} aria-labelledby='customized-dialog-title' open={status}>
+    <Dialog onClose={onClose} aria-labelledby='customized-dialog-title' open={true}>
       <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>
         <Typography color={'var(--primary)'} variant='h6'>
-          Add Equipment
+          Update Equipment
         </Typography>
         {/* <Stack direction={'row'} justifyContent={'space-between'}>
           <Stack direction={'column'} gap={'0.5rem'}>
@@ -162,10 +170,9 @@ const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
             <Grid item xs={6}>
               <DatePicker
                 label='From'
-                value={null}
-                timezone='Asia/Ho_Chi_Minh'
                 sx={{ borderRadius: 8, width: '100%' }}
-                onChange={(value) => value && setValue('expectedDateFrom', value)}
+                defaultValue={getValues('expectedDateFrom')}
+                onChange={(value) => value && setValue('expectedDateFrom', new Date(value))}
                 renderInput={(params) => <TextField {...params} fullWidth />}
               />
               <Typography variant='caption' style={{ color: 'red' }}>
@@ -176,9 +183,8 @@ const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
               <DatePicker
                 label='To'
                 sx={{ borderRadius: 8, width: '100%' }}
-                value={null}
-                timezone='Asia/Ho_Chi_Minh'
-                onChange={(value) => value && setValue('expectedDateTo', value)}
+                defaultValue={getValues('expectedDateTo')}
+                onChange={(value) => value && setValue('expectedDateTo', new Date(value))}
                 renderInput={(params) => <TextField {...params} fullWidth />}
               />
               <Typography variant='caption' style={{ color: 'red' }}>
@@ -220,4 +226,4 @@ const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
   );
 };
 
-export default EquipmentAddForm;
+export default EquipmentEditForm;

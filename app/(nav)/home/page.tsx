@@ -26,7 +26,7 @@ const Home = () => {
             xs={12}
             lg={6}
             alignItems={'center'}
-            order={{ xs: 2, md: 1, lg: 1 }}
+            order={{ xs: 2, md: 1, lg: 1, xl: 1 }}
           >
             <Stack
               direction='column'
@@ -44,6 +44,7 @@ const Home = () => {
                   md: 'center',
                   lg: 'left',
                 }}
+                color='white'
               >
                 Start Simplify Your Bussiness
               </Typography>
@@ -81,7 +82,7 @@ const Home = () => {
                   lg: '100%',
                 }}
                 width='70%'
-                mx={{ xs: 'auto', md: 0 }}
+                mx={{ xs: 'auto', lg: 0 }}
               >
                 <Image
                   src='/images/main-logo.png'
@@ -96,27 +97,29 @@ const Home = () => {
           </Grid>
         </Grid>
       </Box>
-      <Box bgcolor='#1a1363' py={6}>
+      <Box bgcolor='#1a1363' py={6} id='about'>
         <Box display='flex' flexDirection='column' gap={2} mb={4}>
-          <Typography textAlign={'center'} variant='h4'>
+          <Typography textAlign={'center'} color='white' variant='h4'>
             About
           </Typography>
-          <Typography textAlign={'center'} variant='h3'>
+          <Typography textAlign={'center'} color='white' variant='h3'>
             STAMINA GYM MANAGEMENT PLATFORM
           </Typography>
         </Box>
         <Box>
           <Grid container>
             <Grid item xs={12} lg={4}>
-              <Box width={{ xs: '50%', lg: '100%' }}>
-                {/* <Image
-                  src='/images/gym-model.png'
-                  alt='thumbnail'
-                  sizes='100vw'
-                  width={0}
-                  height={0}
-                  style={{ width: '100%', height: '50%', objectFit: 'cover' }}
-                /> */}
+              <Box display='flex' justifyContent='center'>
+                <Box width={{ xs: '50%', lg: '80%' }}>
+                  <Image
+                    src='/images/gym-model.png'
+                    alt='thumbnail'
+                    sizes='100vw'
+                    width={0}
+                    height={0}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                </Box>
               </Box>
             </Grid>
 
@@ -133,6 +136,7 @@ const Home = () => {
                     className='pt-16'
                     variant='h6'
                     textAlign={{ xs: 'center', lg: 'left' }}
+                    px={{ xs: 3, md: 0 }}
                   >
                     Welcome to STAMINA Platform – the ultimate solution for small gym management. Streamline your
                     operations, engage members effortlessly, and elevate your fitness business. Simplify, thrive, and
@@ -141,18 +145,18 @@ const Home = () => {
                   </Typography>
                 </Box>
                 <Box mx={{ xs: 'auto', lg: '0' }}>
-                  <Typography variant='h5' mb={2} mt={2}>
+                  <Typography variant='h5' mb={2} mt={2} color='white' textAlign={{ xs: 'center', lg: 'left' }}>
                     What we offer:
                   </Typography>
                   <Stack
                     style={{ width: '100%' }}
-                    direction={{ xs: 'column', lg: 'row' }}
+                    direction={{ xs: 'column', sm: 'row' }}
                     spacing={2}
                     alignItems='center'
                   >
-                    <OfferCard title='Support' icon='./images/elipse16.png' />
-                    <OfferCard title='Simple' icon='./images/target-fill.png' />
-                    <OfferCard title='Effective' icon='./images/target-fill.png' />
+                    <OfferCard title='Support' icon='/images/elipse16.png' />
+                    <OfferCard title='Simple' icon='/images/target-fill.png' />
+                    <OfferCard title='Effective' icon='/images/target-fill.png' />
                   </Stack>
                 </Box>
               </Stack>
@@ -170,6 +174,7 @@ const Home = () => {
         display='flex'
         flexDirection='column'
         gap={2}
+        id='plan'
       >
         <Stack direction={'row'} justifyContent={{ xs: 'center', lg: 'end' }}>
           <Typography letterSpacing={'4px'} fontWeight={'normal'} variant='h5'>

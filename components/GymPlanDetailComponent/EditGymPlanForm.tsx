@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+'use client';
+
+import React from 'react';
 import {
   Dialog,
   DialogContent,
@@ -10,171 +12,199 @@ import {
   Switch,
   InputAdornment,
   MenuItem,
-} from "@mui/material";
-import { GymPlanResponse } from "@/app/_models/GymPlanResponse";
-import CustomInput from "../CustomInputComponent/CustomInput";
-import { log } from "console";
+} from '@mui/material';
+import { useForm, Controller } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Plan } from '@/app/_services/plan/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { planService } from '@/app/_services/plan';
+import { toast } from 'react-toastify';
 
-interface EditGymPlanFormProps {
-  gymPlan: GymPlanResponse;
-  onCancel?: () => void;
-  onSave?: (updatedPlan: GymPlanResponse) => void;
-  onOpen: boolean;
+const schema = yup.object().shape({
+  name: yup.string().required('Name is required'),
+  description: yup.string().required('Description is required'),
+  timeAmount: yup.number().required('Time Amount is required').positive('Time Amount must be a positive number'),
+  timeUnit: yup.string().required('Time Unit is required'),
+  price: yup.number().required('Price is required').positive('Price must be a positive number'),
+  activate: yup.boolean().required(''),
+});
+
+interface IEditGymPlanFormProps {
+  gymPlan: Plan;
+  onCancel: () => void;
 }
 
-const EditGymPlanForm: React.FC<EditGymPlanFormProps> = ({
-  gymPlan,
-  onCancel,
-  onOpen,
-}) => {
-  const [editedPlan, setEditedPlan] = useState<GymPlanResponse>({ ...gymPlan });
-  console.log("EDITED PLAN: " + JSON.stringify(editedPlan));
-
-  const handleFieldChange = (field: string, value: any) => {
-    setEditedPlan((prevPlan) => ({ ...prevPlan, [field]: value }));
-  };
-
-  const handleSwitchChange = (
-    field: string,
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    handleFieldChange(field, event.target.checked);
-  };
-
-  const handleSave = () => {
-    // onSave(editedPlan);
-  };
-  const [edit, update] = useState({
-    required: true,
-    disabled: false,
-    isEdit: false,
+const EditGymPlanForm = ({ gymPlan, onCancel }: IEditGymPlanFormProps) => {
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      name: gymPlan.name,
+      description: gymPlan.description,
+      timeAmount: gymPlan.timeAmount,
+      timeUnit: gymPlan.timeUnit,
+      price: gymPlan.price,
+      activate: gymPlan.activate,
+    },
   });
 
-  if (gymPlan) {
-    
-    let editForm = (
-      <Dialog onClose={onCancel} open={onOpen}>
-        <DialogContent
-          style={{
-            padding: "20px",
-            minWidth: "400px",
-            backgroundColor: "#fff",
-            borderRadius: "10px",
-            boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          <Typography
-            variant="h4"
-            align="center"
-            style={{ color: "#1a1363", marginBottom: "20px" }}
-          >
-            Edit Gym Plan
-          </Typography>
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: planService.updatePlans,
+    onSuccess: () => {
+      toast.success('Update plan successfully!');
+      queryClient.invalidateQueries({ queryKey: ['plans'] });
+      onCancel();
+    },
+  });
+
+  const handleSave = (data: any) => {
+    mutate({ id: gymPlan.id, payload: data });
+  };
+
+  return (
+    <Dialog onClose={onCancel} open>
+      <DialogContent
+        style={{
+          padding: '20px',
+          minWidth: '400px',
+          backgroundColor: '#fff',
+          borderRadius: '10px',
+          boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+        }}
+      >
+        <Typography variant='h4' align='center' style={{ color: '#1a1363', marginBottom: '20px' }}>
+          Edit Gym Plan
+        </Typography>
+        <form onSubmit={handleSubmit(handleSave)}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <CustomInput
-                onChange={(e: any) => handleFieldChange("name", e.target.value)}
-                value={editedPlan.name}
-                title={"Name"}
-              ></CustomInput>
+              <Controller
+                name='name'
+                control={control}
+                defaultValue={gymPlan.name}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label='Name'
+                    fullWidth
+                    error={!!errors.name}
+                    helperText={errors.name?.message}
+                  />
+                )}
+              />
             </Grid>
             <Grid item xs={12}>
-              <label style={{ fontWeight: "bold" }}>Description</label>
-              <TextField
-                margin="dense"
-                size="small"
-                fullWidth
-                multiline
-                rows={3}
-                variant="outlined"
-                value={editedPlan.description}
-                onChange={(e) =>
-                  handleFieldChange("description", e.target.value)
-                }
+              <Controller
+                name='description'
+                control={control}
+                defaultValue={gymPlan.description}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label='Description'
+                    multiline
+                    rows={3}
+                    fullWidth
+                    variant='outlined'
+                    error={!!errors.description}
+                    helperText={errors.description?.message}
+                  />
+                )}
               />
             </Grid>
             <Grid item xs={6}>
-              <CustomInput
-                fullWidth
-                title="Time Period"
-                label="Time Period"
-                type="number"
-                value={editedPlan.timeAmount}
-                onChange={(e: any) =>
-                  handleFieldChange("timeAmount", e.target.value)
-                }
-              ></CustomInput>
+              <Controller
+                name='timeAmount'
+                control={control}
+                defaultValue={gymPlan.timeAmount}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label='Time Amount'
+                    type='number'
+                    fullWidth
+                    error={!!errors.timeAmount}
+                    helperText={errors.timeAmount?.message}
+                  />
+                )}
+              />
             </Grid>
             <Grid item xs={6}>
-              <CustomInput
-                title="Time Unit"
-                label="Time Unit"
-                select
-                value={editedPlan.timeUnit}
-                onChange={(e: any) =>
-                  handleFieldChange("timeUnit", e.target.value)
-                }
-                content={["ANNUAL", "MONTH", "YEAR"].map((option, index) => (
-                  <MenuItem key={index} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              ></CustomInput>
+              <Controller
+                name='timeUnit'
+                control={control}
+                defaultValue={gymPlan.timeUnit}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    select
+                    label='Time Unit'
+                    fullWidth
+                    error={!!errors.timeUnit}
+                    helperText={errors.timeUnit?.message}
+                  >
+                    {['ANNUAL', 'MONTH', 'YEAR'].map((option, index) => (
+                      <MenuItem key={index} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
             </Grid>
             <Grid item xs={12}>
-              <CustomInput
-                title={"Price"}
-                value={editedPlan.price}
-                onChange={(e: { target: { value: string } }) =>
-                  handleFieldChange("price", parseFloat(e.target.value) || 0)
-                }
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="start">VND</InputAdornment>
-                  ),
-                }}
-              ></CustomInput>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    color="primary"
-                    checked={editedPlan.activate}
-                    onChange={(e) => handleSwitchChange("activate", e)}
+              <Controller
+                name='price'
+                control={control}
+                defaultValue={gymPlan.price}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label='Price'
+                    fullWidth
+                    InputProps={{ startAdornment: <InputAdornment position='start'>VND</InputAdornment> }}
+                    error={!!errors.price}
+                    helperText={errors.price?.message}
                   />
-                }
-                label="Activation Status"
+                )}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Controller
+                name='activate'
+                control={control}
+                defaultValue={gymPlan.activate}
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={<Switch {...field} color='primary' defaultChecked={gymPlan.activate} />}
+                    label='Activation Status'
+                  />
+                )}
               />
             </Grid>
           </Grid>
-          <div style={{ marginTop: "20px", textAlign: "center" }}>
+          <div style={{ marginTop: '20px', textAlign: 'center' }}>
             <Button
-              style={{
-                borderRadius: "8px",
-                color: "var(--primary)",
-                backgroundColor: "#DEBA3B",
-                fontWeight: 600,
-              }}
+              style={{ borderRadius: '8px', color: 'var(--primary)', backgroundColor: '#DEBA3B', fontWeight: 600 }}
               autoFocus
-              onClick={handleSave}
+              type='submit'
             >
               Save Change
             </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={onCancel}
-              style={{ marginLeft: "10px" }}
-            >
+            <Button variant='outlined' color='primary' onClick={onCancel} style={{ marginLeft: '10px' }}>
               Cancel
             </Button>
           </div>
-        </DialogContent>
-      </Dialog>
-    );
-    return editForm;
-  }
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
 };
 
 export default EditGymPlanForm;

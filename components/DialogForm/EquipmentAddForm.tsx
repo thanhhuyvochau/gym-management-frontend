@@ -1,4 +1,4 @@
-import { Close } from "@mui/icons-material";
+import { Close, FileUploadOutlined } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -7,157 +7,215 @@ import {
   DialogContent,
   DialogTitle,
   Grid,
-  IconButton,
   MenuItem,
   Select,
   Stack,
+  TextField,
   Typography,
   styled,
-} from "@mui/material";
-import React, { useState } from "react";
-import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
-import CustomInput from "../CustomInputComponent/CustomInput";
+} from '@mui/material';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { inventoryService } from '@/app/_services';
+import { toast } from 'react-toastify';
+import { DatePicker } from '@mui/x-date-pickers';
+import { parse } from 'date-fns';
 
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
+const schema = yup.object().shape({
+  name: yup.string().required('Equipment Name is required'),
+  code: yup.string().required('Code is required'),
+  quantity: yup.number().required('Quantity is required'),
+  expectedDateFrom: yup.date().required('From date is required'),
+  expectedDateTo: yup.date().required('To date is required'),
+  costPer: yup.number().required('Cost Per is required'),
 });
-const EquipmentAddForm = (props: any) => {
+
+// const VisuallyHiddenInput = styled('input')({
+//   clip: 'rect(0 0 0 0)',
+//   clipPath: 'inset(50%)',
+//   height: 1,
+//   overflow: 'hidden',
+//   position: 'absolute',
+//   bottom: 0,
+//   left: 0,
+//   whiteSpace: 'nowrap',
+//   width: 1,
+// });
+
+interface IEquipmentAddFormProps {
+  onClose: () => void;
+  status: boolean;
+}
+
+const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
   const [selectedImage, setSelectedImage] = useState(null);
-  const handleFileUpload = (event: any) => {
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const queryClient = useQueryClient();
+
+  const { mutate: mutateAdd } = useMutation({
+    mutationFn: inventoryService.create,
+    onSuccess: () => {
+      toast.success('Create inventory successfully!');
+      queryClient.invalidateQueries({ queryKey: ['inventories'] });
+      onClose();
+    },
+  });
+
+  const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSelectedImage(reader.result as any);
+        setSelectedImage(reader.result);
       };
       reader.readAsDataURL(file);
     }
-    // const formData = new FormData();
-    // formData.append("file", file);
-    // axios
-    //   .post("/upload", formData)
-    //   .then((response) => {
-    //     console.log(response);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
+  };
+
+  const onSubmit = (data: any) => {
+    mutateAdd(data);
   };
 
   return (
-    <Dialog
-      onClose={props.onClickClose}
-      aria-labelledby="customized-dialog-title"
-      open={props.status}
-    >
-      <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-        <Stack direction={"row"} justifyContent={"space-between"}>
-          <Stack direction={"column"} gap={"0.5rem"}>
-            <Typography color={"var(--primary)"} variant="h6">
+    <Dialog onClose={onClose} aria-labelledby='customized-dialog-title' open={status}>
+      <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>
+        <Typography color={'var(--primary)'} variant='h6'>
+          Add Equipment
+        </Typography>
+        {/* <Stack direction={'row'} justifyContent={'space-between'}>
+          <Stack direction={'column'} gap={'0.5rem'}>
+            <Typography color={'var(--primary)'} variant='h6'>
               Add Equipment
             </Typography>
-            <Button
-              component="label"
-              variant="text"
-              endIcon={<FileUploadOutlinedIcon></FileUploadOutlinedIcon>}
-              className="pl-0 justify-start"
-            >
+            <Button component='label' variant='text' endIcon={<FileUploadOutlined />} className='pl-0 justify-start'>
               Attach Photo
-              <VisuallyHiddenInput onChange={handleFileUpload} type="file" />
+              <VisuallyHiddenInput onChange={handleFileUpload} type='file' />
             </Button>
           </Stack>
           {selectedImage == null ? (
-            <Box
-              style={{ background: "#807DA8", width: "109px", height: "109px" }}
-              component={"div"}
-            ></Box>
+            <Box style={{ background: '#807DA8', width: '109px', height: '109px' }} component={'div'}></Box>
           ) : (
             <img
               src={selectedImage}
-              alt="Equipment"
+              alt='Equipment'
               style={{
-                width: "109px",
-                height: "109px",
+                width: '109px',
+                height: '109px',
               }}
             />
           )}
-        </Stack>
+        </Stack> */}
       </DialogTitle>
 
-      <DialogContent>
-        <Grid spacing={"6"} container>
-          <Grid item xs={12}>
-            <CustomInput title={"Equipment Name"}></CustomInput>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <DialogContent>
+          <Grid spacing={2} container>
+            <Grid item xs={12}>
+              <TextField fullWidth size='medium' sx={{ borderRadius: 8 }} {...register('name')} placeholder='Name' />
+              <Typography variant='caption' style={{ color: 'red' }}>
+                {errors.name?.message}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField fullWidth size='medium' sx={{ borderRadius: 8 }} {...register('code')} placeholder='Code' />
+              <Typography variant='caption' style={{ color: 'red' }}>
+                {errors.code?.message}
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                size='medium'
+                sx={{ borderRadius: 8 }}
+                type='number'
+                {...register('quantity')}
+                placeholder='Quantity'
+              />
+              <Typography variant='caption' style={{ color: 'red' }}>
+                {errors.quantity?.message}
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                size='medium'
+                sx={{ borderRadius: 8 }}
+                type='number'
+                {...register('costPer')}
+                placeholder='Cost'
+              />
+              <Typography variant='caption' style={{ color: 'red' }}>
+                {errors.costPer?.message}
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <DatePicker
+                label='From'
+                value={null}
+                timezone='Asia/Ho_Chi_Minh'
+                sx={{ borderRadius: 8, width: '100%' }}
+                onChange={(value) => value && setValue('expectedDateFrom', value)}
+                renderInput={(params) => <TextField {...params} fullWidth />}
+              />
+              <Typography variant='caption' style={{ color: 'red' }}>
+                {errors.expectedDateFrom?.message}
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <DatePicker
+                label='To'
+                sx={{ borderRadius: 8, width: '100%' }}
+                value={null}
+                timezone='Asia/Ho_Chi_Minh'
+                onChange={(value) => value && setValue('expectedDateTo', value)}
+                renderInput={(params) => <TextField {...params} fullWidth />}
+              />
+              <Typography variant='caption' style={{ color: 'red' }}>
+                {errors.expectedDateTo?.message}
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <Stack
-              justifyContent={"space-between"}
-              direction={"column"}
-              component={"div"}
-              gap={"8px"}
-            >
-              <label style={{ fontWeight: "bold" }}>Status</label>
-              <Select
-                style={{ height: "43.3px", paddingBottom: "0" }}
-                value={"USING"}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-              >
-                <MenuItem value={"USING"}>USING</MenuItem>
-                <MenuItem value={"UNUSED"}>UNUSED</MenuItem>
-                <MenuItem value={"DAMAGED"}>DAMAGED</MenuItem>
-              </Select>
-            </Stack>
-          </Grid>
-          <Grid item xs={6}>
-            <CustomInput title={"Quantity"}></CustomInput>
-          </Grid>
-          <Grid item xs={6}>
-            <CustomInput title={"From"}></CustomInput>
-          </Grid>
-          <Grid item xs={6}>
-            <CustomInput title={"To"}></CustomInput>
-          </Grid>
-          <Grid item xs={12}>
-            <CustomInput title={"Cost Per"}></CustomInput>
-          </Grid>
-        </Grid>
-      </DialogContent>
-      <DialogActions className="p-6">
-        <Button
-          style={{
-            border: "2px #1A1363",
-            fontWeight: "normal",
-            borderRadius: "8px",
-          }}
-          variant="outlined"
-          color="info"
-          autoFocus
-          onClick={props.onClickClose}
-        >
-          Cancel
-        </Button>
-        <Button
-          style={{
-            borderRadius: "8px",
-            color: "var(--primary)",
-            backgroundColor: "#DEBA3B",
-            fontWeight: 600,
-          }}
-          autoFocus
-          onClick={props.onClickClose}
-        >
-          Save changes
-        </Button>
-      </DialogActions>
+        </DialogContent>
+        <DialogActions sx={{ px: 4, pb: 4 }}>
+          <Button
+            style={{
+              border: '2px #1A1363',
+              fontWeight: 'normal',
+              borderRadius: '8px',
+            }}
+            variant='outlined'
+            color='info'
+            autoFocus
+            onClick={onClose}
+            type='button'
+          >
+            Cancel
+          </Button>
+          <Button
+            style={{
+              borderRadius: '8px',
+              color: 'var(--primary)',
+              backgroundColor: '#DEBA3B',
+              fontWeight: 600,
+            }}
+            autoFocus
+            type='submit'
+          >
+            Save changes
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };

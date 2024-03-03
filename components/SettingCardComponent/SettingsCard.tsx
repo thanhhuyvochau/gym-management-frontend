@@ -1,20 +1,21 @@
 // IMPORTS
-import React, { Component, use, useState } from "react";
-import Card from "@mui/material/Card";
-import Divider from "@mui/material/Divider";
-import InputAdornment from "@mui/material/InputAdornment";
-import MenuItem from "@mui/material/MenuItem";
-import IconButton from "@mui/material/IconButton";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Visibility from "@mui/icons-material/Visibility";
-import CardContent from "@mui/material/CardContent";
-import Box from "@mui/material/Box";
-import { Grid, Typography } from "@mui/material";
-import FormControl from "@mui/material/FormControl";
-import Button from "@mui/material/Button";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import CustomInput from "../CustomInputComponent/CustomInput";
+import React, { useState } from 'react';
+import Card from '@mui/material/Card';
+import Divider from '@mui/material/Divider';
+import Box from '@mui/material/Box';
+import { Grid, MenuItem, Select, Stack, TextField } from '@mui/material';
+import Button from '@mui/material/Button';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { useAuth } from '@/app/_hooks';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { userService } from '@/app/_services';
+import { UpdatePasswordPayload, UpdateUserPayload } from '@/app/_services/user/types';
+import { toast } from 'react-toastify';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -22,12 +23,25 @@ interface TabPanelProps {
   value: number;
 }
 
+const schema = yup.object().shape({
+  fullName: yup.string().required('Full Name is required'),
+  gender: yup.string().required('Gender is required'),
+  phone: yup.string().required('Phone Number is required'),
+  address: yup.string().required('Address is required'),
+});
+
+const passwordSchema = yup.object().shape({
+  oldPassword: yup.string().required('This field is required'),
+  newPassword: yup.string().required('This field is required'),
+  confirmPassword: yup.string().required('This field is required'),
+});
+
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
@@ -40,294 +54,175 @@ function TabPanel(props: TabPanelProps) {
 
 //APP
 export default function SettingsCard(props: any) {
-  //TAB STATES
-  const [value, setValue] = React.useState(0);
-  // FORM STATES
-  const [user, setUser] = useState({
-    ...props.info,
-    showPassword: false,
+  const { profile, refetch } = useAuth();
+
+  const { handleSubmit, register, control } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      fullName: profile?.fullName || '',
+      address: profile?.address || '',
+      phone: profile?.phone || '',
+      gender: profile?.gender || '',
+    },
   });
 
-  const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
+  const {
+    handleSubmit: handleSubmitPassword,
+    register: registerPassword,
+    reset: resetUpdatePassword,
+  } = useForm({
+    resolver: yupResolver(passwordSchema),
+  });
+
+  const { mutate: mutateUpdateInfo } = useMutation({
+    mutationFn: (payload: UpdateUserPayload) => userService.updateProfile(payload),
+    onSuccess: () => {
+      toast.success('Update successfully!');
+      setEditing(false);
+      refetch();
+    },
+    onError: () => {
+      toast.error('Update Error!');
+    },
+  });
+
+  const { mutate: mutateUpdatePassword } = useMutation({
+    mutationFn: (payload: UpdatePasswordPayload) => userService.updatePassword(payload),
+    onSuccess: () => {
+      toast.success('Update successfully!');
+      resetUpdatePassword();
+    },
+    onError: () => {
+      toast.error('Update Failed!');
+    },
+  });
+
+  const [value, setValue] = React.useState(0);
+
+  const [isEditing, setEditing] = useState(false);
+
+  const handleChangeTab = (_: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-  // GENDER SELECT STATES
   const genderSelect = [
     {
-      value: "MALE",
-      label: "Male",
+      value: 'MALE',
+      label: 'Male',
     },
     {
-      value: "FEMALE",
-      label: "Female",
+      value: 'FEMALE',
+      label: 'Female',
     },
   ];
-  const changeField = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUser({ ...user, [event.target.name]: event.target.value });
-  };
 
-  //BUTTON STATES
-  const [edit, update] = useState({
-    required: true,
-    disabled: true,
-    isEdit: true,
-  });
-
-  // EDIT -> UPDATE
-  const changeButton = (event: any) => {
-    event.preventDefault();
-    user.showPassword = false;
-    edit.disabled = !edit.disabled;
-    edit.isEdit = !edit.isEdit;
-    update({ ...edit });
-  };
-
-  // TOGGLE PASSWORD VISIBILITY
-  const handlePassword = () => {
-    user.showPassword = !user.showPassword;
-    setUser({ ...user });
-  };
   const a11yProps = (index: number) => {
     return {
       id: `simple-tab-${index}`,
-      "aria-controls": `simple-tabpanel-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
     };
   };
 
-  //RETURN
+  const onSubmitHandler = (data: any) => {
+    console.log('data', data);
+    mutateUpdateInfo(data);
+  };
+
+  const onSubmitPasswordHandler = (data: any) => {
+    const { confirmPassword, ...rest } = data;
+    mutateUpdatePassword(rest);
+  };
+
   return (
-    <Card variant="outlined" sx={{ height: "100%", width: "100%" }}>
-      {/* TABS */}
+    <Card variant='outlined' sx={{ height: '100%', width: '100%' }}>
       <br></br>
-      <Tabs
-        value={value}
-        onChange={handleChangeTab}
-        textColor="primary"
-        indicatorColor="primary"
-      >
-        <Tab label="Information" {...a11yProps(0)} />
-        <Tab label="Password" {...a11yProps(1)} />
+      <Tabs value={value} onChange={handleChangeTab} textColor='primary' indicatorColor='primary'>
+        <Tab label='Information' {...a11yProps(0)} />
+        <Tab label='Password' {...a11yProps(1)} />
       </Tabs>
       <Divider></Divider>
 
-      {/* MAIN CONTENT CONTAINER */}
-      <Box component={"div"}>
-        <TabPanel value={value} index={0}>
-          <CardContent
-            sx={{
-              p: 3,
+      <TabPanel value={value} index={1}>
+        <Box p={4} component='form' onSubmit={handleSubmitPassword(onSubmitPasswordHandler)}>
+          <Stack gap={2}>
+            <TextField fullWidth placeholder='Old password' {...registerPassword('oldPassword')} type='password' />
+            <TextField fullWidth placeholder='New password' {...registerPassword('newPassword')} type='password' />
+            <TextField
+              fullWidth
+              placeholder='Confirm password'
+              {...registerPassword('confirmPassword')}
+              type='password'
+            />
+          </Stack>
 
-              textAlign: { xs: "center", md: "start" },
-            }}
-          >
-            {/* FIELDS */}
-            <FormControl fullWidth>
-              <Grid
-                container
-                direction={{ xs: "column", md: "row" }}
-                columnSpacing={5}
-                rowSpacing={3}
-              >
-                {/* ROW 1: FIRST NAME */}
-                <Grid component="form" item xs={6}>
-                  <CustomInput
-                    id="firstName"
-                    name="firstName"
-                    value={user.fullName}
-                    onChange={changeField}
-                    title="Full Name"
-                    dis={edit.isEdit}
-                    req={edit.required}
-                  ></CustomInput>
-                </Grid>
-
-                <Grid item xs={6}>
-                  <CustomInput
-                    select
-                    id="gender"
-                    name="gender"
-                    value={
-                      user.gender == undefined
-                        ? genderSelect[0].value
-                        : user.gender
-                    }
-                    onChange={changeField}
-                    title="Gender"
-                    dis={edit.disabled}
-                    req={edit.required}
-                    //MAP THRU OPTIONS
-                    content={genderSelect.map((option, index) => (
-                      <MenuItem key={index} value={option.value}>
+          <Box display='flex' gap={1} justifyContent='end'>
+            <Button
+              sx={{ p: '1rem 2rem', my: 2, height: '3rem', float: 'right' }}
+              component='button'
+              size='large'
+              variant='contained'
+              color='secondary'
+              type='submit'
+            >
+              Save
+            </Button>
+          </Box>
+        </Box>
+      </TabPanel>
+      <TabPanel value={value} index={0}>
+        <Box p={4} component='form' onSubmit={handleSubmit(onSubmitHandler)}>
+          <Grid container spacing={4}>
+            <Grid item xs={6}>
+              <TextField fullWidth disabled={!isEditing} {...register('fullName')} />
+            </Grid>
+            <Grid item xs={6}>
+              <Controller
+                name='gender'
+                control={control}
+                render={({ field }) => (
+                  <Select {...field} fullWidth disabled={!isEditing} label='Gender'>
+                    {genderSelect.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
                         {option.label}
                       </MenuItem>
                     ))}
-                  ></CustomInput>
-                </Grid>
-                {/* ROW 3: PHONE */}
-                <Grid item xs={6}>
-                  <CustomInput
-                    id="phone"
-                    name="phone"
-                    value={user.phone}
-                    onChange={changeField}
-                    title="Phone Number"
-                    dis={edit.disabled}
-                    req={edit.required}
-                    //DIALING CODE
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">84+</InputAdornment>
-                      ),
-                    }}
-                  ></CustomInput>
-                </Grid>
-                {/* ROW 3: EMAIL */}
-                <Grid item xs={6}>
-                  <CustomInput
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={user.email}
-                    onChange={changeField}
-                    title="Email Address"
-                    dis={edit.disabled}
-                    req={edit.required}
-                  ></CustomInput>
-                </Grid>
-                {/* BUTTON */}
-                <Grid
-                  container
-                  justifyContent={{ xs: "center", md: "flex-end" }}
-                  item
-                  xs={12}
-                >
-                  <Button
-                    type="button"
-                    sx={{
-                      p: "0.25rem 2rem",
-                      my: 2,
-                      height: "2.25rem",
-                      opacity: 0.8,
-                      "&:hover": { opacity: 1 },
-                    }}
-                    component="button"
-                    size="large"
-                    variant="contained"
-                    style={{ backgroundColor: "var(--primary)" }}
-                    onClick={() => changeButton(event)}
-                  >
-                    {edit.isEdit === false ? "UPDATE" : "EDIT"}
-                  </Button>
-                </Grid>
-              </Grid>
-            </FormControl>
-          </CardContent>
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <CardContent
-            sx={{
-              p: 3,
-
-              textAlign: { xs: "center", md: "start" },
-            }}
-          >
-            {/* FIELDS */}
-            <FormControl fullWidth>
-              <Grid
-                container
-                direction={{ xs: "column", md: "row" }}
-                columnSpacing={5}
-                rowSpacing={3}
+                  </Select>
+                )}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField fullWidth disabled={!isEditing} {...register('phone')} />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField fullWidth disabled={!isEditing} {...register('address')} />
+            </Grid>
+          </Grid>
+          <Box display='flex' gap={1} justifyContent='end' mt={2}>
+            {isEditing && (
+              <Button
+                sx={{ p: '1rem 2rem', my: 2, height: '3rem', float: 'right' }}
+                component='button'
+                size='large'
+                variant='contained'
+                color='secondary'
+                type='submit'
               >
-                {/* ROW 4: PASSWORD */}
-                <Grid item xs={12}>
-                  <CustomInput
-                    id="pass"
-                    name="pass"
-                    value={user.pass}
-                    onChange={changeField}
-                    title="Current Password"
-                    dis={edit.disabled}
-                    req={edit.required}
-                    type={user.showPassword ? "text" : "password"}
-                    // PASSWORD ICON
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={handlePassword}
-                            edge="end"
-                            disabled={edit.disabled}
-                          >
-                            {user.showPassword ? (
-                              <VisibilityOff />
-                            ) : (
-                              <Visibility />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  ></CustomInput>
-                </Grid>
-                {/* ROW 4: PASSWORD */}
-                <Grid item xs={12}>
-                  <CustomInput
-                    id="pass"
-                    name="pass"
-                    value={user.pass}
-                    onChange={changeField}
-                    title="New Password"
-                    dis={edit.disabled}
-                    req={edit.required}
-                    type={user.showPassword ? "text" : "password"}
-                    // PASSWORD ICON
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={handlePassword}
-                            edge="end"
-                            disabled={edit.disabled}
-                          >
-                            {user.showPassword ? (
-                              <VisibilityOff />
-                            ) : (
-                              <Visibility />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  ></CustomInput>
-                </Grid>
-                {/* BUTTON */}
-                <Grid
-                  container
-                  justifyContent={{ xs: "center", md: "flex-end" }}
-                  item
-                  xs={12}
-                >
-                  <Button
-                    sx={{ p: "1rem 2rem", my: 2, height: "3rem" }}
-                    component="button"
-                    size="large"
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => changeButton(event)}
-                  >
-                    {edit.isEdit === false ? "SAVE" : "CHANGE"}
-                  </Button>
-                </Grid>
-              </Grid>
-            </FormControl>
-          </CardContent>
-        </TabPanel>
-      </Box>
+                Save
+              </Button>
+            )}
+            <Button
+              sx={{ p: '1rem 2rem', my: 2, height: '3rem', float: 'right' }}
+              component='button'
+              size='large'
+              variant='contained'
+              color='secondary'
+              onClick={() => setEditing((prev) => !prev)}
+            >
+              {isEditing ? 'Cancel' : 'Edit'}
+            </Button>
+          </Box>
+        </Box>
+      </TabPanel>
     </Card>
   );
-}
-function updateUser() {
-  throw new Error("Function not implemented.");
 }

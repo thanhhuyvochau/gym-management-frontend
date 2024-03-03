@@ -1,8 +1,6 @@
-"use client";
-import Home from "./(nav)/home/page";
-import Login from "./(nav)/login/page";
-import { useEffect } from "react";
-import { Typography } from "@mui/material";
+'use client';
+
+import Home from './(nav)/home/page';
 
 export default function Main() {
   return (

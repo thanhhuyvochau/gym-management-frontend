@@ -3,16 +3,12 @@
   background-size: 100% 100%;
   background-position: center top;
   display: flex;
-  background-image: linear-gradient(
-      180deg,
-      rgba(19, 36, 99, 0) 0%,
-      #1a1363 100%
-    ),
-    url("/images/first-home-background.png");
-
+  background-image: linear-gradient(180deg, rgba(19, 36, 99, 0) 0%, #1a1363 100%),
+    url('/images/first-home-background.png');
+  background-size: cover;
   background: l;
 }
 .about {
   background: #1a1363;
-  max-height: 750px;
+  /* max-height: 750px; */
 }

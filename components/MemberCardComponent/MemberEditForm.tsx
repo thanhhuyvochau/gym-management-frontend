@@ -23,13 +23,14 @@ import { memberService } from '@/app/_services';
 import { toast } from 'react-toastify';
 import { DatePicker } from '@mui/x-date-pickers';
 import { Member } from '@/app/_services/member/types';
+import Image from 'next/image';
 
 const schema = yup.object().shape({
   fullName: yup.string().required('Member Name is required'),
   gender: yup.string().required('Gender is required'),
   phoneNumber: yup.string().required('Phone Number is required'),
   birthday: yup.date().required('Birthday is required'),
-  // image: yup.string().required('Image is required'),
+  image: yup.mixed(),
 });
 
 const genderSelect = [
@@ -56,6 +57,7 @@ const MemberEditForm = ({ onClose, member }: IEquipmentAddFormProps) => {
     setValue,
     control,
     getValues,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -64,9 +66,10 @@ const MemberEditForm = ({ onClose, member }: IEquipmentAddFormProps) => {
       gender,
       phoneNumber,
       birthday: new Date(birthday),
-      image: memberImage,
     },
   });
+
+  const [selectedImage, setSelectedImage] = useState<string | null>(memberImage || null);
 
   const queryClient = useQueryClient();
 
@@ -76,15 +79,40 @@ const MemberEditForm = ({ onClose, member }: IEquipmentAddFormProps) => {
       toast.success('Update member successfully!');
       queryClient.invalidateQueries({ queryKey: ['members'] });
       onClose();
+      handleReset();
     },
   });
+
+  const handleReset = () => {
+    reset();
+    setSelectedImage(null);
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setValue('image', file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          setSelectedImage(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleClose = () => {
+    onClose();
+    handleReset();
+  };
 
   const onSubmit = (data: any) => {
     mutateEdit({ id: member.id, payload: data });
   };
 
   return (
-    <Dialog onClose={onClose} aria-labelledby='customized-dialog-title' open={true}>
+    <Dialog onClose={handleClose} aria-labelledby='customized-dialog-title' open={true}>
       <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>
         <Typography color={'var(--primary)'} variant='h6'>
           Update Member Info
@@ -94,6 +122,31 @@ const MemberEditForm = ({ onClose, member }: IEquipmentAddFormProps) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
           <Grid spacing={2} container>
+            <Grid item xs={12}>
+              <Box display='flex' flexDirection='column' gap={1}>
+                <TextField
+                  type='file'
+                  fullWidth
+                  label='Image'
+                  variant='outlined'
+                  InputLabelProps={{ shrink: true }}
+                  onChange={handleFileChange}
+                  error={!!errors.image}
+                />
+                {selectedImage && (
+                  <Box width={150} height={150} borderRadius={1} overflow='hidden'>
+                    <Image
+                      src={selectedImage}
+                      alt='preview-img'
+                      width={0}
+                      height={0}
+                      sizes='100vw'
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  </Box>
+                )}
+              </Box>
+            </Grid>
             <Grid item xs={12}>
               <TextField fullWidth size='medium' sx={{ borderRadius: 8 }} {...register('fullName')} Label='Full Name' />
               <Typography variant='caption' style={{ color: 'red' }}>
@@ -164,7 +217,7 @@ const MemberEditForm = ({ onClose, member }: IEquipmentAddFormProps) => {
             variant='outlined'
             color='info'
             autoFocus
-            onClick={onClose}
+            onClick={handleClose}
             type='button'
           >
             Cancel

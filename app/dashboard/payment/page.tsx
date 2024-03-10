@@ -9,11 +9,13 @@ import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
+import { DatePicker } from '@mui/x-date-pickers';
 
 const schema = yup.object().shape({
   actualPrice: yup.number().required('Price is required'),
   gymPlanId: yup.number().required('Plan is required'),
   memberId: yup.number().required('Member is required'),
+  fromDate: yup.date().required('From Date is required'),
 });
 
 export default function PaymentPages() {
@@ -98,7 +100,20 @@ export default function PaymentPages() {
                 )}
               />
             </Grid>
-            <Grid item xs={6} md={3}>
+            <Grid item xs={12} md={6}>
+              <DatePicker
+                label='From Date'
+                sx={{ borderRadius: 8, width: '100%' }}
+                onChange={(value: Date | null) => value && setValue('fromDate', new Date(value))}
+                renderInput={(params) => <TextField {...params} fullWidth />}
+              />
+              {errors.fromDate && (
+                <Typography variant='caption' color='red'>
+                  {errors.fromDate.message}
+                </Typography>
+              )}
+            </Grid>
+            <Grid item xs={12} md={3}>
               {plans && (
                 <Controller
                   name='gymPlanId'
@@ -122,7 +137,8 @@ export default function PaymentPages() {
                 />
               )}
             </Grid>
-            <Grid item xs={6} md={3}>
+
+            <Grid item xs={12} md={3}>
               <TextField
                 fullWidth
                 placeholder='Price'

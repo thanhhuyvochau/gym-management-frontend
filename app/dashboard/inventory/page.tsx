@@ -14,13 +14,15 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { inventoryService } from '@/app/_services';
 import { Inventory } from '@/app/_services/inventory/types';
 import EquipmentEditForm from '@/components/DialogForm/EquipmentEditForm';
-import { ConfirmDeletePopup } from '@/components';
+import { ConfirmDeletePopup, EquipmentCard } from '@/components';
+import { format } from 'date-fns';
+import { toast } from 'react-toastify';
 const MUIDataTable = dynamic(() => import('mui-datatables'), {
   ssr: false,
 });
 
 const EquimentComponent = () => {
-  const { data } = useQuery({ queryKey: ['inventories'], queryFn: () => inventoryService.getInventories() });
+  const { data, refetch } = useQuery({ queryKey: ['inventories'], queryFn: () => inventoryService.getInventories() });
 
   const [selectedInventory, setSelectedInventory] = useState<Inventory | null>();
   const [statusModal, setStatusModal] = useState<'edit' | 'view'>();
@@ -29,7 +31,15 @@ const EquimentComponent = () => {
   const [selectedDeleteInventory, setSelectedDeleteInventory] = useState<Inventory | null>();
   const [isOpenDeletePopup, setOpenDeletePopup] = useState<boolean>(false);
 
-  const { mutate: mutateDelete } = useMutation({ mutationFn: inventoryService.delete });
+  const { mutate: mutateDelete } = useMutation({
+    mutationFn: inventoryService.delete,
+    onSuccess: () => {
+      refetch();
+      toast.success('Delete equipment successfully');
+      setOpenDeletePopup(false);
+      setSelectedDeleteInventory(null);
+    },
+  });
 
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -44,18 +54,46 @@ const EquimentComponent = () => {
   const columns: MUIDataTableColumn[] = [
     { label: 'Code', name: 'code' },
     { label: 'Name', name: 'name' },
-    { label: 'From', name: 'expectUseFrom' },
-    { label: 'To', name: 'expectUserTo' },
+    {
+      label: 'From',
+      name: 'expectedDateFrom',
+      options: {
+        customBodyRender: (value: number) => {
+          return format(value, 'dd-MM-yyyy');
+        },
+      },
+    },
+    {
+      label: 'To',
+      name: 'expectedDateTo',
+      options: {
+        customBodyRender: (value: string) => {
+          return format(value, 'dd-MM-yyyy');
+        },
+      },
+    },
     {
       label: 'Cost Per',
       name: 'costPer',
       options: {
-        customBodyRender: (value: number) => {
+        customBodyRender: (value: string) => {
           return value + 'VND';
         },
       },
     },
-    { label: 'Status', name: 'status' },
+    {
+      label: 'Status',
+      name: 'expectedDateTo',
+      options: {
+        customBodyRender: (value: string) => {
+          return new Date(value) > new Date() ? (
+            <Typography color='green'>Active</Typography>
+          ) : (
+            <Typography color='red'>Inactive</Typography>
+          );
+        },
+      },
+    },
     { label: 'Quantity', name: 'quantity' },
     {
       label: '',
@@ -157,6 +195,14 @@ const EquimentComponent = () => {
           onClose={() => setOpenDeletePopup(false)}
           onDelete={() => mutateDelete(selectedDeleteInventory.id)}
           itemName={selectedDeleteInventory.name}
+        />
+      )}
+      {selectedInventory && statusModal === 'view' && (
+        <EquipmentCard
+          inventory={selectedInventory}
+          onClickClose={() => {
+            setSelectedInventory(null);
+          }}
         />
       )}
     </Box>

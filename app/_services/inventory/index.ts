@@ -3,7 +3,7 @@ import { CreateInventoryPayload, InventoryResponse } from './types';
 
 export const inventoryService = {
   getInventories: async () => {
-    const { data } = await api.get('equipments');
+    const { data } = await api.get('api/equipments');
 
     return data.data as InventoryResponse;
   },
@@ -14,7 +14,7 @@ export const inventoryService = {
       formData.append(key, (payload as any)[key]);
     });
 
-    await api.post('equipments', formData, {
+    await api.post('api/equipments', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -25,10 +25,10 @@ export const inventoryService = {
     const formData = new FormData();
 
     Object.keys(payload).forEach((key) => {
-      formData.append(key, (data as any)[key]);
+      formData.append(key, (payload as any)[key]);
     });
 
-    const { data } = await api.put(`equipments/${id}`, formData, {
+    const { data } = await api.put(`api/equipments/${id}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -37,7 +37,7 @@ export const inventoryService = {
     return data;
   },
   delete: async (id: number) => {
-    const { data } = await api.delete(`equipments/${id}`);
+    const { data } = await api.delete(`api/equipments/${id}`);
 
     return data;
   },

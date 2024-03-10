@@ -41,7 +41,7 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { profile, login, isLoginError } = useAuth();
+  const { profile, login } = useAuth();
 
   useEffect(() => {
     const storedEmail = localStorage.getItem('email');

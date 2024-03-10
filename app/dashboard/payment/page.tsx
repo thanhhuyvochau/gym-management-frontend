@@ -34,7 +34,11 @@ export default function PaymentPages() {
 
   const queryClient = useQueryClient();
 
-  const { data: plans } = useQuery({ queryKey: ['plans'], queryFn: () => planService.getPlans() });
+  const { data: plans } = useQuery({
+    queryKey: ['plans'],
+    queryFn: () => planService.getPlans(),
+    select: (data) => data.filter((item) => item.activate),
+  });
   const [searchText, setSearchText] = useState<string>();
 
   const { data: members, refetch } = useQuery({

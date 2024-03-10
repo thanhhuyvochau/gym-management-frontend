@@ -25,16 +25,6 @@ export default function ReportPage() {
     queryKey: ['members'],
     queryFn: () => memberService.getMembers({ page: 0, size: 1, sort: ['id'], q: 'string' }),
   });
-  // const [selectedReport, setSelectedReport] = useState<Report | null>(null);
-
-  // const [selectedDeleteMember, setSelectedDeleteMember] = useState<any | null>();
-  // const [isOpenDeletePopup, setOpenDeletePopup] = useState<boolean>(false);
-
-  const { mutate: mutateDelete } = useMutation({ mutationFn: memberService.delete });
-
-  // const handleClickClose = () => {
-  //   setSelectedReport(null);
-  // };
 
   const curDate = new Date();
   const initFromDate = new Date();
@@ -52,23 +42,11 @@ export default function ReportPage() {
     { label: 'Name', name: 'memberName' },
     { label: 'Plan Type', name: 'planName' },
     {
-      label: 'Plan Status',
-      name: 'membershipStatus',
+      label: 'Amount',
+      name: 'amount',
       options: {
-        customBodyRender(value, tableMeta, updateValue) {
-          return (
-            <>
-              {value ? (
-                <Typography fontSize={'1rem'} fontWeight={'normal'} variant='h6' color='green'>
-                  Active
-                </Typography>
-              ) : (
-                <Typography fontSize={'1rem'} fontWeight={'normal'} variant='h6' color='red'>
-                  In Active
-                </Typography>
-              )}
-            </>
-          );
+        customBodyRender(value) {
+          return `${Number(value).toLocaleString('vi')} VND`;
         },
       },
     },

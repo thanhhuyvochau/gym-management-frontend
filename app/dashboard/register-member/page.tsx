@@ -52,7 +52,11 @@ const RegisterMember = () => {
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const { data: plans } = useQuery({ queryKey: ['plans'], queryFn: () => planService.getPlans() });
+  const { data: plans } = useQuery({
+    queryKey: ['plans'],
+    queryFn: () => planService.getPlans(),
+    select: (data) => data.filter((item) => item.activate),
+  });
 
   const { mutate: mutateCreate } = useMutation({
     mutationFn: (payload: CreateMemberPayload) => memberService.create(payload),

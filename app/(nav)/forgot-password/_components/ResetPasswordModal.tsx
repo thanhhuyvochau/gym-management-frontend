@@ -17,7 +17,7 @@ interface IResetPasswordModalProps {
 const schema = yup.object().shape({
   email: yup.string().required('Email is required'),
   otpCode: yup.string().required('OTP is required'),
-  password: yup.number().required('Password is required'),
+  password: yup.string().required('Password is required'),
 });
 
 export function ResetPasswordModal({ isOpen, onClose }: IResetPasswordModalProps) {

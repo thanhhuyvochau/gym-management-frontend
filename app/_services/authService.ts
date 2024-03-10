@@ -36,9 +36,7 @@ const authService = {
     });
   },
   updateForgotPassword: async (payload: { email: string; otpCode: string; password: string }) => {
-    await api.put('api/accounts/forget-password', {
-      payload,
-    });
+    await api.put('api/accounts/forget-password', payload);
   },
 };
 

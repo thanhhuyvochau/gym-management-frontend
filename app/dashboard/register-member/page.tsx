@@ -1,12 +1,12 @@
 'use client';
 
-import { memberService } from '@/app/_services';
+import { memberService, planService } from '@/app/_services';
 import { CreateMemberPayload } from '@/app/_services/member/types';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Button, Grid, MenuItem, Paper, Select, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, MenuItem, Paper, Stack, TextField, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import React from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
@@ -16,8 +16,9 @@ const schema = yup.object().shape({
   gender: yup.string().required('Gender is required'),
   phoneNumber: yup.string().required('Phone Number is required'),
   birthday: yup.date().required('Birthday is required'),
-  age: yup.number().required('Age is required'),
   image: yup.mixed(),
+  price: yup.number().required('Price is required'),
+  plan: yup.number().required('Plan is required'),
 });
 
 const genderSelect = [
@@ -37,22 +38,24 @@ const RegisterMember = () => {
     control,
     setValue,
     reset,
+    watch,
+    getValues,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {
-      gender: genderSelect[0].value,
-    },
   });
 
   const queryClient = useQueryClient();
+
+  const { data: plans } = useQuery({ queryKey: ['plans'], queryFn: () => planService.getPlans() });
 
   const { mutate: mutateCreate } = useMutation({
     mutationFn: (payload: CreateMemberPayload) => memberService.create(payload),
     onSuccess: () => {
       toast.success('Create member successfully!');
       reset();
+
       queryClient.invalidateQueries({
         queryKey: ['members'],
       });
@@ -66,16 +69,25 @@ const RegisterMember = () => {
     mutateCreate(data);
   };
 
+  useEffect(() => {
+    if (watch('plan')) {
+      const plan = plans?.find((item) => item.id === getValues('plan'));
+      if (plan) {
+        setValue('price', plan.price);
+      }
+    }
+  }, [watch('plan')]);
+
   return (
     <>
-      <Box className='mt-6' component={'form'} onSubmit={handleSubmit(onSubmitHandler)} width={'100%'}>
+      <Box mt={6} component={'form'} onSubmit={handleSubmit(onSubmitHandler)} width={'100%'}>
         <Typography color={'#1A1363'} variant='h3' my={2} fontWeight={600}>
           Registration
         </Typography>
         <Paper sx={{ borderRadius: 4, p: 4 }} elevation={6}>
           <Grid container spacing={4}>
             <Grid item xs={12} md={6}>
-              <TextField fullWidth placeholder='Name of Participant' {...register('fullName')} />
+              <TextField fullWidth label='Name of Participant' {...register('fullName')} />
               {errors.fullName && (
                 <Typography variant='caption' color='red'>
                   {errors.fullName.message}
@@ -83,7 +95,7 @@ const RegisterMember = () => {
               )}
             </Grid>
             <Grid item xs={12} md={6}>
-              <TextField fullWidth placeholder='Phone' {...register('phoneNumber')} />
+              <TextField fullWidth label='Phone' {...register('phoneNumber')} />
               {errors.phoneNumber && (
                 <Typography variant='caption' color='red'>
                   {errors.phoneNumber.message}
@@ -94,7 +106,7 @@ const RegisterMember = () => {
               <DatePicker
                 label='Birthday'
                 sx={{ borderRadius: 8, width: '100%' }}
-                onChange={(value) => value && setValue('birthday', new Date(value))}
+                onChange={(value: Date | null) => value && setValue('birthday', new Date(value))}
                 renderInput={(params) => <TextField {...params} fullWidth />}
               />
               {errors.birthday && (
@@ -108,13 +120,20 @@ const RegisterMember = () => {
                 name='gender'
                 control={control}
                 render={({ field }) => (
-                  <Select {...field} fullWidth label='Gender' defaultValue={genderSelect[0].value}>
+                  <TextField
+                    {...field}
+                    select
+                    label='Gender'
+                    fullWidth
+                    error={!!errors.gender}
+                    helperText={errors.gender?.message}
+                  >
                     {genderSelect.map((option) => (
                       <MenuItem key={option.value} value={option.value}>
                         {option.label}
                       </MenuItem>
                     ))}
-                  </Select>
+                  </TextField>
                 )}
               />
               {errors.gender && (
@@ -123,16 +142,40 @@ const RegisterMember = () => {
                 </Typography>
               )}
             </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField fullWidth placeholder='' {...register('image')} type='file' />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField fullWidth placeholder='Age' type='number' {...register('age')} />
-              {errors.age && (
-                <Typography variant='caption' color='red'>
-                  {errors.age.message}
-                </Typography>
+            <Grid item xs={6} md={3}>
+              {plans && (
+                <Controller
+                  name='plan'
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      select
+                      label='Select Plan'
+                      fullWidth
+                      error={!!errors.plan}
+                      helperText={errors.plan?.message}
+                    >
+                      {plans.map((plan) => (
+                        <MenuItem key={plan.id} value={plan.id}>
+                          {plan.name}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  )}
+                />
               )}
+            </Grid>
+            <Grid item xs={6} md={3}>
+              <TextField
+                fullWidth
+                placeholder='Price'
+                {...register('price')}
+                defaultValue={watch('price')}
+                type='number'
+                error={!!errors.price}
+                helperText={errors.price?.message}
+              />
             </Grid>
           </Grid>
           <Stack spacing={3} direction={'row'} justifyContent={'end'} mt={4}>

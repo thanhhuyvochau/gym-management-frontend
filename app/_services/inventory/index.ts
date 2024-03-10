@@ -8,13 +8,31 @@ export const inventoryService = {
     return data.data as InventoryResponse;
   },
   create: async (payload: CreateInventoryPayload) => {
-    const { data } = await api.post('equipments', payload);
+    const formData = new FormData();
 
-    return data;
+    Object.keys(payload).forEach((key) => {
+      formData.append(key, (payload as any)[key]);
+    });
+
+    await api.post('equipments', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
   },
 
   update: async ({ id, payload }: { id: number; payload: CreateInventoryPayload }) => {
-    const { data } = await api.put(`equipments/${id}`, payload);
+    const formData = new FormData();
+
+    Object.keys(payload).forEach((key) => {
+      formData.append(key, (data as any)[key]);
+    });
+
+    const { data } = await api.put(`equipments/${id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
 
     return data;
   },

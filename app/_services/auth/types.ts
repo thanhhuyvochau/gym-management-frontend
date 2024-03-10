@@ -5,4 +5,5 @@ export type TUser = {
   gender: string;
   id: number;
   phone: string;
+  imageProfile?: string;
 };

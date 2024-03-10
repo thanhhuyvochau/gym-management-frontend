@@ -87,7 +87,7 @@ const GymPlanManagement = () => {
     { label: 'Price (VND)', name: 'price' },
     {
       label: 'Register',
-      name: 'registerNumber',
+      name: 'numberOfRegister',
     },
     {
       label: 'Status',
@@ -153,8 +153,8 @@ const GymPlanManagement = () => {
   ];
   return (
     <Box className='children-box' component={'div'} height={'100%'}>
-      <Box display='flex' justifyContent='space-between' alignItems='center'>
-        <Typography className='mt-8 mb-16' variant='h3' my={2} color='black'>
+      <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
+        <Typography variant='h3' my={2} color='var(--primary)'>
           Gym Plan Management
         </Typography>
         <Button variant='contained' sx={{ height: 'fit-content' }} onClick={() => setOpenCreateForm(true)}>

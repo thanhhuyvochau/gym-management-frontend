@@ -24,7 +24,7 @@ const authService = {
     return localStorage.getItem('access_token');
   },
   getProfile: async () => {
-    const { data } = await api.get<JwtResponse>('/accounts/profile');
+    const { data } = await api.get<JwtResponse>('accounts/profile');
 
     return data.data;
   },

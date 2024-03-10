@@ -5,11 +5,12 @@ import Toolbar from '@mui/material/Toolbar';
 
 import DashBoardTopBar from '../../components/TopBarComponent/top-bar';
 import SideBarComponent from '@/components/SideBarComponent/side-bar';
-import { Stack, Typography } from '@mui/material';
+import { Avatar, Stack, Typography } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../_hooks';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const drawerWidth = 240;
 
@@ -25,11 +26,24 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   };
 
   const drawer = (
-    <Stack gap={2}>
+    <Stack gap={2} py={2}>
       <Stack direction={'column'} alignItems={'center'} justifyContent={'center'} className='pt-4 pb-4'>
-        <Box sx={{ borderRadius: 1 }} component={'div'}>
-          <AccountCircleIcon sx={{ width: '100px', height: '100px', color: 'white' }} />
-        </Box>
+        {profile?.imageProfile ? (
+          <Avatar sx={{ width: 120, height: 120 }}>
+            <Image
+              src={profile.imageProfile}
+              alt={profile.fullName}
+              width={0}
+              height={0}
+              sizes='100vw'
+              style={{ width: '100%', height: '100%' }}
+            />
+          </Avatar>
+        ) : (
+          <Box sx={{ borderRadius: 1 }} component={'div'}>
+            <AccountCircleIcon sx={{ width: '100px', height: '100px', color: 'white' }} />
+          </Box>
+        )}
         <Stack direction={'column'} alignItems={'center'}>
           <Typography variant='body1' color={'white'}>
             {profile?.fullName}

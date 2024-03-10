@@ -25,11 +25,19 @@ export interface Member {
   gender: string;
   phoneNumber: string;
   birthday: Date;
+  memberImage: string;
+  dateEnrolled: string;
+  dateExpiration: string;
 }
 
+export type ChargeMemberPayload = {
+  gymPlanId: number;
+  actualPrice: number;
+};
+
 export type GetMembersQuery = {
-  page: number;
-  size: number;
-  sort: string[];
-  q: string;
+  page?: number;
+  size?: number;
+  sort?: string[];
+  q?: string;
 };

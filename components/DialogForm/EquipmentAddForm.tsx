@@ -23,6 +23,7 @@ import { inventoryService } from '@/app/_services';
 import { toast } from 'react-toastify';
 import { DatePicker } from '@mui/x-date-pickers';
 import { parse } from 'date-fns';
+import Image from 'next/image';
 
 const schema = yup.object().shape({
   name: yup.string().required('Equipment Name is required'),
@@ -31,6 +32,7 @@ const schema = yup.object().shape({
   expectedDateFrom: yup.date().required('From date is required'),
   expectedDateTo: yup.date().required('To date is required'),
   costPer: yup.number().required('Cost Per is required'),
+  image: yup.mixed(),
 });
 
 // const VisuallyHiddenInput = styled('input')({
@@ -51,10 +53,12 @@ interface IEquipmentAddFormProps {
 }
 
 const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const {
     handleSubmit,
     register,
+    watch,
+    reset,
     setValue,
     formState: { errors },
   } = useForm({
@@ -72,63 +76,74 @@ const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
     },
   });
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file) {
+      // setValue('image', file);
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImage(reader.result);
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          setSelectedImage(reader.result);
+        }
       };
       reader.readAsDataURL(file);
     }
   };
 
   const onSubmit = (data: any) => {
+    console.log('hihi', data);
     mutateAdd(data);
   };
 
+  const handleClose = () => {
+    onClose();
+    reset();
+  };
+
   return (
-    <Dialog onClose={onClose} aria-labelledby='customized-dialog-title' open={status}>
+    <Dialog onClose={handleClose} aria-labelledby='customized-dialog-title' open={status}>
       <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>
         <Typography color={'var(--primary)'} variant='h6'>
           Add Equipment
         </Typography>
-        {/* <Stack direction={'row'} justifyContent={'space-between'}>
-          <Stack direction={'column'} gap={'0.5rem'}>
-            <Typography color={'var(--primary)'} variant='h6'>
-              Add Equipment
-            </Typography>
-            <Button component='label' variant='text' endIcon={<FileUploadOutlined />} className='pl-0 justify-start'>
-              Attach Photo
-              <VisuallyHiddenInput onChange={handleFileUpload} type='file' />
-            </Button>
-          </Stack>
-          {selectedImage == null ? (
-            <Box style={{ background: '#807DA8', width: '109px', height: '109px' }} component={'div'}></Box>
-          ) : (
-            <img
-              src={selectedImage}
-              alt='Equipment'
-              style={{
-                width: '109px',
-                height: '109px',
-              }}
-            />
-          )}
-        </Stack> */}
       </DialogTitle>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
           <Grid spacing={2} container>
             <Grid item xs={12}>
-              <TextField fullWidth size='medium' sx={{ borderRadius: 8 }} {...register('name')} placeholder='Name' />
+              <Box display='flex' flexDirection='column' gap={1}>
+                <TextField
+                  type='file'
+                  fullWidth
+                  label='Image'
+                  variant='outlined'
+                  InputLabelProps={{ shrink: true }}
+                  onChange={handleFileChange}
+                  error={!!errors.image}
+                />
+                {selectedImage && (
+                  <Box width={150} height={150} borderRadius={1} overflow='hidden'>
+                    <Image
+                      src={selectedImage}
+                      alt='preview-img'
+                      width={0}
+                      height={0}
+                      sizes='100vw'
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  </Box>
+                )}
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField fullWidth size='medium' sx={{ borderRadius: 8 }} {...register('name')} label='Name' />
               <Typography variant='caption' style={{ color: 'red' }}>
                 {errors.name?.message}
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <TextField fullWidth size='medium' sx={{ borderRadius: 8 }} {...register('code')} placeholder='Code' />
+              <TextField fullWidth size='medium' sx={{ borderRadius: 8 }} {...register('code')} label='Code' />
               <Typography variant='caption' style={{ color: 'red' }}>
                 {errors.code?.message}
               </Typography>
@@ -140,7 +155,7 @@ const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
                 sx={{ borderRadius: 8 }}
                 type='number'
                 {...register('quantity')}
-                placeholder='Quantity'
+                label='Quantity'
               />
               <Typography variant='caption' style={{ color: 'red' }}>
                 {errors.quantity?.message}
@@ -153,7 +168,7 @@ const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
                 sx={{ borderRadius: 8 }}
                 type='number'
                 {...register('costPer')}
-                placeholder='Cost'
+                label='Cost'
               />
               <Typography variant='caption' style={{ color: 'red' }}>
                 {errors.costPer?.message}
@@ -165,7 +180,7 @@ const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
                 value={null}
                 timezone='Asia/Ho_Chi_Minh'
                 sx={{ borderRadius: 8, width: '100%' }}
-                onChange={(value) => value && setValue('expectedDateFrom', value)}
+                onChange={(value: Date | null) => value && setValue('expectedDateFrom', new Date(value))}
                 renderInput={(params) => <TextField {...params} fullWidth />}
               />
               <Typography variant='caption' style={{ color: 'red' }}>
@@ -178,7 +193,7 @@ const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
                 sx={{ borderRadius: 8, width: '100%' }}
                 value={null}
                 timezone='Asia/Ho_Chi_Minh'
-                onChange={(value) => value && setValue('expectedDateTo', value)}
+                onChange={(value: Date | null) => value && setValue('expectedDateTo', new Date(value))}
                 renderInput={(params) => <TextField {...params} fullWidth />}
               />
               <Typography variant='caption' style={{ color: 'red' }}>
@@ -187,7 +202,7 @@ const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
             </Grid>
           </Grid>
         </DialogContent>
-        <DialogActions sx={{ px: 4, pb: 4 }}>
+        <Box sx={{ px: 4, pb: 4 }} display='flex' justifyContent='end'>
           <Button
             style={{
               border: '2px #1A1363',
@@ -197,7 +212,7 @@ const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
             variant='outlined'
             color='info'
             autoFocus
-            onClick={onClose}
+            onClick={handleClose}
             type='button'
           >
             Cancel
@@ -214,7 +229,7 @@ const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
           >
             Save changes
           </Button>
-        </DialogActions>
+        </Box>
       </form>
     </Dialog>
   );

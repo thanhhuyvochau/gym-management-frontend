@@ -74,9 +74,6 @@ export function HomeReponsiveAppBar() {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
   return (
     <AppBar color='default' position='sticky'>
       <Container maxWidth='lg'>

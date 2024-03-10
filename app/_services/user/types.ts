@@ -3,6 +3,7 @@ export type UpdateUserPayload = {
   phone: string;
   gender: string;
   address: string;
+  image?: File;
 };
 
 export type UpdatePasswordPayload = {

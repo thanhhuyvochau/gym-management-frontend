@@ -24,7 +24,7 @@ export default function ProfilePage() {
         <Grid item xs={12} lg={5} xl={5} height='100%'>
           <Paper elevation={3} sx={{ p: 2, height: '100%' }}>
             <Box display='flex' justifyContent='center' height='100%'>
-              <UserCardComponent data={profile} />
+              <UserCardComponent />
             </Box>
           </Paper>
         </Grid>

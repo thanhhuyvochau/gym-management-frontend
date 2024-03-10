@@ -1,29 +1,16 @@
 import React from 'react';
 import { Paper, Typography, Grid, Button, IconButton, Divider, Dialog, DialogContent } from '@mui/material';
 import { ExpandMore, ExpandLess } from '@mui/icons-material';
-import { MemberResponse } from '@/app/_models/MemberResponse';
+import { Member } from '@/app/_services/member/types';
+import { format } from 'date-fns';
 
 interface MemberCardProps {
-  member: MemberResponse;
+  member: Member;
   onClickClose: () => any;
 }
 
 const MemberCard: React.FC<MemberCardProps> = ({ member, onClickClose }) => {
-  const {
-    id,
-    fullName,
-    gender,
-    dateOfBirth,
-    email,
-    phoneNumber,
-    streetAddress,
-    city,
-    stateProvince,
-    membershipType,
-    membershipStartDate,
-    membershipEndDate,
-    membershipStatus,
-  } = member;
+  const { id, fullName, gender, phoneNumber, birthday, dateEnrolled, dateExpiration } = member;
 
   const [expanded, setExpanded] = React.useState(false);
 
@@ -76,41 +63,40 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, onClickClose }) => {
               <strong>ID:</strong> {id}
             </Typography>
             <Typography variant='body2' sx={{ color: '#1a1363', marginBottom: '0.5rem' }}>
+              <strong>Full Name:</strong> {fullName}
+            </Typography>
+            <Typography variant='body2' sx={{ color: '#1a1363', marginBottom: '0.5rem' }}>
               <strong>Gender:</strong> {gender}
             </Typography>
             <Typography variant='body2' sx={{ color: '#1a1363', marginBottom: '0.5rem' }}>
-              <strong>Date of Birth:</strong> {dateOfBirth}
+              <strong>Date of Birth:</strong> {format(new Date(birthday), 'MM-dd-yyyy')}
             </Typography>
             <Divider sx={{ my: 2, backgroundColor: '#1a1363' }} />
-            <Typography variant='body2' sx={{ color: '#1a1363', marginBottom: '0.5rem' }}>
-              <strong>Email:</strong> {email}
-            </Typography>
             <Typography variant='body2' sx={{ color: '#1a1363', marginBottom: '0.5rem' }}>
               <strong>Phone Number:</strong> {phoneNumber}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant='body2' sx={{ color: '#1a1363', marginBottom: '0.5rem' }}>
+            {/* <Typography variant='body2' sx={{ color: '#1a1363', marginBottom: '0.5rem' }}>
               <strong>Address:</strong> {streetAddress}, {city}, {stateProvince}
-            </Typography>
-            <Divider sx={{ my: 2, backgroundColor: '#1a1363' }} />
-            <Typography variant='body2' sx={{ color: '#1a1363', marginBottom: '0.5rem' }}>
+            </Typography> */}
+            {/* <Divider sx={{ my: 2, backgroundColor: '#1a1363' }} /> */}
+            {/* <Typography variant='body2' sx={{ color: '#1a1363', marginBottom: '0.5rem' }}>
               <strong>Membership Type:</strong> {membershipType}
+            </Typography> */}
+            <Typography variant='body2' sx={{ color: '#1a1363', marginBottom: '0.5rem' }}>
+              <strong>Membership Start Date:</strong> {format(new Date(dateEnrolled), 'MM-dd-yyyy')}
             </Typography>
             <Typography variant='body2' sx={{ color: '#1a1363', marginBottom: '0.5rem' }}>
-              <strong>Membership Start Date:</strong> {membershipStartDate}
+              <strong>Membership End Date:</strong> {format(new Date(dateExpiration), 'MM-dd-yyyy')}
             </Typography>
-            {membershipEndDate && (
-              <Typography variant='body2' sx={{ color: '#1a1363', marginBottom: '0.5rem' }}>
-                <strong>Membership End Date:</strong> {membershipEndDate}
-              </Typography>
-            )}
+
             <Typography variant='body2' sx={{ color: '#1a1363', marginBottom: '0.5rem' }}>
-              <strong>Membership Status:</strong> {membershipStatus ? 'Active' : 'Inactive'}
+              <strong>Membership Status:</strong> {new Date(dateExpiration) > new Date() ? 'Active' : 'Inactive'}
             </Typography>
           </Grid>
         </Grid>
-        <IconButton
+        {/* <IconButton
           onClick={handleToggleExpand}
           sx={{
             position: 'absolute',
@@ -121,7 +107,7 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, onClickClose }) => {
           }}
         >
           {expanded ? <ExpandLess /> : <ExpandMore />}
-        </IconButton>
+        </IconButton> */}
       </DialogContent>
       <Divider sx={{ my: 0, backgroundColor: '#1a1363' }} />
       <div style={{ marginTop: '0', textAlign: 'right', padding: '1rem' }}>

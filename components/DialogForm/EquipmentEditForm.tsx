@@ -23,6 +23,7 @@ import { inventoryService } from '@/app/_services';
 import { toast } from 'react-toastify';
 import { Inventory } from '@/app/_services/inventory/types';
 import { DatePicker } from '@mui/x-date-pickers';
+import Image from 'next/image';
 
 const schema = yup.object().shape({
   name: yup.string().required('Equipment Name is required'),
@@ -31,6 +32,7 @@ const schema = yup.object().shape({
   expectedDateFrom: yup.date().required('From date is required'),
   expectedDateTo: yup.date().required('To date is required'),
   costPer: yup.number().required('Cost Per is required'),
+  image: yup.mixed(),
 });
 
 // const VisuallyHiddenInput = styled('input')({
@@ -66,6 +68,7 @@ const EquipmentEditForm = ({ onClose, inventory }: IEquipmentAddFormProps) => {
       expectedDateFrom: new Date(inventory.expectedDateFrom),
       expectedDateTo: new Date(inventory.expectedDateTo),
       costPer: inventory.costPer,
+      image: inventory.image,
     },
   });
 
@@ -80,12 +83,17 @@ const EquipmentEditForm = ({ onClose, inventory }: IEquipmentAddFormProps) => {
     },
   });
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
+  const [selectedImage, setSelectedImage] = useState<string | null>(getValues('image'));
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file) {
+      setValue('image', file);
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImage(reader.result);
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          setSelectedImage(reader.result);
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -101,34 +109,35 @@ const EquipmentEditForm = ({ onClose, inventory }: IEquipmentAddFormProps) => {
         <Typography color={'var(--primary)'} variant='h6'>
           Update Equipment
         </Typography>
-        {/* <Stack direction={'row'} justifyContent={'space-between'}>
-          <Stack direction={'column'} gap={'0.5rem'}>
-            <Typography color={'var(--primary)'} variant='h6'>
-              Add Equipment
-            </Typography>
-            <Button component='label' variant='text' endIcon={<FileUploadOutlined />} className='pl-0 justify-start'>
-              Attach Photo
-              <VisuallyHiddenInput onChange={handleFileUpload} type='file' />
-            </Button>
-          </Stack>
-          {selectedImage == null ? (
-            <Box style={{ background: '#807DA8', width: '109px', height: '109px' }} component={'div'}></Box>
-          ) : (
-            <img
-              src={selectedImage}
-              alt='Equipment'
-              style={{
-                width: '109px',
-                height: '109px',
-              }}
-            />
-          )}
-        </Stack> */}
       </DialogTitle>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
           <Grid spacing={2} container>
+            <Grid item xs={12}>
+              <Box display='flex' flexDirection='column' gap={4}>
+                <TextField
+                  type='file'
+                  fullWidth
+                  label='Image'
+                  variant='outlined'
+                  InputLabelProps={{ shrink: true }}
+                  onChange={handleFileChange}
+                  error={!!errors.image}
+                />
+                {selectedImage && (
+                  <Box maxWidth={150} maxHeight={150}>
+                    <Image
+                      src={selectedImage}
+                      alt='preview-img'
+                      width={0}
+                      height={0}
+                      style={{ width: '100%', height: '100%' }}
+                    />
+                  </Box>
+                )}
+              </Box>
+            </Grid>
             <Grid item xs={12}>
               <TextField fullWidth size='medium' sx={{ borderRadius: 8 }} {...register('name')} placeholder='Name' />
               <Typography variant='caption' style={{ color: 'red' }}>

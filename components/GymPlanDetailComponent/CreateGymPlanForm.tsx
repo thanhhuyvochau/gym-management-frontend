@@ -42,6 +42,9 @@ const CreateGymPlanForm = ({ onCancel }: IEditGymPlanFormProps) => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      activate: false,
+    },
   });
 
   const queryClient = useQueryClient();
@@ -72,7 +75,7 @@ const CreateGymPlanForm = ({ onCancel }: IEditGymPlanFormProps) => {
         }}
       >
         <Typography variant='h4' align='center' style={{ color: '#1a1363', marginBottom: '20px' }}>
-          Edit Gym Plan
+          Create New Gym Plan
         </Typography>
         <form onSubmit={handleSubmit(handleSave)}>
           <Grid container spacing={2}>

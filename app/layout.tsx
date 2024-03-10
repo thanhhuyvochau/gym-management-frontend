@@ -11,6 +11,8 @@ import { viVN } from '@mui/x-date-pickers/locales';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { LocalizationProvider } from '@mui/x-date-pickers';
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 const theme = createTheme({
   typography: {

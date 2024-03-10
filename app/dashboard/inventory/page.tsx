@@ -121,7 +121,6 @@ const EquimentComponent = () => {
         </>
       );
     },
-    searchAlwaysOpen: true,
     responsive: 'standard',
     customToolbar(data) {
       return (
@@ -134,15 +133,15 @@ const EquimentComponent = () => {
 
   return (
     <Box className='children-box' component={'div'} height={'100%'}>
-      <Box display='flex' justifyContent='space-between' alignItems='center'>
-        <Typography className='mt-16 mb-16' variant='h3' color='black' py={2}>
+      <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
+        <Typography variant='h3' color='var(--primary)' py={2}>
           Equipment Management
         </Typography>
         <Button variant='contained' sx={{ height: 'fit-content' }} onClick={() => setOpenCreateModal(true)}>
           Create new
         </Button>
       </Box>
-      {data && <MUIDataTable title='Gym Owner Management' data={data?.items} columns={columns} options={options} />}
+      {data && <MUIDataTable title='Manage Equipments' data={data?.items} columns={columns} options={options} />}
       {selectedInventory && statusModal === 'edit' && (
         <EquipmentEditForm
           inventory={selectedInventory}

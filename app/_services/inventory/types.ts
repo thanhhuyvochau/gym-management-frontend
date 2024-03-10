@@ -9,6 +9,7 @@ export interface Inventory {
   expectedDateTo: Date;
   costPer: number;
   quantity: number;
+  image: string;
   id: number;
 }
 

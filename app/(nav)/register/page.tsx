@@ -100,13 +100,13 @@ const Register = () => {
             width='65%'
             maxWidth='25rem'
             height='100%'
-            className='mt-16'
+            mt={4}
             minWidth={{ xs: '100%', sm: '25rem' }}
             component='form'
             autoComplete='true'
           >
-            <Stack justifyContent='center' alignItems='center' spacing={4}>
-              <Typography style={{ color: ' var( --main-font-color)' }} variant='h3'>
+            <Stack justifyContent='center' alignItems='start' spacing={4}>
+              <Typography style={{ color: ' var( --main-font-color)' }} variant='h3' fontWeight={700}>
                 Sign Up
               </Typography>
 
@@ -152,7 +152,7 @@ const Register = () => {
               <Grid container direction='column'>
                 <InputLabel style={{ color: 'var(--main-font-color)' }} htmlFor='passwordInput'>
                   <Typography fontWeight='600' variant='h5'>
-                    Re-type Password
+                    Confirm Password
                   </Typography>
                 </InputLabel>
                 <TextField

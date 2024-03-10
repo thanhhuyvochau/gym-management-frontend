@@ -1,7 +1,7 @@
 'use client';
 
 import { Avatar, Box, Card, Grid, TextField, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useAuth } from '../_hooks';
 import Image from 'next/image';
@@ -12,6 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 import { planService, statisticService } from '../_services';
 import { format } from 'date-fns';
 import { DatePicker } from '@mui/x-date-pickers';
+import { ChartData } from 'chart.js';
 
 const sampleData = [
   { date: '2024-01-01', revenue: 100 },
@@ -48,7 +49,7 @@ const Dashboard = () => {
   const [fromDate, setFromDate] = useState(initFromDate);
   const [toDate, setToDate] = useState(curDate);
 
-  const { data: statistics } = useQuery({
+  const { data: statistics, refetch } = useQuery({
     queryKey: ['statistics'],
     queryFn: () => statisticService.getStatistic({ fromDate, toDate }),
   });
@@ -58,26 +59,12 @@ const Dashboard = () => {
     queryFn: () => planService.getPlans(),
   });
 
-  const data = {
-    labels: sampleData?.map((item) => format(item.date, 'dd-MM-yy')),
-    datasets: [
-      {
-        label: 'My Dataset',
-        backgroundColor: 'rgba(75,192,192,1)',
-        // borderColor: 'rgba(0,0,0,1)',
-        // borderWidth: 2,
-        data: sampleData?.map((item) => item.revenue),
-      },
-    ],
-  };
-
-  const dataLine = {
-    labels: sampleData?.map((item) => format(item.date, 'dd-MM-yy')),
+  const dataLine: ChartData<'line'> = {
+    labels: statistics?.map((item) => format(item.date, 'dd-MM-yy')) || [],
     datasets: [
       {
         label: 'Revenue',
         fill: false,
-        lineTension: 0.1,
         backgroundColor: 'rgba(75,192,192,0.4)',
         borderColor: 'rgba(75,192,192,1)',
         borderCapStyle: 'butt',
@@ -93,7 +80,7 @@ const Dashboard = () => {
         pointHoverBorderWidth: 2,
         pointRadius: 1,
         pointHitRadius: 10,
-        data: sampleData?.map((item) => item.revenue),
+        data: statistics?.map((item) => item.revenue) || [],
       },
     ],
   };
@@ -108,6 +95,12 @@ const Dashboard = () => {
       },
     ],
   };
+
+  useEffect(() => {
+    if (fromDate && toDate) {
+      refetch();
+    }
+  }, [fromDate, toDate]);
 
   return (
     profile && (
@@ -155,6 +148,7 @@ const Dashboard = () => {
                       label='From date'
                       sx={{ borderRadius: 8, width: '100%' }}
                       defaultValue={fromDate}
+                      maxDate={toDate}
                       onChange={(value: Date | null) => value && setFromDate(value)}
                       renderInput={(params) => <TextField {...params} fullWidth />}
                     />
@@ -171,7 +165,7 @@ const Dashboard = () => {
                   </Grid>
                 </Grid>
                 {/* <Bar data={data} /> */}
-                <Line data={data} />
+                <Line data={dataLine} />
               </Stack>
             </Card>
           </Grid>

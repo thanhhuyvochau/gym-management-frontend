@@ -25,16 +25,16 @@ export default function ReportPage() {
     queryKey: ['members'],
     queryFn: () => memberService.getMembers({ page: 0, size: 1, sort: ['id'], q: 'string' }),
   });
-  const [selectedReport, setSelectedReport] = useState<Report | null>(null);
+  // const [selectedReport, setSelectedReport] = useState<Report | null>(null);
 
-  const [selectedDeleteMember, setSelectedDeleteMember] = useState<any | null>();
-  const [isOpenDeletePopup, setOpenDeletePopup] = useState<boolean>(false);
+  // const [selectedDeleteMember, setSelectedDeleteMember] = useState<any | null>();
+  // const [isOpenDeletePopup, setOpenDeletePopup] = useState<boolean>(false);
 
   const { mutate: mutateDelete } = useMutation({ mutationFn: memberService.delete });
 
-  const handleClickClose = () => {
-    setSelectedReport(null);
-  };
+  // const handleClickClose = () => {
+  //   setSelectedReport(null);
+  // };
 
   const curDate = new Date();
   const initFromDate = new Date();
@@ -90,28 +90,6 @@ export default function ReportPage() {
         },
       },
     },
-    {
-      label: '',
-      name: '',
-      options: {
-        customBodyRender: (value, tableMeta) => {
-          return (
-            <Button
-              variant='outlined'
-              color='info'
-              startIcon={<VisibilityIcon />}
-              onClick={() => {
-                let rowIndex = tableMeta.rowIndex;
-                let selectedMember = reports?.[rowIndex];
-                selectedMember && setSelectedReport(selectedMember);
-              }}
-            >
-              View
-            </Button>
-          );
-        },
-      },
-    },
   ];
 
   const options: MUIDataTableOptions = {
@@ -120,6 +98,10 @@ export default function ReportPage() {
     print: false,
     download: false,
     responsive: 'standard',
+    selectableRowsHeader: false,
+    customToolbarSelect() {
+      return <></>;
+    },
   };
 
   const totalAmount = reports?.reduce((acc, cur) => {
@@ -162,13 +144,12 @@ export default function ReportPage() {
               <Typography variant='body1' fontWeight={600}>
                 Total
               </Typography>
-              <Chip label={`${totalAmount} VND`} color='primary' />
+              <Chip label={`${totalAmount?.toLocaleString('vi')} VND`} color='primary' />
             </Box>
           </Grid>
         </Grid>
       </Card>
       {reports && <MUIDataTable title='Gym Owner Management' data={reports} columns={columns} options={options} />}
-      {/* {selectedReport && <MemberCard onClickClose={handleClickClose} member={selectedReport!}></MemberCard>} */}
     </Box>
   );
 }

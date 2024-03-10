@@ -70,6 +70,7 @@ export default function SettingsCard(props: any) {
     handleSubmit: handleSubmitPassword,
     register: registerPassword,
     reset: resetUpdatePassword,
+    formState: { isValid: isValidPassword },
   } = useForm({
     resolver: yupResolver(passwordSchema),
   });
@@ -161,8 +162,8 @@ export default function SettingsCard(props: any) {
               component='button'
               size='large'
               variant='contained'
-              color='secondary'
               type='submit'
+              disabled={!isValidPassword}
             >
               Save
             </Button>
@@ -204,7 +205,7 @@ export default function SettingsCard(props: any) {
                 component='button'
                 size='large'
                 variant='contained'
-                color='secondary'
+                // color='secondary'
                 type='submit'
               >
                 Save
@@ -214,8 +215,7 @@ export default function SettingsCard(props: any) {
               sx={{ p: '1rem 2rem', my: 2, height: '3rem', float: 'right' }}
               component='button'
               size='large'
-              variant='contained'
-              color='secondary'
+              variant={isEditing ? 'outlined' : 'contained'}
               onClick={() => setEditing((prev) => !prev)}
             >
               {isEditing ? 'Cancel' : 'Edit'}

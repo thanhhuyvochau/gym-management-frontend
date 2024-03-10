@@ -29,8 +29,8 @@ const schema = yup.object().shape({
   name: yup.string().required('Equipment Name is required'),
   code: yup.string().required('Code is required'),
   quantity: yup.number().required('Quantity is required'),
-  expectedDateFrom: yup.date().required('From date is required'),
-  expectedDateTo: yup.date().required('To date is required'),
+  expectedDateFrom: yup.string().required('From date is required'),
+  expectedDateTo: yup.string().required('To date is required'),
   costPer: yup.number().required('Cost Per is required'),
   image: yup.mixed(),
 });
@@ -65,10 +65,9 @@ const EquipmentEditForm = ({ onClose, inventory }: IEquipmentAddFormProps) => {
       name: inventory.name,
       code: inventory.code,
       quantity: inventory.quantity,
-      expectedDateFrom: new Date(inventory.expectedDateFrom),
-      expectedDateTo: new Date(inventory.expectedDateTo),
+      expectedDateFrom: new Date(inventory.expectedDateFrom).toISOString(),
+      expectedDateTo: new Date(inventory.expectedDateTo).toISOString(),
       costPer: inventory.costPer,
-      image: inventory.image,
     },
   });
 
@@ -83,7 +82,7 @@ const EquipmentEditForm = ({ onClose, inventory }: IEquipmentAddFormProps) => {
     },
   });
 
-  const [selectedImage, setSelectedImage] = useState<string | null>(getValues('image'));
+  const [selectedImage, setSelectedImage] = useState<string | null>(inventory.image);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -110,7 +109,6 @@ const EquipmentEditForm = ({ onClose, inventory }: IEquipmentAddFormProps) => {
           Update Equipment
         </Typography>
       </DialogTitle>
-
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
           <Grid spacing={2} container>
@@ -132,6 +130,7 @@ const EquipmentEditForm = ({ onClose, inventory }: IEquipmentAddFormProps) => {
                       alt='preview-img'
                       width={0}
                       height={0}
+                      sizes='100vw'
                       style={{ width: '100%', height: '100%' }}
                     />
                   </Box>
@@ -181,7 +180,7 @@ const EquipmentEditForm = ({ onClose, inventory }: IEquipmentAddFormProps) => {
                 label='From'
                 sx={{ borderRadius: 8, width: '100%' }}
                 defaultValue={getValues('expectedDateFrom')}
-                onChange={(value) => value && setValue('expectedDateFrom', new Date(value))}
+                onChange={(value) => value && setValue('expectedDateFrom', new Date(value).toISOString())}
                 renderInput={(params) => <TextField {...params} fullWidth />}
               />
               <Typography variant='caption' style={{ color: 'red' }}>
@@ -193,7 +192,7 @@ const EquipmentEditForm = ({ onClose, inventory }: IEquipmentAddFormProps) => {
                 label='To'
                 sx={{ borderRadius: 8, width: '100%' }}
                 defaultValue={getValues('expectedDateTo')}
-                onChange={(value) => value && setValue('expectedDateTo', new Date(value))}
+                onChange={(value) => value && setValue('expectedDateTo', new Date(value).toISOString())}
                 renderInput={(params) => <TextField {...params} fullWidth />}
               />
               <Typography variant='caption' style={{ color: 'red' }}>
@@ -202,7 +201,7 @@ const EquipmentEditForm = ({ onClose, inventory }: IEquipmentAddFormProps) => {
             </Grid>
           </Grid>
         </DialogContent>
-        <DialogActions sx={{ px: 4, pb: 4 }}>
+        <Box display='flex' justifyContent='end' gap={2} sx={{ px: 4, pb: 4 }}>
           <Button
             style={{
               border: '2px #1A1363',
@@ -229,7 +228,7 @@ const EquipmentEditForm = ({ onClose, inventory }: IEquipmentAddFormProps) => {
           >
             Save changes
           </Button>
-        </DialogActions>
+        </Box>
       </form>
     </Dialog>
   );

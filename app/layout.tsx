@@ -7,7 +7,6 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3/AdapterDateFnsV3';
-import { viVN } from '@mui/x-date-pickers/locales';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -15,6 +14,14 @@ import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
 const theme = createTheme({
+  palette: {
+    primary: {
+      light: '#695fa7',
+      main: '#1a1363',
+      dark: '#000d34',
+      contrastText: '#fff',
+    },
+  },
   typography: {
     fontFamily: 'Poppins, sans-serif',
     fontSize: 16,
@@ -112,10 +119,7 @@ export default function RootLayout(prop: Props) {
         />
       </head>
       <body style={{ overflow: 'hidden' }}>
-        <LocalizationProvider
-          dateAdapter={AdapterDateFns}
-          localeText={viVN.components.MuiLocalizationProvider.defaultProps.localeText}
-        >
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
           <ToastContainer position='bottom-right' autoClose={3000} closeOnClick hideProgressBar />
           <QueryClientProvider client={queryClient}>
             <ThemeProvider theme={theme}>{prop.children}</ThemeProvider>

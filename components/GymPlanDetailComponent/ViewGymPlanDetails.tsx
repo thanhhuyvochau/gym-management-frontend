@@ -48,7 +48,7 @@ const GymPlanDetails: React.FC<GymPlanDetailsProps> = ({ gymPlan, onClickClose }
         <Typography variant='h4' align='center' style={titleStyles}>
           {gymPlan.name}
         </Typography>
-        <Grid className='mt-6' container spacing={2} justifyContent='center'>
+        <Grid className='mt-6' container spacing={1} justifyContent='center'>
           <Grid item xs={12} sm={6}>
             <Typography variant='body2' style={detailStyles}>
               <strong>Time Period:</strong> {gymPlan.timeAmount} {gymPlan.timeUnit}

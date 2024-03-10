@@ -6,27 +6,37 @@ export const memberService = {
     const formData = new FormData();
 
     Object.keys(payload).forEach((key) => {
-      formData.append(key, (data as any)[key]);
+      formData.append(key, (payload as any)[key]);
     });
 
-    const { data } = await api.post('members', formData, {
+    await api.post('api/members', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
   },
   getMembers: async (query: GetMembersQuery) => {
-    const { data } = await api.get('members', { params: query });
+    const { data } = await api.get('api/members', { params: query });
 
     return data.data as GetMembersResponse;
   },
   update: async ({ id, payload }: { id: number; payload: CreateMemberPayload }) => {
-    const { data } = await api.put(`members/${id}`, payload);
+    const formData = new FormData();
+
+    Object.keys(payload).forEach((key) => {
+      formData.append(key, (payload as any)[key]);
+    });
+
+    await api.put(`api/members/${id}`, payload, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
   },
   charge: async ({ id, payload }: { id: number; payload: ChargeMemberPayload }) => {
-    return api.put(`/members/${id}/plan`, payload);
+    return api.put(`api/members/${id}/plan`, payload);
   },
   delete: async (id: number) => {
-    const { data } = await api.delete(`members/${id}`);
+    const { data } = await api.delete(`api/members/${id}`);
   },
 };

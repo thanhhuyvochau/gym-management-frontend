@@ -5,6 +5,7 @@ export type CreateMemberPayload = {
   phoneNumber: string;
   birthday: Date;
   image: string;
+  fromDate: Date;
 };
 
 export interface GetMembersResponse {
@@ -25,7 +26,7 @@ export interface Member {
   gender: string;
   phoneNumber: string;
   birthday: Date;
-  memberImage: string;
+  memberImage?: string;
   dateEnrolled: string;
   dateExpiration: string;
 }
@@ -33,6 +34,7 @@ export interface Member {
 export type ChargeMemberPayload = {
   gymPlanId: number;
   actualPrice: number;
+  fromDate: Date;
 };
 
 export type GetMembersQuery = {

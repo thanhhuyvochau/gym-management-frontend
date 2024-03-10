@@ -19,53 +19,6 @@ import { toast } from 'react-toastify';
 const MUIDataTable = dynamic(() => import('mui-datatables'), {
   ssr: false,
 });
-const mockUsers: MemberResponse[] = [
-  {
-    id: 1,
-    fullName: 'John Doe',
-    gender: 'Male',
-    dateOfBirth: '1990-01-01',
-    email: 'john.doe@example.com',
-    phoneNumber: '123-456-7890',
-    streetAddress: '123 Main St',
-    city: 'Cityville',
-    stateProvince: 'State A',
-    membershipType: 'Premium',
-    membershipStartDate: '2022-01-01',
-    membershipEndDate: '2022-12-31',
-    membershipStatus: true,
-  },
-  {
-    id: 2,
-    fullName: 'Jane Smith',
-    gender: 'Female',
-    dateOfBirth: '1985-03-15',
-    email: 'jane.smith@example.com',
-    phoneNumber: '987-654-3210',
-    streetAddress: '456 Oak St',
-    city: 'Townsville',
-    stateProvince: 'State B',
-    membershipType: 'Regular',
-    membershipStartDate: '2022-02-15',
-    membershipStatus: true,
-  },
-  {
-    id: 3,
-    fullName: 'Bob Johnson',
-    gender: 'Male',
-    dateOfBirth: '1982-07-20',
-    email: 'bob.johnson@example.com',
-    phoneNumber: '555-123-4567',
-    streetAddress: '789 Pine St',
-    city: 'Villageville',
-    stateProvince: 'State C',
-    membershipType: 'Basic',
-    membershipStartDate: '2022-03-10',
-    membershipEndDate: '2022-09-10',
-    membershipStatus: false,
-  },
-];
-
 const ManagerManagement = () => {
   const { data, refetch } = useQuery({
     queryKey: ['members'],
@@ -108,24 +61,7 @@ const ManagerManagement = () => {
 
     {
       label: 'Plan Type',
-      name: 'gymPlanId',
-      options: {
-        customBodyRender(value) {
-          return (
-            <>
-              {new Date(value) > new Date() ? (
-                <Typography fontSize={'1rem'} fontWeight={'normal'} variant='h6' color='green'>
-                  Active
-                </Typography>
-              ) : (
-                <Typography fontSize={'1rem'} fontWeight={'normal'} variant='h6' color='red'>
-                  In Active
-                </Typography>
-              )}
-            </>
-          );
-        },
-      },
+      name: 'planName',
     },
     {
       label: 'Plan Status',

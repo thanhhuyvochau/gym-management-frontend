@@ -149,7 +149,7 @@ const EditGymPlanForm = ({ gymPlan, onCancel }: IEditGymPlanFormProps) => {
                     error={!!errors.timeUnit}
                     helperText={errors.timeUnit?.message}
                   >
-                    {['ANNUAL', 'MONTH', 'YEAR'].map((option, index) => (
+                    {['MONTH', 'YEAR'].map((option, index) => (
                       <MenuItem key={index} value={option}>
                         {option}
                       </MenuItem>

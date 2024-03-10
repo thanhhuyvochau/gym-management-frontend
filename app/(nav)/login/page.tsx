@@ -150,7 +150,7 @@ const Login = () => {
                 control={<Checkbox checked={rememberMe} onClick={() => setRememberMe((prev) => !prev)} />}
                 label='Remember me'
               />
-              <Link style={{ color: 'var(--main-font-color)', margin: 'auto 0' }} href=''>
+              <Link style={{ color: 'var(--main-font-color)', margin: 'auto 0' }} href='/forgot-password'>
                 Forgot Password?
               </Link>
             </Grid>

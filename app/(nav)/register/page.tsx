@@ -178,7 +178,7 @@ const Register = () => {
                 sx={{ width: '100%' }}
                 onClick={handleSubmitRegister}
               >
-                <Typography variant='h5'>Register</Typography>
+                <Typography variant='body1'>Register</Typography>
               </Fab>
               <Grid justifyContent='space-between' direction='row' container item xs={12}>
                 <FormControlLabel

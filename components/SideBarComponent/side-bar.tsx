@@ -88,6 +88,12 @@ const allSideBarItem: SideBarItem[] = [
     forRole: [GYM_OWNER], // Adjust roles as needed
     link: '/dashboard/report',
   },
+  {
+    label: 'Attendance',
+    icon: desktopIcons[7],
+    forRole: [GYM_OWNER], // Adjust roles as needed
+    link: '/dashboard/attendance',
+  },
 ];
 
 const SideBarComponent = () => {

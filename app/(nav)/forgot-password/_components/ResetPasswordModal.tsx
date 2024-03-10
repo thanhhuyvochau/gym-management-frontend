@@ -38,6 +38,9 @@ export function ResetPasswordModal({ isOpen, onClose }: IResetPasswordModalProps
       onClose();
       reset();
     },
+    onError: () => {
+      toast.error('OTP is not correct!');
+    },
   });
 
   const onSubmit = (data: any) => {

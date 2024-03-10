@@ -20,9 +20,10 @@ import { useAuth } from '@/app/_hooks';
 import { useMutation } from '@tanstack/react-query';
 import authService from '@/app/_services/authService';
 import { ResetPasswordModal } from './_components/ResetPasswordModal';
+import { toast } from 'react-toastify';
 
 const schema = yup.object().shape({
-  email: yup.string().email().required(),
+  email: yup.string().email().required('Please type your email'),
 });
 
 export default function ForgotPasswordPage() {
@@ -40,6 +41,7 @@ export default function ForgotPasswordPage() {
     mutationFn: authService.getOtpForgotPassword,
     onSuccess: () => {
       setOpenResetPassword(true);
+      toast.success('OTP was sent to your email');
     },
   });
 
@@ -97,11 +99,14 @@ export default function ForgotPasswordPage() {
                       id='emailInput'
                       style={{ border: 'solid 4px #332F64', borderRadius: '10px' }}
                       required
-                      error={!!errors.email}
-                      helperText={errors.email ? errors.email.message : ''}
                     />
                   )}
                 />
+                {errors.email && (
+                  <Typography color='red' variant='caption'>
+                    {errors.email.message}
+                  </Typography>
+                )}
               </Grid>
               <Fab
                 style={{
@@ -113,7 +118,11 @@ export default function ForgotPasswordPage() {
                 type='submit'
                 disabled={!isValid}
               >
-                {isPending ? <CircularProgress size={20} /> : <Typography variant='body1'>Get OTP</Typography>}
+                {isPending ? (
+                  <CircularProgress size={20} sx={{ color: 'white' }} />
+                ) : (
+                  <Typography variant='body1'>Get OTP</Typography>
+                )}
               </Fab>
             </Stack>
           </Box>

@@ -21,21 +21,18 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  password: yup.string().required(),
+  email: yup.string().email().required('Please type your email'),
+  password: yup.string().required('Please type your password'),
 });
 
 const Login = () => {
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {
-      email: localStorage.getItem('email') || '',
-      password: localStorage.getItem('password') || '',
-    },
   });
 
   const [rememberMe, setRememberMe] = useState(true);
@@ -48,8 +45,9 @@ const Login = () => {
     const storedPassword = localStorage.getItem('password');
 
     if (storedEmail && storedPassword) {
-      localStorage.setItem('email', storedEmail);
-      localStorage.setItem('password', storedPassword);
+      setValue('email', storedEmail);
+      setValue('password', storedPassword);
+
       setRememberMe(true);
     }
   }, []);
@@ -112,12 +110,14 @@ const Login = () => {
                     className={classes.inputField}
                     id='emailInput'
                     style={{ border: 'solid 4px #332F64', borderRadius: '10px' }}
-                    required
-                    error={!!errors.email}
-                    helperText={errors.email ? errors.email.message : ''}
                   />
                 )}
               />
+              {errors.email && (
+                <Typography color='red' variant='caption'>
+                  {errors.email.message}
+                </Typography>
+              )}
             </Grid>
             <Grid container direction='column'>
               <InputLabel style={{ color: 'var(--main-font-color)' }} htmlFor='passwordInput'>
@@ -135,13 +135,15 @@ const Login = () => {
                     type='password'
                     className={classes.inputField}
                     style={{ border: 'solid 4px #332F64', borderRadius: '10px' }}
-                    required
                     id='passwordInput'
-                    error={!!errors.password}
-                    helperText={errors.password ? errors.password.message : ''}
                   />
                 )}
               />
+              {errors.password && (
+                <Typography color='red' variant='caption'>
+                  {errors.password.message}
+                </Typography>
+              )}
             </Grid>
 
             <Grid justifyContent='space-between' direction='row' container item xs={12}>
@@ -163,7 +165,11 @@ const Login = () => {
               sx={{ width: '100%' }}
               type='submit'
             >
-              {isLoading ? <CircularProgress size={20} /> : <Typography variant='body1'>Login</Typography>}
+              {isLoading ? (
+                <CircularProgress size={20} sx={{ color: 'white' }} />
+              ) : (
+                <Typography variant='body1'>Login</Typography>
+              )}
             </Fab>
           </Stack>
         </Box>

@@ -1,4 +1,4 @@
-import { Close, FileUploadOutlined } from '@mui/icons-material';
+import { Close, FileUploadOutlined, Watch } from '@mui/icons-material';
 import { Box, Button, Dialog, DialogContent, DialogTitle, Grid, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -33,7 +33,7 @@ const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
     watch,
     reset,
     setValue,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -133,8 +133,8 @@ const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
                 size='medium'
                 sx={{ borderRadius: 8 }}
                 type='number'
-                {...register('quantity')}
                 label='Quantity'
+                {...register('quantity')}
               />
               <Typography variant='caption' style={{ color: 'red' }}>
                 {errors.quantity?.message}
@@ -181,7 +181,7 @@ const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
           <Button variant='outlined' onClick={handleClose} type='button'>
             Cancel
           </Button>
-          <Button variant='contained' type='submit' disabled={!isValid}>
+          <Button variant='contained' type='submit'>
             Save changes
           </Button>
         </Box>

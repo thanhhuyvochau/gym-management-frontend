@@ -56,7 +56,13 @@ function TabPanel(props: TabPanelProps) {
 export default function SettingsCard(props: any) {
   const { profile, refetch } = useAuth();
 
-  const { handleSubmit, register, control } = useForm({
+  const {
+    handleSubmit,
+    register,
+    control,
+    reset,
+    formState: { isDirty },
+  } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       fullName: profile?.fullName || '',
@@ -207,6 +213,7 @@ export default function SettingsCard(props: any) {
                 variant='contained'
                 // color='secondary'
                 type='submit'
+                disabled={!isDirty}
               >
                 Save
               </Button>
@@ -216,7 +223,12 @@ export default function SettingsCard(props: any) {
               component='button'
               size='large'
               variant={isEditing ? 'outlined' : 'contained'}
-              onClick={() => setEditing((prev) => !prev)}
+              onClick={() => {
+                setEditing((prev) => !prev);
+                if (isEditing) {
+                  reset();
+                }
+              }}
             >
               {isEditing ? 'Cancel' : 'Edit'}
             </Button>

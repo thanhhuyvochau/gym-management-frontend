@@ -15,14 +15,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const desktopIcons = [
-  <SpaceDashboardOutlinedIcon style={{ color: 'white' }} />,
-  <OtherHousesOutlinedIcon style={{ color: 'white' }} />,
-  <AppRegistrationOutlinedIcon style={{ color: 'white' }} />,
-  <AssignmentSharpIcon style={{ color: 'white' }} />,
-  <PaymentOutlinedIcon style={{ color: 'white' }} />,
-  <Inventory2OutlinedIcon style={{ color: 'white' }} />,
-  <PeopleOutlinedIcon style={{ color: 'white' }} />,
-  <AssessmentOutlinedIcon style={{ color: 'white' }} />,
+  <SpaceDashboardOutlinedIcon style={{ color: 'white' }} key={1} />,
+  <OtherHousesOutlinedIcon style={{ color: 'white' }} key={2} />,
+  <AppRegistrationOutlinedIcon style={{ color: 'white' }} key={3} />,
+  <AssignmentSharpIcon style={{ color: 'white' }} key={4} />,
+  <PaymentOutlinedIcon style={{ color: 'white' }} key={5} />,
+  <Inventory2OutlinedIcon style={{ color: 'white' }} key={6} />,
+  <PeopleOutlinedIcon style={{ color: 'white' }} key={7} />,
+  <AssessmentOutlinedIcon style={{ color: 'white' }} key={8} />,
 ];
 const styles = {
   '&.Mui-selected': {
@@ -124,7 +124,7 @@ const SideBarComponent = () => {
       {generateSideBarByRole().map((item, index) => (
         <ListItem
           style={{ width: '100%', display: 'block' }}
-          key={index}
+          key={item.link}
           disablePadding
           selected={item.link === pathname}
           onClick={() => setSelectedNavItem(index)}

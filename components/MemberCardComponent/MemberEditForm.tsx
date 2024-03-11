@@ -148,7 +148,7 @@ const MemberEditForm = ({ onClose, member }: IEquipmentAddFormProps) => {
               </Box>
             </Grid>
             <Grid item xs={12}>
-              <TextField fullWidth size='medium' sx={{ borderRadius: 8 }} {...register('fullName')} Label='Full Name' />
+              <TextField fullWidth size='medium' sx={{ borderRadius: 8 }} {...register('fullName')} label='Full Name' />
               <Typography variant='caption' style={{ color: 'red' }}>
                 {errors.fullName?.message}
               </Typography>
@@ -198,7 +198,6 @@ const MemberEditForm = ({ onClose, member }: IEquipmentAddFormProps) => {
                 sx={{ borderRadius: 8, width: '100%' }}
                 defaultValue={getValues('birthday')}
                 onChange={(value) => value && setValue('birthday', new Date(value))}
-                renderInput={(params) => <TextField {...params} fullWidth />}
               />
               <Typography variant='caption' style={{ color: 'red' }}>
                 {errors.birthday?.message}

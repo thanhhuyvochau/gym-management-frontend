@@ -78,6 +78,8 @@ export default function PaymentPages() {
 
   const dataAutoComplete = members?.items.map((item) => ({ label: item.fullName, id: item.id })) || [];
 
+  const currentData = dataAutoComplete.find((item) => item.id === watch('memberId'));
+
   useEffect(() => {
     if (searchText) {
       refetch();
@@ -98,6 +100,7 @@ export default function PaymentPages() {
                 id='combo-box-demo'
                 options={dataAutoComplete}
                 fullWidth
+                value={currentData || null}
                 onChange={(_, value) => value && setValue('memberId', value.id)}
                 renderInput={(params) => (
                   <TextField {...params} label='Member' onChange={(e) => debouncedSearch(e.target.value)} fullWidth />
@@ -108,8 +111,8 @@ export default function PaymentPages() {
               <DatePicker
                 label='From Date'
                 sx={{ borderRadius: 8, width: '100%' }}
+                value={(watch('fromDate') && new Date(watch('fromDate'))) || null}
                 onChange={(value: Date | null) => value && setValue('fromDate', new Date(value))}
-                renderInput={(params) => <TextField {...params} fullWidth />}
               />
               {errors.fromDate && (
                 <Typography variant='caption' color='red'>
@@ -118,28 +121,27 @@ export default function PaymentPages() {
               )}
             </Grid>
             <Grid item xs={12} md={3}>
-              {plans && (
-                <Controller
-                  name='gymPlanId'
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      select
-                      label='Select Plan'
-                      fullWidth
-                      error={!!errors.gymPlanId}
-                      helperText={errors.gymPlanId?.message}
-                    >
-                      {plans.map((plan) => (
-                        <MenuItem key={plan.id} value={plan.id}>
-                          {plan.name}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  )}
-                />
-              )}
+              <Controller
+                name='gymPlanId'
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    select
+                    label='Select Plan'
+                    fullWidth
+                    value={watch('gymPlanId') || ''}
+                    error={!!errors.gymPlanId}
+                    helperText={errors.gymPlanId?.message}
+                  >
+                    {plans?.map((plan) => (
+                      <MenuItem key={plan.id} value={plan.id}>
+                        {plan.name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
             </Grid>
 
             <Grid item xs={12} md={3}>

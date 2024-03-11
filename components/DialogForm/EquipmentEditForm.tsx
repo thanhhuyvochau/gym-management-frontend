@@ -113,7 +113,7 @@ const EquipmentEditForm = ({ onClose, inventory }: IEquipmentAddFormProps) => {
         <DialogContent>
           <Grid spacing={2} container>
             <Grid item xs={12}>
-              <Box display='flex' flexDirection='column' gap={4}>
+              <Box display='flex' flexDirection='column' gap={2}>
                 <TextField
                   type='file'
                   fullWidth
@@ -124,14 +124,14 @@ const EquipmentEditForm = ({ onClose, inventory }: IEquipmentAddFormProps) => {
                   error={!!errors.image}
                 />
                 {selectedImage && (
-                  <Box maxWidth={150} maxHeight={150}>
+                  <Box width={150} height={150}>
                     <Image
                       src={selectedImage}
                       alt='preview-img'
                       width={0}
                       height={0}
                       sizes='100vw'
-                      style={{ width: '100%', height: '100%' }}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                   </Box>
                 )}
@@ -178,10 +178,10 @@ const EquipmentEditForm = ({ onClose, inventory }: IEquipmentAddFormProps) => {
             <Grid item xs={6}>
               <DatePicker
                 label='From'
+                disablePast
                 sx={{ borderRadius: 8, width: '100%' }}
                 defaultValue={getValues('expectedDateFrom')}
                 onChange={(value) => value && setValue('expectedDateFrom', new Date(value).toISOString())}
-                renderInput={(params) => <TextField {...params} fullWidth />}
               />
               <Typography variant='caption' style={{ color: 'red' }}>
                 {errors.expectedDateFrom?.message}
@@ -192,8 +192,8 @@ const EquipmentEditForm = ({ onClose, inventory }: IEquipmentAddFormProps) => {
                 label='To'
                 sx={{ borderRadius: 8, width: '100%' }}
                 defaultValue={getValues('expectedDateTo')}
+                disablePast
                 onChange={(value) => value && setValue('expectedDateTo', new Date(value).toISOString())}
-                renderInput={(params) => <TextField {...params} fullWidth />}
               />
               <Typography variant='caption' style={{ color: 'red' }}>
                 {errors.expectedDateTo?.message}

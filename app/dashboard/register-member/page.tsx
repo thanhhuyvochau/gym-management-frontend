@@ -51,6 +51,7 @@ const RegisterMember = () => {
   const queryClient = useQueryClient();
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [birthDay, setBirthDay] = useState<string | null>(null);
 
   const { data: plans } = useQuery({
     queryKey: ['plans'],
@@ -93,6 +94,7 @@ const RegisterMember = () => {
   const handleReset = () => {
     reset();
     setSelectedImage(null);
+    setBirthDay(null);
   };
 
   useEffect(() => {
@@ -106,10 +108,6 @@ const RegisterMember = () => {
 
   return (
     <>
-      <p>
-        <pre>{JSON.stringify(watch('fromDate'))}</pre>
-        <pre>{JSON.stringify(watch('birthday'))}</pre>
-      </p>
       <Box mt={6} component={'form'} onSubmit={handleSubmit(onSubmitHandler)} width={'100%'}>
         <Typography color={'#1A1363'} variant='h3' my={2} fontWeight={600}>
           Registration
@@ -159,10 +157,10 @@ const RegisterMember = () => {
             </Grid>
             <Grid item xs={12} md={6}>
               <DatePicker
+                value={(watch('birthday') && new Date(watch('birthday'))) || null}
                 label='Birthday'
                 sx={{ borderRadius: 8, width: '100%' }}
                 onChange={(value: Date | null) => value && setValue('birthday', new Date(value).toISOString())}
-                renderInput={(params) => <TextField {...params} fullWidth />}
               />
               {errors.birthday && (
                 <Typography variant='caption' color='red'>
@@ -175,14 +173,7 @@ const RegisterMember = () => {
                 name='gender'
                 control={control}
                 render={({ field }) => (
-                  <TextField
-                    {...field}
-                    select
-                    label='Gender'
-                    fullWidth
-                    error={!!errors.gender}
-                    helperText={errors.gender?.message}
-                  >
+                  <TextField {...field} select label='Gender' fullWidth value={watch('gender') || ''}>
                     {genderSelect.map((option) => (
                       <MenuItem key={option.value} value={option.value}>
                         {option.label}
@@ -198,27 +189,23 @@ const RegisterMember = () => {
               )}
             </Grid>
             <Grid item xs={6} md={3}>
-              {plans && (
-                <Controller
-                  name='plan'
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      select
-                      label='Select Plan'
-                      fullWidth
-                      error={!!errors.plan}
-                      helperText={errors.plan?.message}
-                    >
-                      {plans.map((plan) => (
-                        <MenuItem key={plan.id} value={plan.id}>
-                          {plan.name}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  )}
-                />
+              <Controller
+                name='plan'
+                control={control}
+                render={({ field }) => (
+                  <TextField {...field} select label='Select Plan' fullWidth value={watch('plan') || ''}>
+                    {plans?.map((plan) => (
+                      <MenuItem key={plan.id} value={plan.id}>
+                        {plan.name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
+              {errors.plan && (
+                <Typography variant='caption' color='red'>
+                  {errors.plan.message}
+                </Typography>
               )}
             </Grid>
             <Grid item xs={6} md={3}>
@@ -228,16 +215,19 @@ const RegisterMember = () => {
                 {...register('price')}
                 defaultValue={watch('price')}
                 type='number'
-                error={!!errors.price}
-                helperText={errors.price?.message}
               />
+              {errors.price && (
+                <Typography variant='caption' color='red'>
+                  {errors.price.message}
+                </Typography>
+              )}
             </Grid>
             <Grid item xs={6} md={6}>
               <DatePicker
                 label='From Date'
                 sx={{ borderRadius: 8, width: '100%' }}
+                value={(watch('fromDate') && new Date(watch('fromDate'))) || null}
                 onChange={(value: Date | null) => value && setValue('fromDate', new Date(value).toISOString())}
-                renderInput={(params) => <TextField {...params} fullWidth />}
               />
               {errors.fromDate && (
                 <Typography variant='caption' color='red'>

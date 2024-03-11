@@ -11,13 +11,13 @@ export const userService = {
       formData.append(key, (data as any)[key]);
     });
 
-    await api.put('accounts/profile', formData, {
+    await api.put('api/accounts/profile', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
   },
   updatePassword: async (data: UpdatePasswordPayload) => {
-    await api.put('accounts/password', data);
+    await api.put('api/accounts/password', data);
   },
 };

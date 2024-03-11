@@ -14,31 +14,6 @@ import { format } from 'date-fns';
 import { DatePicker } from '@mui/x-date-pickers';
 import { ChartData } from 'chart.js';
 
-const sampleData = [
-  { date: '2024-01-01', revenue: 100 },
-  { date: '2024-01-02', revenue: 120 },
-  { date: '2024-01-03', revenue: 90 },
-  { date: '2024-01-04', revenue: 150 },
-  { date: '2024-01-05', revenue: 110 },
-  { date: '2024-01-06', revenue: 130 },
-  { date: '2024-01-07', revenue: 140 },
-  { date: '2024-01-08', revenue: 160 },
-  { date: '2024-01-09', revenue: 180 },
-  { date: '2024-01-10', revenue: 200 },
-  // Add more data for January...
-  { date: '2024-02-01', revenue: 220 },
-  { date: '2024-02-02', revenue: 240 },
-  { date: '2024-02-03', revenue: 260 },
-  { date: '2024-02-04', revenue: 280 },
-  { date: '2024-02-05', revenue: 300 },
-  // Add more data for February...
-  { date: '2024-03-01', revenue: 320 },
-  { date: '2024-03-02', revenue: 340 },
-  { date: '2024-03-03', revenue: 360 },
-  // Add more data for March...
-  // Continue adding data for other months...
-];
-
 const Dashboard = () => {
   const { profile } = useAuth();
 
@@ -120,8 +95,8 @@ const Dashboard = () => {
                   </Box>
                   <Typography variant='body2' color={'gray'}>
                     Welcome to Stamina Fitness Gym Management! Your path to strength starts here. With top-notch
-                    facilities and expert guidance, we're committed to helping you reach your fitness goals. Join us and
-                    unleash your potential today!
+                    facilities and expert guidance, we&apos;re committed to helping you reach your fitness goals. Join
+                    us and unleash your potential today!
                   </Typography>
                 </Stack>
                 {profile.imageProfile && (
@@ -150,7 +125,6 @@ const Dashboard = () => {
                       defaultValue={fromDate}
                       maxDate={toDate}
                       onChange={(value: Date | null) => value && setFromDate(value)}
-                      renderInput={(params) => <TextField {...params} fullWidth />}
                     />
                   </Grid>
                   <Grid item xs={6} md={4}>
@@ -160,7 +134,6 @@ const Dashboard = () => {
                       defaultValue={toDate}
                       maxDate={curDate}
                       onChange={(value: Date | null) => value && setToDate(value)}
-                      renderInput={(params) => <TextField {...params} fullWidth />}
                     />
                   </Grid>
                 </Grid>

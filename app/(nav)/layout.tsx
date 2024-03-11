@@ -24,7 +24,7 @@ interface NavItem {
   onClick?: () => void;
 }
 
-export function HomeReponsiveAppBar() {
+function HomeReponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 
   const { profile, logout } = useAuth();
@@ -137,7 +137,7 @@ export function HomeReponsiveAppBar() {
             }}
           >
             {pages.map((page) => (
-              <Button>
+              <Button key={page.name}>
                 <Link
                   href={page.navLink()}
                   style={{
@@ -163,7 +163,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   return (
     <>
       <Box component={'div'}>
-        <HomeReponsiveAppBar></HomeReponsiveAppBar>
+        <HomeReponsiveAppBar />
         <Box style={{}} component={'div'}>
           {children}
         </Box>

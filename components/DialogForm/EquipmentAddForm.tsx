@@ -157,8 +157,8 @@ const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
               <DatePicker
                 label='From'
                 sx={{ borderRadius: 8, width: '100%' }}
+                disablePast
                 onChange={(value: Date | null) => value && setValue('expectedDateFrom', new Date(value).toISOString())}
-                renderInput={(params) => <TextField {...params} fullWidth />}
               />
               <Typography variant='caption' style={{ color: 'red' }}>
                 {errors.expectedDateFrom?.message}
@@ -168,8 +168,8 @@ const EquipmentAddForm = ({ onClose, status }: IEquipmentAddFormProps) => {
               <DatePicker
                 label='To'
                 sx={{ borderRadius: 8, width: '100%' }}
+                disablePast
                 onChange={(value: Date | null) => value && setValue('expectedDateTo', new Date(value).toISOString())}
-                renderInput={(params) => <TextField {...params} fullWidth />}
               />
               <Typography variant='caption' style={{ color: 'red' }}>
                 {errors.expectedDateTo?.message}

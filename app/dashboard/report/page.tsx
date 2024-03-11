@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { MUIDataTableColumn, MUIDataTableOptions } from 'mui-datatables';
-import { Box, Button, Card, Chip, Grid, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, Chip, Grid, Stack, TextField, Typography } from '@mui/material';
 import { AccountResponse } from '@/app/_models/AccountResponse';
 import { Add, DeleteOutline, PlusOneRounded } from '@mui/icons-material';
 import dynamic from 'next/dynamic';
@@ -96,7 +96,7 @@ export default function ReportPage() {
         Sales Report
       </Typography>
 
-      <Card bgcolor='white' sx={{ my: 4, p: 4 }}>
+      <Card sx={{ my: 4, p: 4, bgcolor: 'white' }}>
         <Grid container spacing={4}>
           <Grid item xs={6} md={4}>
             <DatePicker
@@ -104,7 +104,6 @@ export default function ReportPage() {
               sx={{ borderRadius: 8, width: '100%' }}
               defaultValue={fromDate}
               onChange={(value: Date | null) => value && setFromDate(value)}
-              renderInput={(params) => <TextField {...params} fullWidth />}
             />
           </Grid>
           <Grid item xs={6} md={4}>
@@ -114,7 +113,6 @@ export default function ReportPage() {
               defaultValue={toDate}
               maxDate={curDate}
               onChange={(value: Date | null) => value && setToDate(value)}
-              renderInput={(params) => <TextField {...params} fullWidth />}
             />
           </Grid>
           <Grid item xs={12} md={4}>

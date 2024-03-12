@@ -13,11 +13,15 @@ export default function AttendancePage() {
 
   const { mutate } = useMutation({
     mutationFn: memberService.processImage,
-    onSuccess: () => {
-      toast.success('Reconized!');
+    onSuccess: (data) => {
+      if (data.status) {
+        toast.success('Reconized!');
+      } else {
+        toast.error('Failed to recognize');
+      }
     },
     onError: () => {
-      toast.error('Failed to recognize');
+      toast.error('Server error!');
     },
   });
 
@@ -136,8 +140,8 @@ export default function AttendancePage() {
   }, [isModelLoaded]);
 
   return (
-    <Box py={4}>
-      <video ref={videoRef} width='720' height='560' autoPlay muted style={{ display: 'block' }}></video>
+    <Box py={4} width='100%' display='flex' justifyContent='center'>
+      <video ref={videoRef} autoPlay muted style={{ display: 'block' }}></video>
     </Box>
   );
 }

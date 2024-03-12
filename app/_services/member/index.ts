@@ -39,4 +39,11 @@ export const memberService = {
   delete: async (id: number) => {
     const { data } = await api.delete(`api/members/${id}`);
   },
+  processImage: async (payload: FormData) => {
+    const { data } = await api.post(`api/members/process-face`, payload, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+
+    return data;
+  },
 };

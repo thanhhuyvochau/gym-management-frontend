@@ -1,7 +1,7 @@
 'use client';
 
 import * as faceapi from 'face-api.js';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { memberService } from '@/app/_services';
@@ -14,8 +14,12 @@ export default function AttendancePage() {
 
   const { mutate } = useMutation({
     mutationFn: memberService.processImage,
-    onSuccess: () => {
-      toast.success('Reconized!');
+    onSuccess: (data) => {
+      if (data.status) {
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
     },
     onError: () => {
       toast.error('Failed to recognize');
@@ -81,50 +85,43 @@ export default function AttendancePage() {
 
   useEffect(() => {
     let captureTimeout: string | number | NodeJS.Timeout | undefined;
-    async function detectFace() {
-      if (!videoRef.current || !isModelLoaded) return;
+    if (!videoRef.current || !isModelLoaded) return;
 
-      const video = videoRef.current;
-      const displaySize = { width: video.offsetWidth, height: video.offsetHeight };
+    const video = videoRef.current;
+    const displaySize = { width: video.offsetWidth, height: video.offsetHeight };
 
-      const canvas = faceapi.createCanvas(video);
+    const canvas = faceapi.createCanvas(video);
 
-      faceapi.matchDimensions(canvas, displaySize);
+    faceapi.matchDimensions(canvas, displaySize);
+    document.body.append(canvas);
+
+    // const labeledFaceDescriptors = await getLabeledFaceDescriptions();
+    // const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors);
+    video.addEventListener('play', () => {
+      const canvas = faceapi.createCanvasFromMedia(video);
       document.body.append(canvas);
+      const displaySize = { width: video.width, height: video.height };
+      faceapi.matchDimensions(canvas, displaySize);
 
-      // const labeledFaceDescriptors = await getLabeledFaceDescriptions();
-      // const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors);
+      setInterval(async () => {
+        const detections = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceDescriptors();
+        // const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
-      video.addEventListener('play', () => {
-        const canvas = faceapi.createCanvasFromMedia(video);
-        document.body.append(canvas);
-        const displaySize = { width: video.width, height: video.height };
-        faceapi.matchDimensions(canvas, displaySize);
+        canvas!.getContext('2d')!.clearRect(0, 0, canvas.width, canvas.height);
 
-        setInterval(async () => {
-          const detections = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceDescriptors();
-          // const resizedDetections = faceapi.resizeResults(detections, displaySize);
-
-          canvas!.getContext('2d')!.clearRect(0, 0, canvas.width, canvas.height);
-
-          if (detections.length > 0) {
-            if (!faceDetected) {
-              faceDetected = true;
-              captureTimeout = setTimeout(() => {
-                captureImageAndSend(detections[0]);
-              }, 2000); // Capture image after 2 seconds of continuous face detection
-            }
-          } else {
-            faceDetected = false;
-            clearTimeout(captureTimeout);
+        if (detections.length > 0) {
+          if (!faceDetected) {
+            faceDetected = true;
+            captureTimeout = setTimeout(() => {
+              captureImageAndSend(detections[0]);
+            }, 2000); // Capture image after 2 seconds of continuous face detection
           }
-        }, 100);
-      });
-    }
-
-    if (isModelLoaded) {
-      detectFace();
-    }
+        } else {
+          faceDetected = false;
+          clearTimeout(captureTimeout);
+        }
+      }, 100);
+    });
 
     return () => {
       if (captureTimeout) {
@@ -133,8 +130,10 @@ export default function AttendancePage() {
     };
   }, [isModelLoaded]);
 
+  console.log('faceDetected', faceDetected);
+
   return (
-    <Box py={4}>
+    <Box py={4} display='flex' flexDirection='column' alignItems='center' justifyContent='center'>
       <video ref={videoRef} width='720' height='560' autoPlay muted style={{ display: 'block' }}></video>
     </Box>
   );

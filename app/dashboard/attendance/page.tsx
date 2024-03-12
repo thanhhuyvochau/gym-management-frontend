@@ -1,7 +1,7 @@
 'use client';
 
 import * as faceapi from 'face-api.js';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { memberService } from '@/app/_services';
@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 export default function AttendancePage() {
   const videoRef = useRef<any>(null);
   const [isModelLoaded, setIsModelLoaded] = useState(false);
+  const [isReconized, setReconized] = useState(false);
 
   const { mutate } = useMutation({
     mutationFn: memberService.processImage,
@@ -118,11 +119,17 @@ export default function AttendancePage() {
           // });
 
           if (detections.length > 0 && !captureTimeout) {
-            captureTimeout = setTimeout(() => {
-              captureImageAndSend(detections[0]);
-              clearTimeout(captureTimeout);
-              captureTimeout = null;
-            }, 2000); // Adjust timing as needed
+            if (!isReconized) {
+              captureTimeout = setTimeout(() => {
+                captureImageAndSend(detections[0]);
+                setReconized(true);
+
+                clearTimeout(captureTimeout);
+                captureTimeout = null;
+              }, 2000); // Adjust timing as needed
+            }
+          } else {
+            clearTimeout(captureTimeout);
           }
         }, 100);
       });
@@ -141,6 +148,9 @@ export default function AttendancePage() {
 
   return (
     <Box py={4} width='100%' display='flex' justifyContent='center'>
+      <Button variant='contained' onClick={() => setReconized(false)} sx={{ mb: 2 }} disabled={!isReconized}>
+        Reset Reconization
+      </Button>
       <video ref={videoRef} autoPlay muted style={{ display: 'block' }}></video>
     </Box>
   );

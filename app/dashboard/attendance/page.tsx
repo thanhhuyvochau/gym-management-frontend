@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 export default function AttendancePage() {
   const videoRef = useRef<any>(null);
   const [isModelLoaded, setIsModelLoaded] = useState(false);
+  let faceDetected = false;
 
   const { mutate } = useMutation({
     mutationFn: memberService.processImage,
@@ -25,7 +26,7 @@ export default function AttendancePage() {
     // Capture the image (you may need to adapt this part based on your requirements)
     const canvas = faceapi.createCanvasFromMedia(videoRef.current);
     const context = canvas.getContext('2d');
-    context.drawImage(videoRef.current, 0, 0, videoRef.current.width, videoRef.current.height);
+    context!.drawImage(videoRef.current, 0, 0, videoRef.current.width, videoRef.current.height);
     const capturedImage = canvas.toDataURL('image/jpeg');
 
     // Convert base64 to Blob
@@ -79,7 +80,7 @@ export default function AttendancePage() {
   }, [isModelLoaded]);
 
   useEffect(() => {
-    let captureTimeout;
+    let captureTimeout: string | number | NodeJS.Timeout | undefined;
     async function detectFace() {
       if (!videoRef.current || !isModelLoaded) return;
 
@@ -104,21 +105,18 @@ export default function AttendancePage() {
           const detections = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceDescriptors();
           // const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
-          canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+          canvas!.getContext('2d')!.clearRect(0, 0, canvas.width, canvas.height);
 
-          // const results = resizedDetections.map((d) => faceMatcher.findBestMatch(d.descriptor));
-          // results.forEach((result, i) => {
-          //   const box = resizedDetections[i].detection.box;
-          //   const drawBox = new faceapi.draw.DrawBox(box, { label: result.toString() });
-          //   drawBox.draw(canvas);
-          // });
-
-          if (detections.length > 0 && !captureTimeout) {
-            captureTimeout = setTimeout(() => {
-              captureImageAndSend(detections[0]);
-              clearTimeout(captureTimeout);
-              captureTimeout = null;
-            }, 2000); // Adjust timing as needed
+          if (detections.length > 0) {
+            if (!faceDetected) {
+              faceDetected = true;
+              captureTimeout = setTimeout(() => {
+                captureImageAndSend(detections[0]);
+              }, 2000); // Capture image after 2 seconds of continuous face detection
+            }
+          } else {
+            faceDetected = false;
+            clearTimeout(captureTimeout);
           }
         }, 100);
       });

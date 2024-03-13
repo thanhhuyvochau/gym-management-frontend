@@ -172,7 +172,7 @@ const EquimentComponent = () => {
   return (
     <Box className='children-box' component={'div'} height={'100%'}>
       <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
-        <Typography variant='h3' color='var(--primary)' py={2}>
+        <Typography variant='h3' py={2} color={'var(--primary)'} fontWeight={700}>
           Equipment Management
         </Typography>
         <Button variant='contained' sx={{ height: 'fit-content' }} onClick={() => setOpenCreateModal(true)}>

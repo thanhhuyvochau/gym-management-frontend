@@ -154,7 +154,7 @@ const GymPlanManagement = () => {
   return (
     <Box className='children-box' component={'div'} height={'100%'}>
       <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
-        <Typography variant='h3' my={2} color='var(--primary)'>
+        <Typography variant='h3' py={2} color={'var(--primary)'} fontWeight={700}>
           Gym Plan Management
         </Typography>
         <Button variant='contained' sx={{ height: 'fit-content' }} onClick={() => setOpenCreateForm(true)}>

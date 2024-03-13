@@ -89,7 +89,7 @@ export default function PaymentPages() {
   return (
     <>
       <Box mt={6} component={'form'} onSubmit={handleSubmit(onSubmitHandler)} width={'100%'}>
-        <Typography color={'#1A1363'} variant='h3' my={2} fontWeight={600}>
+        <Typography variant='h3' py={2} color={'var(--primary)'} fontWeight={700}>
           Add Payment
         </Typography>
         <Paper sx={{ borderRadius: 4, p: 4 }} elevation={6}>

@@ -92,7 +92,7 @@ export default function ReportPage() {
 
   return (
     <Box className='children-box' component={'div'} height={'100%'} mt={4}>
-      <Typography className='mt-8 mb-16' variant='h3' py={2} color={'var(--primary)'} fontWeight={700}>
+      <Typography variant='h3' py={2} color={'var(--primary)'} fontWeight={700}>
         Sales Report
       </Typography>
 

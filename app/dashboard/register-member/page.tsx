@@ -109,7 +109,7 @@ const RegisterMember = () => {
   return (
     <>
       <Box mt={6} component={'form'} onSubmit={handleSubmit(onSubmitHandler)} width={'100%'}>
-        <Typography color={'#1A1363'} variant='h3' my={2} fontWeight={600}>
+        <Typography variant='h3' py={2} color={'var(--primary)'} fontWeight={700}>
           Registration
         </Typography>
         <Paper sx={{ borderRadius: 2, p: 4 }} elevation={6}>

@@ -18,7 +18,7 @@ const schema = yup.object().shape({
   phoneNumber: yup.string().required('Phone Number is required'),
   birthday: yup.string().required('Birthday is required'),
   fromDate: yup.string().required('From Date is required'),
-  image: yup.mixed(),
+  image: yup.mixed().required('Image is required'),
   price: yup.number().required('Price is required'),
   plan: yup.number().required('Plan is required'),
 });
@@ -125,6 +125,11 @@ const RegisterMember = () => {
                   onChange={handleFileChange}
                   error={!!errors.image}
                 />
+                {errors.image && (
+                  <Typography variant='caption' color='red'>
+                    {errors.image.message}
+                  </Typography>
+                )}
                 {selectedImage && (
                   <Box width={150} height={150} borderRadius={1} overflow='hidden'>
                     <Image

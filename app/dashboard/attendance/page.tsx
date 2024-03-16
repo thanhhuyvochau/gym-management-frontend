@@ -6,9 +6,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { memberService } from '@/app/_services';
 import { toast } from 'react-toastify';
-
+import styles from './styles.module.css';
 export default function AttendancePage() {
   const videoRef = useRef<any>(null);
+  const canvasRef = useRef<any>(null);
+
   const [isModelLoaded, setIsModelLoaded] = useState(false);
   let faceDetected = false;
 
@@ -88,24 +90,18 @@ export default function AttendancePage() {
     if (!videoRef.current || !isModelLoaded) return;
 
     const video = videoRef.current;
-    const displaySize = { width: video.offsetWidth, height: video.offsetHeight };
 
-    const canvas = faceapi.createCanvas(video);
-
-    faceapi.matchDimensions(canvas, displaySize);
-    document.body.append(canvas);
-
-    // const labeledFaceDescriptors = await getLabeledFaceDescriptions();
-    // const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors);
     video.addEventListener('play', () => {
       const canvas = faceapi.createCanvasFromMedia(video);
-      document.body.append(canvas);
-      const displaySize = { width: video.width, height: video.height };
+      canvas.style.position = 'absolute';
+      canvasRef.current.append(canvas);
+
+      const displaySize = { width: 720, height: 560 };
       faceapi.matchDimensions(canvas, displaySize);
 
       setInterval(async () => {
         const detections = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceDescriptors();
-        // const resizedDetections = faceapi.resizeResults(detections, displaySize);
+        const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
         canvas!.getContext('2d')!.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -114,12 +110,17 @@ export default function AttendancePage() {
             faceDetected = true;
             captureTimeout = setTimeout(() => {
               captureImageAndSend(detections[0]);
-            }, 2000); // Capture image after 2 seconds of continuous face detection
+            }, 1000); // Capture image after 2 seconds of continuous face detection
           }
         } else {
           faceDetected = false;
           clearTimeout(captureTimeout);
         }
+        resizedDetections.forEach((detection) => {
+          const box = detection.detection.box;
+          const drawBox = new faceapi.draw.DrawBox(box, { label: 'Face' });
+          drawBox.draw(canvas);
+        });
       }, 100);
     });
 
@@ -133,7 +134,7 @@ export default function AttendancePage() {
   console.log('faceDetected', faceDetected);
 
   return (
-    <Box py={4} display='flex' flexDirection='column' alignItems='center' justifyContent='center'>
+    <Box ref={canvasRef} py={4} display='flex' flexDirection='column' alignItems='center' justifyContent='center'>
       <video ref={videoRef} width='720' height='560' autoPlay muted style={{ display: 'block' }}></video>
     </Box>
   );

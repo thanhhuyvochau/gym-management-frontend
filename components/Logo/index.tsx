@@ -1,7 +1,7 @@
 'use client';
 
 import { Avatar, Box, Grid, Typography } from '@mui/material';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 export function Logo() {
   const router = useRouter();

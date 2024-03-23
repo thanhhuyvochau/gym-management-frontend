@@ -8,13 +8,9 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import Link from 'next/link';
-import { signOut } from 'next-auth/react';
-import Grid from '@mui/material/Grid/Grid';
 import { useAuth } from '../_hooks';
 import { Logo } from '@/components';
 

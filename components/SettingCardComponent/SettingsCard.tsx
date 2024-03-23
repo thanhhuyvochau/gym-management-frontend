@@ -152,11 +152,28 @@ export default function SettingsCard(props: any) {
       <TabPanel value={value} index={1}>
         <Box p={4} component='form' onSubmit={handleSubmitPassword(onSubmitPasswordHandler)}>
           <Stack gap={2}>
-            <TextField fullWidth placeholder='Old password' {...registerPassword('oldPassword')} type='password' />
-            <TextField fullWidth placeholder='New password' {...registerPassword('newPassword')} type='password' />
             <TextField
               fullWidth
-              placeholder='Confirm password'
+              required
+              id='outlined-required'
+              label='Old password'
+              {...registerPassword('oldPassword')}
+              type='password'
+              defaultValue=''
+            />
+            <TextField
+              fullWidth
+              id='outlined-required'
+              required
+              label='New password'
+              {...registerPassword('newPassword')}
+              type='password'
+            />
+            <TextField
+              fullWidth
+              id='outlined-required'
+              required
+              label='Confirm password'
               {...registerPassword('confirmPassword')}
               type='password'
             />

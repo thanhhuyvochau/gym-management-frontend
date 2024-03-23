@@ -1,9 +1,13 @@
-import Link from 'next/link';
+'use client';
+
 import { Avatar, Box, Grid, Typography } from '@mui/material';
+import { useRouter } from 'next/navigation';
 
 export function Logo() {
+  const router = useRouter();
+
   return (
-    <Box component={Link} display='flex' href={'/home'} sx={{ textDecoration: 'none' }}>
+    <Box display='flex' sx={{ textDecoration: 'none' }} onClick={() => router.push('/home')}>
       <Avatar
         sx={{
           display: 'flex',

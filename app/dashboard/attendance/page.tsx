@@ -6,23 +6,25 @@ import { useEffect, useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { memberService } from '@/app/_services';
 import { toast } from 'react-toastify';
-
+import styles from './styles.module.css';
 export default function AttendancePage() {
   const videoRef = useRef<any>(null);
+  const canvasRef = useRef<any>(null);
+
   const [isModelLoaded, setIsModelLoaded] = useState(false);
-  const [isReconized, setReconized] = useState(false);
+  let faceDetected = false;
 
   const { mutate } = useMutation({
     mutationFn: memberService.processImage,
     onSuccess: (data) => {
       if (data.status) {
-        toast.success('Reconized!');
+        toast.success(data.message);
       } else {
-        toast.error('Failed to recognize');
+        toast.error(data.message);
       }
     },
     onError: () => {
-      toast.error('Server error!');
+      toast.error('Failed to recognize');
     },
   });
 
@@ -30,7 +32,7 @@ export default function AttendancePage() {
     // Capture the image (you may need to adapt this part based on your requirements)
     const canvas = faceapi.createCanvasFromMedia(videoRef.current);
     const context = canvas.getContext('2d');
-    context.drawImage(videoRef.current, 0, 0, videoRef.current.width, videoRef.current.height);
+    context!.drawImage(videoRef.current, 0, 0, videoRef.current.width, videoRef.current.height);
     const capturedImage = canvas.toDataURL('image/jpeg');
 
     // Convert base64 to Blob
@@ -84,60 +86,43 @@ export default function AttendancePage() {
   }, [isModelLoaded]);
 
   useEffect(() => {
-    let captureTimeout;
-    async function detectFace() {
-      if (!videoRef.current || !isModelLoaded) return;
+    let captureTimeout: string | number | NodeJS.Timeout | undefined;
+    if (!videoRef.current || !isModelLoaded) return;
 
-      const video = videoRef.current;
-      const displaySize = { width: video.offsetWidth, height: video.offsetHeight };
+    const video = videoRef.current;
 
-      const canvas = faceapi.createCanvas(video);
+    video.addEventListener('play', () => {
+      const canvas = faceapi.createCanvasFromMedia(video);
+      canvas.style.position = 'absolute';
+      canvasRef.current.append(canvas);
 
+      const displaySize = { width: 720, height: 560 };
       faceapi.matchDimensions(canvas, displaySize);
-      document.body.append(canvas);
 
-      // const labeledFaceDescriptors = await getLabeledFaceDescriptions();
-      // const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors);
+      setInterval(async () => {
+        const detections = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceDescriptors();
+        const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
-      video.addEventListener('play', () => {
-        const canvas = faceapi.createCanvasFromMedia(video);
-        document.body.append(canvas);
-        const displaySize = { width: video.width, height: video.height };
-        faceapi.matchDimensions(canvas, displaySize);
+        canvas!.getContext('2d')!.clearRect(0, 0, canvas.width, canvas.height);
 
-        setInterval(async () => {
-          const detections = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceDescriptors();
-          // const resizedDetections = faceapi.resizeResults(detections, displaySize);
-
-          canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-
-          // const results = resizedDetections.map((d) => faceMatcher.findBestMatch(d.descriptor));
-          // results.forEach((result, i) => {
-          //   const box = resizedDetections[i].detection.box;
-          //   const drawBox = new faceapi.draw.DrawBox(box, { label: result.toString() });
-          //   drawBox.draw(canvas);
-          // });
-
-          if (detections.length > 0 && !captureTimeout) {
-            if (!isReconized) {
-              captureTimeout = setTimeout(() => {
-                captureImageAndSend(detections[0]);
-                setReconized(true);
-
-                clearTimeout(captureTimeout);
-                captureTimeout = null;
-              }, 2000); // Adjust timing as needed
-            }
-          } else {
-            clearTimeout(captureTimeout);
+        if (detections.length > 0) {
+          if (!faceDetected) {
+            faceDetected = true;
+            captureTimeout = setTimeout(() => {
+              captureImageAndSend(detections[0]);
+            }, 1000); // Capture image after 2 seconds of continuous face detection
           }
-        }, 100);
-      });
-    }
-
-    if (isModelLoaded) {
-      detectFace();
-    }
+        } else {
+          faceDetected = false;
+          clearTimeout(captureTimeout);
+        }
+        resizedDetections.forEach((detection) => {
+          const box = detection.detection.box;
+          const drawBox = new faceapi.draw.DrawBox(box, { label: 'Face' });
+          drawBox.draw(canvas);
+        });
+      }, 100);
+    });
 
     return () => {
       if (captureTimeout) {
@@ -146,12 +131,11 @@ export default function AttendancePage() {
     };
   }, [isModelLoaded]);
 
+  console.log('faceDetected', faceDetected);
+
   return (
-    <Box py={4} width='100%' display='flex' justifyContent='center'>
-      <Button variant='contained' onClick={() => setReconized(false)} sx={{ mb: 2 }} disabled={!isReconized}>
-        Reset Reconization
-      </Button>
-      <video ref={videoRef} autoPlay muted style={{ display: 'block' }}></video>
+    <Box ref={canvasRef} py={4} display='flex' flexDirection='column' alignItems='center' justifyContent='center'>
+      <video ref={videoRef} width='720' height='560' autoPlay muted style={{ display: 'block' }}></video>
     </Box>
   );
 }

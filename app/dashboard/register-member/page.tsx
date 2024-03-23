@@ -18,7 +18,7 @@ const schema = yup.object().shape({
   phoneNumber: yup.string().required('Phone Number is required'),
   birthday: yup.string().required('Birthday is required'),
   fromDate: yup.string().required('From Date is required'),
-  image: yup.mixed(),
+  image: yup.mixed().required('Image is required'),
   price: yup.number().required('Price is required'),
   plan: yup.number().required('Plan is required'),
 });
@@ -109,7 +109,7 @@ const RegisterMember = () => {
   return (
     <>
       <Box mt={6} component={'form'} onSubmit={handleSubmit(onSubmitHandler)} width={'100%'}>
-        <Typography color={'#1A1363'} variant='h3' my={2} fontWeight={600}>
+        <Typography variant='h3' py={2} color={'var(--primary)'} fontWeight={700}>
           Registration
         </Typography>
         <Paper sx={{ borderRadius: 2, p: 4 }} elevation={6}>
@@ -125,6 +125,11 @@ const RegisterMember = () => {
                   onChange={handleFileChange}
                   error={!!errors.image}
                 />
+                {errors.image && (
+                  <Typography variant='caption' color='red'>
+                    {errors.image.message}
+                  </Typography>
+                )}
                 {selectedImage && (
                   <Box width={150} height={150} borderRadius={1} overflow='hidden'>
                     <Image

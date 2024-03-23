@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import authService from '../_services/authService';
 import { toast } from 'react-toastify';
+import { AxiosError } from 'axios';
 
 export const useAuth = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -29,6 +30,9 @@ export const useAuth = () => {
     onSuccess: () => {
       refetch();
       toast.success('Login successfully!');
+    },
+    onError: (error: AxiosError<{ error_message: string }>) => {
+      error.response && toast.error(error.response.data.error_message || 'Login failed!');
     },
   });
 

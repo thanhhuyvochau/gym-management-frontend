@@ -153,7 +153,7 @@ const Login = () => {
                 label='Remember me'
               />
               <Link style={{ color: 'var(--main-font-color)', margin: 'auto 0' }} href='/forgot-password'>
-                Forgot Password?
+                <Typography variant='body2'>Forgot Password?</Typography>
               </Link>
             </Grid>
             <Fab
@@ -171,6 +171,21 @@ const Login = () => {
                 <Typography variant='body1'>Login</Typography>
               )}
             </Fab>
+            <Link
+              style={{
+                color: 'var(--main-font-color)',
+                display: 'flex',
+                justifyContent: 'center',
+                textDecoration: 'none',
+                textAlign: 'center',
+                width: '100%',
+              }}
+              href='/register'
+            >
+              <Typography variant='body2' textAlign='center' width='100%'>
+                Not have an account? Sign Up
+              </Typography>
+            </Link>
           </Stack>
         </Box>
       </Grid>

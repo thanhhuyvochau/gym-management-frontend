@@ -121,6 +121,7 @@ const RegisterMember = () => {
                   fullWidth
                   label='Image'
                   variant='outlined'
+                  inputProps={{ accept: 'image/jpeg,image/png,image/jpg' }} // Specify accepted file types here
                   InputLabelProps={{ shrink: true }}
                   onChange={handleFileChange}
                   error={!!errors.image}

@@ -24,14 +24,14 @@ const Dashboard = () => {
   const [fromDate, setFromDate] = useState(initFromDate);
   const [toDate, setToDate] = useState(curDate);
 
-  const { data: statistics, refetch } = useQuery({
+  const { data: statistics, refetch: refetchStatistic } = useQuery({
     queryKey: ['statistics'],
     queryFn: () => statisticService.getStatistic({ fromDate, toDate }),
   });
 
-  const { data: plans } = useQuery({
-    queryKey: ['plans'],
-    queryFn: () => planService.getPlans(),
+  const { data: registers, refetch: refetchPlans } = useQuery({
+    queryKey: ['registers'],
+    queryFn: () => statisticService.getRegisters({ fromDate, toDate }),
   });
 
   const dataLine: ChartData<'line'> = {
@@ -61,10 +61,10 @@ const Dashboard = () => {
   };
 
   const dataDougnut = {
-    labels: plans?.map((plan) => plan.name),
+    labels: registers?.map((register) => register.name),
     datasets: [
       {
-        data: plans?.map((plan) => plan.numberOfRegister),
+        data: registers?.map((register) => register.numberOfRegister),
         backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
         hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
       },
@@ -72,9 +72,8 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    if (fromDate && toDate) {
-      refetch();
-    }
+    refetchStatistic();
+    refetchPlans();
   }, [fromDate, toDate]);
 
   return (
@@ -114,7 +113,7 @@ const Dashboard = () => {
               </Box>
             </Card>
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={12}>
             <Card sx={{ p: 4, borderRadius: 2 }}>
               <Stack gap={2}>
                 <Grid container spacing={4}>
@@ -137,14 +136,15 @@ const Dashboard = () => {
                     />
                   </Grid>
                 </Grid>
-                {/* <Bar data={data} /> */}
-                <Line data={dataLine} />
+                <Grid container spacing={4}>
+                  <Grid item xs={12} md={8}>
+                    <Line data={dataLine} />
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <Doughnut data={dataDougnut} />
+                  </Grid>
+                </Grid>
               </Stack>
-            </Card>
-          </Grid>
-          <Grid item xs={4}>
-            <Card sx={{ p: 4, borderRadius: 2 }}>
-              <Doughnut data={dataDougnut} />
             </Card>
           </Grid>
         </Grid>

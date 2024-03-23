@@ -101,6 +101,7 @@ export const UploadAvatarModal = ({ open, onClose }: IUploadAvatarModalProps) =>
                 type='file'
                 fullWidth
                 variant='outlined'
+                inputProps={{ accept: 'image/jpeg,image/png,image/jpg' }} // Specify accepted file types here
                 InputLabelProps={{ shrink: true }}
                 onChange={handleFileChange}
                 error={!!errors.image}

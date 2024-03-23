@@ -197,28 +197,28 @@ export default function SettingsCard(props: any) {
         <Box p={4} component='form' onSubmit={handleSubmit(onSubmitHandler)}>
           <Grid container spacing={4}>
             <Grid item xs={6}>
-              <TextField fullWidth disabled={!isEditing} {...register('fullName')} />
+              <TextField fullWidth disabled={!isEditing} {...register('fullName')} label='Full Name' />
             </Grid>
             <Grid item xs={6}>
               <Controller
                 name='gender'
                 control={control}
                 render={({ field }) => (
-                  <Select {...field} fullWidth disabled={!isEditing} label='Gender'>
+                  <TextField {...field} select label='Gender' fullWidth disabled={!isEditing}>
                     {genderSelect.map((option) => (
                       <MenuItem key={option.value} value={option.value}>
                         {option.label}
                       </MenuItem>
                     ))}
-                  </Select>
+                  </TextField>
                 )}
               />
             </Grid>
             <Grid item xs={6}>
-              <TextField fullWidth disabled={!isEditing} {...register('phone')} />
+              <TextField fullWidth disabled={!isEditing} {...register('phone')} label='Phone' />
             </Grid>
             <Grid item xs={6}>
-              <TextField fullWidth disabled={!isEditing} {...register('address')} />
+              <TextField fullWidth disabled={!isEditing} {...register('address')} label='Address' />
             </Grid>
           </Grid>
           <Box display='flex' gap={1} justifyContent='end' mt={2}>

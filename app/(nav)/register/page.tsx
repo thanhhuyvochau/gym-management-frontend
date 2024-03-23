@@ -1,10 +1,14 @@
 'use client';
+
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import {
   Box,
   Button,
   Checkbox,
   Fab,
-  FormControl,
   FormControlLabel,
   Grid,
   InputLabel,
@@ -12,79 +16,63 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
-import classes from './Register.module.css';
-import axios from 'axios';
-import { API } from '@/app/_constants/api-endpoint';
-import { redirect } from 'next/navigation';
+import classes from './Register.module.css'; // Assuming this is your custom styling
+import { useMutation } from '@tanstack/react-query';
+import authService from '@/app/_services/authService';
+import { toast } from 'react-toastify';
+import { AxiosError } from 'axios';
+import { useRouter } from 'next/navigation';
 
-const Register = () => {
-  const [formState, setFormState] = useState({
-    email: '',
-    password: '',
-    rePassword: '',
+const schema = yup
+  .object({
+    email: yup
+      .string()
+      .email('Email must be valid and contain "@" (e.g., user@example.com)')
+      .required('Email is required'),
+    password: yup
+      .string()
+      .matches(
+        /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,20}$/,
+        'Password must be 8-20 characters long, with at least one digit, one uppercase and one lowercase letter, one special character, and no whitespace',
+      )
+      .min(8, 'Password must be at least 8 characters long')
+      .required('Password is required'),
+    rePassword: yup
+      .string()
+      .oneOf([yup.ref('password'), ''], 'Passwords must match')
+      .required('Confirmation of the password is required'),
+    terms: yup.bool().oneOf([true], 'You must accept the terms and conditions').required(),
+  })
+  .required();
+
+export default function Register() {
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
   });
-  const [errors, setErrors] = useState({
-    email: '',
-    password: '',
-    rePassword: '',
+
+  const { mutate } = useMutation({
+    mutationFn: authService.register,
+    onSuccess: () => {
+      toast.success('Registration successfully!');
+      router.push('/login');
+    },
+    onError: (error: AxiosError<{ error_message: string }>) => {
+      error.response && toast.error(error.response?.data.error_message || 'Registration failed');
+    },
   });
-  const changeField = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormState({ ...formState, [event.target.name]: event.target.value });
+
+  const onSubmit = (data: any) => {
+    mutate({ email: data.email, password: data.password });
   };
-  const validateForm = () => {
-    let valid = true;
 
-    if (!formState.email) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        email: 'Email is required',
-      }));
-      valid = false;
-    } else {
-      setErrors((prevErrors) => ({ ...prevErrors, email: '' }));
-    }
-
-    if (!formState.password) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        password: 'Password is required',
-      }));
-      valid = false;
-    } else {
-      setErrors((prevErrors) => ({ ...prevErrors, password: '' }));
-    }
-
-    if (formState.password !== formState.rePassword) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        rePassword: 'Passwords do not match',
-      }));
-      valid = false;
-    } else {
-      setErrors((prevErrors) => ({ ...prevErrors, rePassword: '' }));
-    }
-
-    return valid;
-  };
-  const handleSubmitRegister = async () => {
-    if (validateForm()) {
-      try {
-        const response = await axios.post(API.REGISTER, {
-          email: formState.email,
-          password: formState.password,
-        });
-        // Handle the response as needed
-        console.log('Registration successful:', response.data);
-        redirect('/login');
-      } catch (error) {
-        // Handle errors
-        console.error('Registration failed:', error);
-      }
-    }
-  };
   return (
-    <>
+    <Box>
       <Grid className={classes.fullHeightContainer} container>
         <Grid
           direction='row'
@@ -104,8 +92,9 @@ const Register = () => {
             minWidth={{ xs: '100%', sm: '25rem' }}
             component='form'
             autoComplete='true'
+            onSubmit={handleSubmit(onSubmit)}
           >
-            <Stack justifyContent='center' alignItems='start' spacing={4}>
+            <Stack justifyContent='center' alignItems='start' spacing={2}>
               <Typography style={{ color: ' var( --main-font-color)' }} variant='h3' fontWeight={700}>
                 Sign Up
               </Typography>
@@ -118,16 +107,14 @@ const Register = () => {
                 </InputLabel>
                 <TextField
                   className={classes.inputField}
-                  id='emailInput'
                   style={{ border: 'solid 4px #332F64', borderRadius: '10px' }}
-                  required
-                  value={formState.email}
-                  onChange={changeField}
-                  name='email'
+                  {...register('email')}
                 />
-                <Typography variant='subtitle2' color={'red'}>
-                  {errors.email}
-                </Typography>
+                {errors.email && (
+                  <Typography color='error' variant='body2'>
+                    {errors.email.message}
+                  </Typography>
+                )}
               </Grid>
               <Grid container direction='column'>
                 <InputLabel style={{ color: 'var(--main-font-color)' }} htmlFor='passwordInput'>
@@ -138,15 +125,14 @@ const Register = () => {
                 <TextField
                   className={classes.inputField}
                   style={{ border: 'solid 4px #332F64', borderRadius: '10px' }}
-                  required
-                  id='passwordInput'
-                  value={formState.password}
-                  onChange={changeField}
-                  name='password'
+                  {...register('password')}
+                  type='password'
                 />
-                <Typography variant='subtitle2' color={'red'}>
-                  {errors.email}
-                </Typography>
+                {errors.password && (
+                  <Typography color='error' variant='body2'>
+                    {errors.password.message}
+                  </Typography>
+                )}
               </Grid>
 
               <Grid container direction='column'>
@@ -156,37 +142,41 @@ const Register = () => {
                   </Typography>
                 </InputLabel>
                 <TextField
+                  {...register('rePassword', {
+                    validate: (value) => value === watch('password') || 'Passwords do not match',
+                  })}
                   className={classes.inputField}
                   style={{ border: 'solid 4px #332F64', borderRadius: '10px' }}
-                  required
-                  id='passwordInput'
-                  value={formState.rePassword}
-                  onChange={changeField}
-                  name='rePassword'
+                  type='password'
                 />
-                <Typography variant='subtitle2' color={'red'}>
-                  {errors.rePassword}
-                </Typography>
+                {errors.rePassword && (
+                  <Typography color='error' variant='body2'>
+                    {errors.rePassword.message}
+                  </Typography>
+                )}
               </Grid>
 
-              <Fab
-                style={{
-                  background: 'var( --main-font-color)',
-                  color: 'white',
-                }}
-                variant='extended'
-                sx={{ width: '100%' }}
-                onClick={handleSubmitRegister}
-              >
-                <Typography variant='body1'>Register</Typography>
-              </Fab>
               <Grid justifyContent='space-between' direction='row' container item xs={12}>
                 <FormControlLabel
                   style={{ color: 'var(--main-font-color)' }}
-                  control={<Checkbox />}
+                  control={<Checkbox {...register('terms')} />}
                   label='Accept all the Terms and Conditions'
                 />
+                {errors.terms && (
+                  <Typography color='error' variant='body2'>
+                    {errors.terms.message}
+                  </Typography>
+                )}
               </Grid>
+
+              <Button
+                type='submit'
+                fullWidth
+                variant='contained'
+                sx={{ background: 'var( --main-font-color)', color: 'white', borderRadius: 8 }}
+              >
+                <Typography variant='body1'>Register</Typography>
+              </Button>
             </Stack>
           </Box>
         </Grid>
@@ -202,8 +192,6 @@ const Register = () => {
           />
         </Grid>
       </Grid>
-    </>
+    </Box>
   );
-};
-
-export default Register;
+}

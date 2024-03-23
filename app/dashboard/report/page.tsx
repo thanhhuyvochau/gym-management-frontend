@@ -120,7 +120,7 @@ export default function ReportPage() {
               <Typography variant='body1' fontWeight={600}>
                 Total
               </Typography>
-              <Chip label={`${totalAmount?.toLocaleString('vi')} VND`} color='primary' />
+              <Chip label={`${totalAmount ? totalAmount.toLocaleString('vi') : 0} VND`} color='primary' />
             </Box>
           </Grid>
         </Grid>

@@ -38,6 +38,12 @@ const authService = {
   updateForgotPassword: async (payload: { email: string; otpCode: string; password: string }) => {
     await api.put('api/accounts/forget-password', payload);
   },
+
+  register: async (payload: { email: string; password: string }) => {
+    const { data } = await api.post('api/accounts/register', payload);
+
+    return data;
+  },
 };
 
 export default authService;

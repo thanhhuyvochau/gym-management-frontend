@@ -73,13 +73,6 @@ const GymPlanManagement = () => {
     },
     searchAlwaysOpen: true,
     responsive: 'standard',
-    customToolbar(data) {
-      return (
-        <Button sx={{ '&:hover': { color: 'green' }, color: 'grey' }}>
-          <Add></Add>
-        </Button>
-      );
-    },
   };
 
   const columns: MUIDataTableColumn[] = [

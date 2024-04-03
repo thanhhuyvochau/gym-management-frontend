@@ -160,13 +160,6 @@ const EquimentComponent = () => {
       );
     },
     responsive: 'standard',
-    customToolbar(data) {
-      return (
-        <Button onClick={handleClickOpen} sx={{ '&:hover': { color: 'blue' }, color: 'grey' }}>
-          <Add></Add>
-        </Button>
-      );
-    },
   };
 
   return (
